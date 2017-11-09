@@ -1,9 +1,9 @@
-{*******************************************************}
-{       Borland Delphi Run-time Library                 }
-{       Win32 ADLINK GPIB Interface Unit                }
-{                                                       }
-{       Copyright (c) 2005, ADLINK TECHNOLOGY INC.      }
-{*******************************************************}
+{ ******************************************************* }
+{ Borland Delphi Run-time Library }
+{ Win32 ADLINK GPIB Interface Unit }
+{ }
+{ Copyright (c) 2005, ADLINK TECHNOLOGY INC. }
+{ ******************************************************* }
 
 unit Adgpib;
 
@@ -12,120 +12,144 @@ interface
 uses Windows, gpib_user;
 
 Const
-    NOADDR = $ffff;
-    //tells RcvRespMsg() to stop on EOI
-    STOPend = $100;
+  NOADDR = $FFFF;
+  // tells RcvRespMsg() to stop on EOI
+  STOPend = $100;
 
-    //sad_special_address
-    NO_SAD = 0;
-    ALL_SAD = -1;
+  // sad_special_address
+  NO_SAD = 0;
+  ALL_SAD = -1;
 
 Type
-    send_eotmode = (NULLend, NLend, DABend);
-    Tsend_eotmodes = set of send_eotmode;
-    Addr4882_t = U16;
-    ssize_t    = I32;
-    size_t     = U32;
+  send_eotmode = (NULLend, NLend, DABend);
+  Tsend_eotmodes = set of send_eotmode;
+  Addr4882_t = U16;
+  ssize_t = I32;
+  size_t = U32;
 
-    (* Type declarations for exported 488.2 Global Variables *)
-    Tibsta  = function : integer ; stdcall;
-    Tiberr  = function : integer ; stdcall;
-    Tibcnt  = function : integer ; stdcall;
-    Tibcntl = function : Longint ; stdcall;
+  (* Type declarations for exported 488.2 Global Variables *)
+  Tibsta = function: integer; stdcall;
+  Tiberr = function: integer; stdcall;
+  Tibcnt = function: integer; stdcall;
+  Tibcntl = function: Longint; stdcall;
 
-    TGpibNotifyCallback = function(a:Integer; b:Integer; c:Integer; d:Longint; e:Pointer):Integer; stdcall;
+  TGpibNotifyCallback = function(a: integer; b: integer; c: integer; d: Longint;
+    e: Pointer): integer; stdcall;
 
-function ibsta(): Integer ; stdcall;
-function iberr(): Integer ; stdcall;
-function ibcnt(): Integer ; stdcall;
-function ibcntl(): Integer ; stdcall;
+function ibsta(): integer; stdcall;
+function iberr(): integer; stdcall;
+function ibcnt(): integer; stdcall;
+function ibcntl(): integer; stdcall;
 
-function MakeAddr(pad: Cardinal;sad:Cardinal):Addr4882_t;
-function GetPAD(address:Addr4882_t):Cardinal;
-function GetSAD(address:Addr4882_t):Cardinal;
+function MakeAddr(pad: Cardinal; sad: Cardinal): Addr4882_t;
+function GetPAD(address: Addr4882_t): Cardinal;
+function GetSAD(address: Addr4882_t): Cardinal;
 
 { IEEE 488 Function Prototypes }
-function ibask(ud:Integer;option:Integer;value:PINT): Integer ; stdcall;
-function ibbna(ud:Integer;board_name:PChar): Integer ; stdcall;
-function ibbnaA(ud:Integer;board_name:PChar): Integer ; stdcall;
-function ibbnaW(ud:Integer;board_name:WChar): Integer ; stdcall;
-function ibcac(ud:Integer;synchronous:Integer): Integer ; stdcall;
-function ibclr(ud:Integer): Integer ; stdcall;
-function ibcmd(ud:Integer;const cmd: Pointer;cnt:Longint): Integer ; stdcall;
-function ibcmda(ud:Integer;const cmd: Pointer;cnt:Longint): Integer ; stdcall;
-function ibconfig(ud:Integer;option:Integer;value:Integer): Integer ; stdcall;
-function ibdev(board_index:Integer;pad:Integer;sad:Integer;timo:Integer;send_eoi:Integer;eosmode:Integer): Integer ; stdcall;
-function ibdma(ud:Integer;v:Integer): Integer ; stdcall;
-function ibeot(ud:Integer;v:Integer): Integer ; stdcall;
-function ibeos(ud:Integer;v:Integer): Integer ; stdcall;
-function ibfind(const dev: PChar): Integer ; stdcall;
-function ibfindA(const dev: PChar): Integer ; stdcall;
-function ibfindW(const dev: PChar): Integer ; stdcall;
-function ibgts(ud:Integer;shadow_handshake:Integer): Integer ; stdcall;
-function ibist(ud:Integer;ist:Integer): Integer ; stdcall;
-function iblines(ud:Integer;line_status:PUCHAR): Integer ; stdcall;
-function ibln(ud:Integer;pad:Integer;sad:Integer;found_listener:PUCHAR): Integer ; stdcall;
-function ibloc(ud:Integer): Integer ; stdcall;
-function ibonl(ud:Integer;onl:Integer): Integer ; stdcall;
-function ibpad(ud:Integer;v:Integer): Integer ; stdcall;
-function ibpct(ud:Integer): Integer ; stdcall;
-function ibppc(ud:Integer;v:Integer): Integer ; stdcall;
-function ibrd(ud:Integer;buf:Pointer;count:Longint): Integer ; stdcall;
-function ibrda(ud:Integer;buf:Pointer;count:Longint): Integer ; stdcall;
-function ibrdf(ud:Integer;const file_path: PChar): Integer ; stdcall;
-function ibrdfA(ud:Integer;const file_path: PChar): Integer ; stdcall;
-function ibrdfW(ud:Integer;const file_path: PChar): Integer ; stdcall;
-function ibrpp(ud:Integer;ppr:PChar): Integer ; stdcall;
-function ibrsc(ud:Integer;v:Integer): Integer ; stdcall;
-function ibrsp(ud:Integer;spr:PChar): Integer ; stdcall;
-function ibrsv(ud:Integer;v:Integer): Integer ; stdcall;
-function ibsad(ud:Integer;v:Integer): Integer ; stdcall;
-function ibsic(ud:Integer): Integer ; stdcall;
-function ibsre(ud:Integer;v:Integer): Integer ; stdcall;
-function ibstop(ud:Integer): Integer ; stdcall;
-function ibtmo(ud:Integer;v:Integer): Integer ; stdcall;
-function ibtrg(ud:Integer): Integer ; stdcall;
-function ibwait(ud:Integer;mask:Integer): Integer ; stdcall;
-function ibwrt(ud:Integer;const buf: Pointer;count:Longint): Integer ; stdcall;
-function ibwrta(ud:Integer;const buf: Pointer;count:Longint): Integer ; stdcall;
-function ibwrtf(ud:Integer;const file_path: PChar): Integer ; stdcall;
-function ibwrtfA(ud:Integer;const file_path: PChar): Integer ; stdcall;
-function ibwrtfW(ud:Integer;const file_path: PChar): Integer ; stdcall;
+function ibask(ud: integer; option: integer; value: PINT): integer; stdcall;
+function ibbna(ud: integer; board_name: PChar): integer; stdcall;
+function ibbnaA(ud: integer; board_name: PChar): integer; stdcall;
+function ibbnaW(ud: integer; board_name: WChar): integer; stdcall;
+function ibcac(ud: integer; synchronous: integer): integer; stdcall;
+function ibclr(ud: integer): integer; stdcall;
+function ibcmd(ud: integer; const cmd: Pointer; cnt: Longint): integer; stdcall;
+function ibcmda(ud: integer; const cmd: Pointer; cnt: Longint)
+  : integer; stdcall;
+function ibconfig(ud: integer; option: integer; value: integer)
+  : integer; stdcall;
+function ibdev(board_index: integer; pad: integer; sad: integer; timo: integer;
+  send_eoi: integer; eosmode: integer): integer; stdcall;
+function ibdma(ud: integer; v: integer): integer; stdcall;
+function ibeot(ud: integer; v: integer): integer; stdcall;
+function ibeos(ud: integer; v: integer): integer; stdcall;
+function ibfind(const dev: PChar): integer; stdcall;
+function ibfindA(const dev: PChar): integer; stdcall;
+function ibfindW(const dev: PChar): integer; stdcall;
+function ibgts(ud: integer; shadow_handshake: integer): integer; stdcall;
+function ibist(ud: integer; ist: integer): integer; stdcall;
+function iblines(ud: integer; line_status: PUCHAR): integer; stdcall;
+function ibln(ud: integer; pad: integer; sad: integer; found_listener: PUCHAR)
+  : integer; stdcall;
+function ibloc(ud: integer): integer; stdcall;
+function ibonl(ud: integer; onl: integer): integer; stdcall;
+function ibpad(ud: integer; v: integer): integer; stdcall;
+function ibpct(ud: integer): integer; stdcall;
+function ibppc(ud: integer; v: integer): integer; stdcall;
+function ibrd(ud: integer; buf: Pointer; count: Longint): integer; stdcall;
+function ibrda(ud: integer; buf: Pointer; count: Longint): integer; stdcall;
+function ibrdf(ud: integer; const file_path: PChar): integer; stdcall;
+function ibrdfA(ud: integer; const file_path: PChar): integer; stdcall;
+function ibrdfW(ud: integer; const file_path: PChar): integer; stdcall;
+function ibrpp(ud: integer; ppr: PChar): integer; stdcall;
+function ibrsc(ud: integer; v: integer): integer; stdcall;
+function ibrsp(ud: integer; spr: PChar): integer; stdcall;
+function ibrsv(ud: integer; v: integer): integer; stdcall;
+function ibsad(ud: integer; v: integer): integer; stdcall;
+function ibsic(ud: integer): integer; stdcall;
+function ibsre(ud: integer; v: integer): integer; stdcall;
+function ibstop(ud: integer): integer; stdcall;
+function ibtmo(ud: integer; v: integer): integer; stdcall;
+function ibtrg(ud: integer): integer; stdcall;
+function ibwait(ud: integer; mask: integer): integer; stdcall;
+function ibwrt(ud: integer; const buf: Pointer; count: Longint)
+  : integer; stdcall;
+function ibwrta(ud: integer; const buf: Pointer; count: Longint)
+  : integer; stdcall;
+function ibwrtf(ud: integer; const file_path: PChar): integer; stdcall;
+function ibwrtfA(ud: integer; const file_path: PChar): integer; stdcall;
+function ibwrtfW(ud: integer; const file_path: PChar): integer; stdcall;
 
-function gpib_get_globals(pibsta:PINT;piberr:PINT;pibcnt:PINT;ibcntl:PINT): Integer ; stdcall;
-function gpib_error_string(iberr:Integer): PChar;
+function gpib_get_globals(pibsta: PINT; piberr: PINT; pibcnt: PINT;
+  ibcntl: PINT): integer; stdcall;
+function gpib_error_string(iberr: integer): PChar;
 
-{IEEE 488.2 Function Prototypes}
-procedure AllSPoll2(board_desc:Integer;const addressList: array of Pointer; resultList: array of Byte); stdcall;
-procedure AllSpoll(board_desc:Integer;const addressList: Pointer; resultList: array of Byte); stdcall;
-procedure DevClear(board_desc:Integer;address: Addr4882_t); stdcall;
-procedure DevClearList(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure EnableLocal(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure EnableRemote(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure FindLstn(board_desc:Integer;const padList: Pointer;resultList: Pointer; maxNumResults:Integer); stdcall;
-procedure FindRQS(board_desc:Integer;const addressList: Pointer; result:PByte); stdcall;
-procedure PassControl(board_desc:Integer;address:Addr4882_t); stdcall;
-procedure PPoll(board_desc:Integer;result:PByte); stdcall;
-procedure PPollConfig(board_desc:Integer;address:Addr4882_t;dataLine:Integer;lineSense:Integer); stdcall;
-procedure PPollUnconfig(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure RcvRespMsg(board_desc:Integer;buffer:Pointer;count:Longint;termination:Integer); stdcall;
-procedure ReadStatusByte(board_desc:Integer;address:Addr4882_t;result:PByte); stdcall;
-procedure Receive(board_desc:Integer;address:Addr4882_t; buffer:Pointer;count:Longint;termination:Integer); stdcall;
-procedure ReceiveSetup(board_desc:Integer;address:Addr4882_t); stdcall;
-procedure ResetSys(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure Send(board_desc:Integer;address:Addr4882_t;const buffer: Pointer;count:Longint;eot_mode:Integer); stdcall;
-procedure SendCmds(board_desc:Integer;const cmds: Pointer;count:Longint); stdcall;
-procedure SendDataBytes(board_desc:Integer;const buffer: Pointer;count:Longint;eotmode:Integer); stdcall;
-procedure SendIFC(board_desc:Integer); stdcall;
-procedure SendLLO(board_desc:Integer); stdcall;
-procedure SendList(board_desc:Integer;const addressList: Pointer; const buffer: Pointer;count:Longint;eotmode:Integer); stdcall;
-procedure SendSetup(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure SetRWLS(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure TestSRQ(board_desc:Integer;result:PByte); stdcall;
-procedure TestSys(board_desc:Integer;addrlist:PWORD;resultList: array of Byte); stdcall;
-procedure Trigger(board_desc:Integer;address:Addr4882_t); stdcall;
-procedure TriggerList(board_desc:Integer;const addressList: Pointer); stdcall;
-procedure WaitSRQ(board_desc:Integer;result:PByte); stdcall;
+{ IEEE 488.2 Function Prototypes }
+procedure AllSPoll2(board_desc: integer; const addressList: array of Pointer;
+  resultList: array of Byte); stdcall;
+procedure AllSpoll(board_desc: integer; const addressList: Pointer;
+  resultList: array of Byte); stdcall;
+procedure DevClear(board_desc: integer; address: Addr4882_t); stdcall;
+procedure DevClearList(board_desc: integer;
+  const addressList: Pointer); stdcall;
+procedure EnableLocal(board_desc: integer; const addressList: Pointer); stdcall;
+procedure EnableRemote(board_desc: integer;
+  const addressList: Pointer); stdcall;
+procedure FindLstn(board_desc: integer; const padList: Pointer;
+  resultList: Pointer; maxNumResults: integer); stdcall;
+procedure FindRQS(board_desc: integer; const addressList: Pointer;
+  result: PByte); stdcall;
+procedure PassControl(board_desc: integer; address: Addr4882_t); stdcall;
+procedure PPoll(board_desc: integer; result: PByte); stdcall;
+procedure PPollConfig(board_desc: integer; address: Addr4882_t;
+  dataLine: integer; lineSense: integer); stdcall;
+procedure PPollUnconfig(board_desc: integer;
+  const addressList: Pointer); stdcall;
+procedure RcvRespMsg(board_desc: integer; buffer: Pointer; count: Longint;
+  termination: integer); stdcall;
+procedure ReadStatusByte(board_desc: integer; address: Addr4882_t;
+  result: PByte); stdcall;
+procedure Receive(board_desc: integer; address: Addr4882_t; buffer: Pointer;
+  count: Longint; termination: integer); stdcall;
+procedure ReceiveSetup(board_desc: integer; address: Addr4882_t); stdcall;
+procedure ResetSys(board_desc: integer; const addressList: Pointer); stdcall;
+procedure Send(board_desc: integer; address: Addr4882_t; const buffer: Pointer;
+  count: Longint; eot_mode: integer); stdcall;
+procedure SendCmds(board_desc: integer; const cmds: Pointer;
+  count: Longint); stdcall;
+procedure SendDataBytes(board_desc: integer; const buffer: Pointer;
+  count: Longint; eotmode: integer); stdcall;
+procedure SendIFC(board_desc: integer); stdcall;
+procedure SendLLO(board_desc: integer); stdcall;
+procedure SendList(board_desc: integer; const addressList: Pointer;
+  const buffer: Pointer; count: Longint; eotmode: integer); stdcall;
+procedure SendSetup(board_desc: integer; const addressList: Pointer); stdcall;
+procedure SetRWLS(board_desc: integer; const addressList: Pointer); stdcall;
+procedure TestSRQ(board_desc: integer; result: PByte); stdcall;
+procedure TestSys(board_desc: integer; addrlist: PWORD;
+  resultList: array of Byte); stdcall;
+procedure Trigger(board_desc: integer; address: Addr4882_t); stdcall;
+procedure TriggerList(board_desc: integer; const addressList: Pointer); stdcall;
+procedure WaitSRQ(board_desc: integer; result: PByte); stdcall;
 
 implementation
 
@@ -215,26 +239,26 @@ procedure Trigger; external 'gpib-32.dll' name 'Trigger';
 procedure TriggerList; external 'gpib-32.dll' name 'TriggerList';
 procedure WaitSRQ; external 'gpib-32.dll' name 'WaitSRQ';
 
-function MakeAddr(pad: Cardinal;sad:Cardinal):Addr4882_t;
+function MakeAddr(pad: Cardinal; sad: Cardinal): Addr4882_t;
 Var
-   address:Addr4882_t;
+  address: Addr4882_t;
 Begin
-   address := (pad and $ff);
-   address := address or (sad shl 8) and $ff00;
-   Result := address;
-   Exit;
+  address := (pad and $FF);
+  address := address or (sad shl 8) and $FF00;
+  result := address;
+  Exit;
 end;
 
-function GetPAD(address:Addr4882_t):Cardinal;
+function GetPAD(address: Addr4882_t): Cardinal;
 Begin
-   Result := address and $ff;
-   Exit;
+  result := address and $FF;
+  Exit;
 end;
 
-function GetSAD(address:Addr4882_t):Cardinal;
+function GetSAD(address: Addr4882_t): Cardinal;
 Begin
-   Result := (address shr 8) and $ff;
-   Exit;
+  result := (address shr 8) and $FF;
+  Exit;
 end;
 
 end.

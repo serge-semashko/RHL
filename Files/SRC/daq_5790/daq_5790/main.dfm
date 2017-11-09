@@ -293,10 +293,6 @@ object MainForm: TMainForm
     object TabSheet2: TTabSheet
       Caption = '7088D'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel3: TPanel
         Left = 0
         Top = 0
@@ -394,7 +390,7 @@ object MainForm: TMainForm
           Left = 245
           Top = 13
           Width = 52
-          Height = 30
+          Height = 31
           MaxValue = 0
           MinValue = 0
           TabOrder = 4
@@ -404,7 +400,7 @@ object MainForm: TMainForm
           Left = 369
           Top = 13
           Width = 41
-          Height = 30
+          Height = 31
           MaxValue = 0
           MinValue = 0
           TabOrder = 5
@@ -415,10 +411,6 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'AD5790'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Panel4: TPanel
         Left = 0
         Top = 0
@@ -504,7 +496,7 @@ object MainForm: TMainForm
         object Chart1: TChart
           Left = 0
           Top = 0
-          Width = 1202
+          Width = 1200
           Height = 328
           BackWall.Brush.Style = bsClear
           Legend.Alignment = laTop
@@ -589,8 +581,8 @@ object MainForm: TMainForm
         object Chart2: TChart
           Left = 0
           Top = 328
-          Width = 1202
-          Height = 236
+          Width = 1200
+          Height = 229
           BackWall.Brush.Style = bsClear
           Legend.Alignment = laTop
           Legend.ColorWidth = 25
@@ -691,8 +683,8 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1202
-          Height = 564
+          Width = 1200
+          Height = 557
           BackWall.Brush.Style = bsClear
           Legend.Visible = False
           Title.Text.Strings = (

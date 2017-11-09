@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, Buttons,chart, das_Const;
+  StdCtrls, Buttons, chart, das_Const;
 
 type
   TSetMinMaxForm = class(TForm)
@@ -22,8 +22,8 @@ type
   private
     { Private declarations }
   public
-    chart    :TChart;
-    Function SetLimits(sender:TChart):integer;
+    chart: TChart;
+    Function SetLimits(Sender: TChart): integer;
     { Public declarations }
   end;
 
@@ -37,67 +37,73 @@ uses main;
 {$R *.DFM}
 
 { TForm1 }
+var
+  fs: TFormatSettings;
 
 Function TSetMinMaxForm.SetLimits;
 begin
-    UpperLimit.Text:=Format('%.4f',[sender.LeftAxis.Maximum]);
-    LowerLimit.Text:=Format('%.4f',[sender.LeftAxis.minimum]);
-  Chart:=sender;
-  OkBTn.enabled:=true;
-  Top:=Chart.Top + (Chart.Height div 2) +MainForm.top;
-  Left:=Chart.left + (Chart.Width div 2) +MainForm.left;
+  UpperLimit.Text := Format('%.4f', [Sender.LeftAxis.Maximum]);
+  LowerLimit.Text := Format('%.4f', [Sender.LeftAxis.minimum]);
+  chart := Sender;
+  OkBtn.enabled := true;
+  Top := chart.Top + (chart.Height div 2) + MainForm.Top;
+  Left := chart.Left + (chart.Width div 2) + MainForm.Left;
   self.BringToFront;
-  result:=showmodal;
+  result := showmodal;
 end;
+
 procedure TSetMinMaxForm.OkBtnClick(Sender: TObject);
 Var
- OldDelimiter   : char;
- i1             : Integer;
+  OldDelimiter: Char;
+  i1: integer;
 begin
- Olddelimiter:=DecimalSeparator;
- DecimalSeparator:='.';
- UpperLimit.Text:=ChangeChar(UpperLimit.Text,',','.');
- LowerLimit.Text:=ChangeChar(LowerLimit.Text,',','.');
- chart.LeftAxis.SetMinMax(StrToFloat(LowerLimit.Text),StrToFloat(UpperLimit.Text));
- DecimalSeparator:=Olddelimiter;
- chart.LeftAxis.Automatic:=false;
- chart.LeftAxis.AutomaticMaximum := False;
- chart.LeftAxis.AutomaticMinimum := False;
- ModalResult:=mrOK;
+  OldDelimiter := fs.DecimalSeparator;
+  fs.DecimalSeparator := '.';
+  UpperLimit.Text := ChangeChar(UpperLimit.Text, ',', '.');
+  LowerLimit.Text := ChangeChar(LowerLimit.Text, ',', '.');
+  chart.LeftAxis.SetMinMax(StrToFloat(LowerLimit.Text),
+    StrToFloat(UpperLimit.Text));
+  fs.DecimalSeparator := OldDelimiter;
+  chart.LeftAxis.Automatic := false;
+  chart.LeftAxis.AutomaticMaximum := false;
+  chart.LeftAxis.AutomaticMinimum := false;
+  ModalResult := mrOK;
 
 end;
 
 procedure TSetMinMaxForm.UpperLimitChange(Sender: TObject);
 var
-  Hi,Lo          :double;
-  Res1,res2      :Integer;
-  OldSeparator   :char;
-  i1             :Integer;
+  Hi, Lo: double;
+  Res1, res2: integer;
+  OldSeparator: Char;
+  i1: integer;
 begin
- OldSeparator:=DecimalSeparator;
- DecimalSeparator:='.';
- UpperLimit.Text:=ChangeChar(UpperLimit.Text,',','.');
- LowerLimit.Text:=ChangeChar(LowerLimit.Text,',','.');
- Val(LowerLimit.Text,Lo,res1);
- Val(UpperLimit.Text,Hi,res2);
- DecimalSeparator:=OldSeparator;
- OkBtn.Enabled:=(res1=0) and  (res2=0) and (Hi>Lo);
+  OldSeparator := fs.DecimalSeparator;
+  fs.DecimalSeparator := '.';
+  UpperLimit.Text := ChangeChar(UpperLimit.Text, ',', '.');
+  LowerLimit.Text := ChangeChar(LowerLimit.Text, ',', '.');
+  Val(LowerLimit.Text, Lo, Res1);
+  Val(UpperLimit.Text, Hi, res2);
+  fs.DecimalSeparator := OldSeparator;
+  OkBtn.enabled := (Res1 = 0) and (res2 = 0) and (Hi > Lo);
 end;
-procedure TSetMinMaxForm.FormClose(Sender: TObject;
-  var Action: TCloseAction);
+
+procedure TSetMinMaxForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
-  chart.CancelMouse:=true;
+  chart.CancelMouse := true;
 end;
 
 procedure TSetMinMaxForm.BitBtn2Click(Sender: TObject);
 begin
- modalresult:=mrcancel;
- close;
+  ModalResult := mrcancel;
+  close;
 end;
 
 procedure TSetMinMaxForm.FormKeyPress(Sender: TObject; var Key: Char);
 begin
- if key=#13 then if okbtn.Enabled then okbtn.Click; 
+  if Key = #13 then
+    if OkBtn.enabled then
+      OkBtn.Click;
 end;
 
 end.

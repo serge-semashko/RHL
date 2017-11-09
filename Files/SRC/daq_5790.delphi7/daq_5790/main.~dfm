@@ -1,38 +1,38 @@
 object MainForm: TMainForm
-  Left = 108
-  Top = 119
-  Width = 1228
+  Left = 302
+  Top = 172
+  Width = 1467
   Height = 860
   Caption = 'Read/Write'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 16
   object Panel1: TPanel
     Left = 0
-    Top = 761
-    Width = 1212
-    Height = 31
+    Top = 747
+    Width = 1449
+    Height = 38
     Align = alBottom
     TabOrder = 0
   end
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1212
-    Height = 164
+    Width = 1449
+    Height = 202
     ActivePage = TabSheet1
     Align = alTop
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
@@ -42,46 +42,46 @@ object MainForm: TMainForm
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 1204
-        Height = 993
+        Width = 1441
+        Height = 1222
         Align = alTop
         TabOrder = 0
         object Label1: TLabel
           Left = 1
-          Top = 18
-          Width = 43
-          Height = 20
+          Top = 22
+          Width = 47
+          Height = 24
           Caption = 'GPIB:'
         end
         object Label2: TLabel
-          Left = 123
-          Top = 18
-          Width = 81
-          Height = 20
+          Left = 151
+          Top = 22
+          Width = 92
+          Height = 24
           Caption = 'Instrument:'
         end
         object Label3: TLabel
-          Left = 297
-          Top = 19
-          Width = 41
-          Height = 20
+          Left = 366
+          Top = 23
+          Width = 48
+          Height = 24
           Caption = 'Write:'
         end
         object StartCycle: TSpeedButton
-          Left = 628
-          Top = 17
-          Width = 98
-          Height = 17
+          Left = 773
+          Top = 21
+          Width = 121
+          Height = 21
           Caption = 'Get stat'
           OnClick = StartCycleClick
         end
         object cmbGPIB: TComboBox
-          Left = 47
-          Top = 16
-          Width = 74
-          Height = 28
+          Left = 58
+          Top = 20
+          Width = 91
+          Height = 32
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-          ItemHeight = 20
+          ItemHeight = 24
           ItemIndex = 0
           TabOrder = 0
           Text = 'GPIB0'
@@ -92,13 +92,13 @@ object MainForm: TMainForm
             'GPIB3')
         end
         object cmbInst: TComboBox
-          Left = 207
-          Top = 16
-          Width = 81
-          Height = 28
+          Left = 255
+          Top = 20
+          Width = 99
+          Height = 32
           Style = csDropDownList
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-          ItemHeight = 20
+          ItemHeight = 24
           ItemIndex = 15
           TabOrder = 1
           Text = '16'
@@ -135,88 +135,88 @@ object MainForm: TMainForm
             '30')
         end
         object Button1: TButton
-          Left = 449
-          Top = 17
-          Width = 110
-          Height = 24
+          Left = 553
+          Top = 21
+          Width = 135
+          Height = 29
           Caption = 'Write && Read'
           TabOrder = 2
           OnClick = Button1Click
         end
         object editWrite: TEdit
-          Left = 345
-          Top = 16
-          Width = 104
-          Height = 28
+          Left = 425
+          Top = 20
+          Width = 128
+          Height = 32
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           TabOrder = 3
           Text = '*IDN?'
         end
         object memoRead: TMemo
           Left = 0
-          Top = 44
-          Width = 673
-          Height = 77
+          Top = 54
+          Width = 828
+          Height = 95
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           Lines.Strings = (
             'Memo1')
           TabOrder = 4
         end
         object CycBox: TCheckBox
-          Left = 734
-          Top = 19
-          Width = 125
-          Height = 13
+          Left = 903
+          Top = 23
+          Width = 154
+          Height = 16
           Caption = 'Continue read'
           Checked = True
           State = cbChecked
           TabOrder = 5
         end
         object DAQlen: TSpinEdit
-          Left = 564
-          Top = 12
-          Width = 60
-          Height = 30
+          Left = 694
+          Top = 15
+          Width = 74
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 6
           Value = 0
         end
         object Topspn: TSpinEdit
-          Left = 801
-          Top = 89
-          Width = 121
-          Height = 30
+          Left = 986
+          Top = 110
+          Width = 149
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 7
           Value = 500
         end
         object Bottomspn: TSpinEdit
-          Left = 677
-          Top = 89
-          Width = 121
-          Height = 30
+          Left = 833
+          Top = 110
+          Width = 149
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 8
           Value = 300
         end
         object expspn: TSpinEdit
-          Left = 925
-          Top = 89
-          Width = 69
-          Height = 30
+          Left = 1138
+          Top = 110
+          Width = 85
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 9
           Value = 60
         end
         object StaticText1: TStaticText
-          Left = 678
-          Top = 41
-          Width = 239
-          Height = 24
+          Left = 834
+          Top = 50
+          Width = 295
+          Height = 30
           Alignment = taCenter
           AutoSize = False
           BevelKind = bkTile
@@ -225,10 +225,10 @@ object MainForm: TMainForm
           TabOrder = 10
         end
         object StaticText2: TStaticText
-          Left = 677
-          Top = 66
-          Width = 119
-          Height = 24
+          Left = 833
+          Top = 81
+          Width = 147
+          Height = 30
           Alignment = taCenter
           AutoSize = False
           BevelKind = bkSoft
@@ -236,10 +236,10 @@ object MainForm: TMainForm
           TabOrder = 11
         end
         object StaticText3: TStaticText
-          Left = 802
-          Top = 65
-          Width = 117
-          Height = 24
+          Left = 987
+          Top = 80
+          Width = 144
+          Height = 30
           Alignment = taCenter
           AutoSize = False
           BevelKind = bkSoft
@@ -247,44 +247,44 @@ object MainForm: TMainForm
           TabOrder = 12
         end
         object StaticText4: TStaticText
-          Left = 923
-          Top = 63
-          Width = 73
-          Height = 24
+          Left = 1136
+          Top = 78
+          Width = 91
+          Height = 28
           Caption = 'Exp. Time'
           TabOrder = 13
         end
         object StaticText5: TStaticText
-          Left = 1003
-          Top = 63
-          Width = 77
-          Height = 24
+          Left = 1234
+          Top = 78
+          Width = 89
+          Height = 28
           Caption = 'Dead time'
           TabOrder = 14
         end
         object deadspn: TSpinEdit
-          Left = 1005
-          Top = 89
-          Width = 69
-          Height = 30
+          Left = 1237
+          Top = 110
+          Width = 85
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 15
           Value = 2
         end
         object StaticText6: TStaticText
-          Left = 1084
-          Top = 63
-          Width = 38
-          Height = 24
+          Left = 1334
+          Top = 78
+          Width = 42
+          Height = 28
           Caption = 'Step'
           TabOrder = 16
         end
         object stepspn: TSpinEdit
-          Left = 1081
-          Top = 87
-          Width = 69
-          Height = 30
+          Left = 1330
+          Top = 107
+          Width = 85
+          Height = 35
           MaxValue = 0
           MinValue = 0
           TabOrder = 17
@@ -298,53 +298,53 @@ object MainForm: TMainForm
       object Panel3: TPanel
         Left = 0
         Top = 0
-        Width = 801
-        Height = 129
+        Width = 986
+        Height = 163
         Align = alLeft
         TabOrder = 0
         object Label5: TLabel
           Left = 1
-          Top = 18
-          Width = 68
-          Height = 20
+          Top = 22
+          Width = 81
+          Height = 24
           Caption = 'COM port'
         end
         object Label6: TLabel
-          Left = 159
-          Top = 18
-          Width = 81
-          Height = 20
+          Left = 196
+          Top = 22
+          Width = 94
+          Height = 24
           Caption = '7088d addr'
         end
         object Label7: TLabel
           Left = 1
-          Top = 44
-          Width = 41
-          Height = 20
+          Top = 54
+          Width = 48
+          Height = 24
           Caption = 'Write:'
         end
         object Label8: TLabel
-          Left = 417
-          Top = 43
-          Width = 43
-          Height = 20
+          Left = 513
+          Top = 53
+          Width = 50
+          Height = 24
           Caption = 'Read:'
         end
         object Label9: TLabel
-          Left = 299
-          Top = 16
-          Width = 59
-          Height = 20
+          Left = 368
+          Top = 20
+          Width = 71
+          Height = 24
           Caption = 'Channel'
         end
         object ComComboBox: TComboBox
-          Left = 72
-          Top = 16
-          Width = 85
-          Height = 28
+          Left = 89
+          Top = 20
+          Width = 104
+          Height = 32
           Style = csDropDownList
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-          ItemHeight = 20
+          ItemHeight = 24
           ItemIndex = 0
           TabOrder = 0
           Text = 'COM1'
@@ -363,36 +363,36 @@ object MainForm: TMainForm
             'COM12')
         end
         object Button2: TButton
-          Left = 608
-          Top = 6
-          Width = 111
-          Height = 26
+          Left = 748
+          Top = 7
+          Width = 137
+          Height = 32
           Caption = 'Write && Read'
           TabOrder = 1
         end
         object Edit1: TEdit
           Left = 1
-          Top = 64
-          Width = 409
+          Top = 79
+          Width = 504
           Height = 28
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           TabOrder = 2
           Text = '*IDN?'
         end
         object Memo1: TMemo
-          Left = 413
-          Top = 64
-          Width = 383
-          Height = 63
+          Left = 508
+          Top = 79
+          Width = 472
+          Height = 77
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           Lines.Strings = (
             'Memo1')
           TabOrder = 3
         end
         object address: TSpinEdit
-          Left = 245
-          Top = 13
-          Width = 52
+          Left = 302
+          Top = 16
+          Width = 64
           Height = 30
           MaxValue = 0
           MinValue = 0
@@ -400,9 +400,9 @@ object MainForm: TMainForm
           Value = 2
         end
         object edCh: TSpinEdit
-          Left = 369
-          Top = 13
-          Width = 41
+          Left = 454
+          Top = 16
+          Width = 51
           Height = 30
           MaxValue = 0
           MinValue = 0
@@ -417,46 +417,46 @@ object MainForm: TMainForm
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 465
-        Height = 129
+        Width = 572
+        Height = 163
         Align = alLeft
         TabOrder = 0
         object Label11: TLabel
-          Left = 24
-          Top = 48
-          Width = 41
-          Height = 20
+          Left = 30
+          Top = 59
+          Width = 48
+          Height = 24
           Caption = 'Write:'
         end
         object Label12: TLabel
-          Left = 24
-          Top = 96
-          Width = 43
-          Height = 20
+          Left = 30
+          Top = 118
+          Width = 50
+          Height = 24
           Caption = 'Read:'
         end
         object Button3: TButton
-          Left = 344
-          Top = 16
-          Width = 89
-          Height = 17
+          Left = 423
+          Top = 20
+          Width = 110
+          Height = 21
           Caption = 'Write && Read'
           TabOrder = 0
         end
         object Edit2: TEdit
-          Left = 24
-          Top = 64
-          Width = 409
+          Left = 30
+          Top = 79
+          Width = 503
           Height = 28
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           TabOrder = 1
           Text = '*IDN?'
         end
         object Memo2: TMemo
-          Left = 24
-          Top = 112
-          Width = 409
-          Height = 67
+          Left = 30
+          Top = 138
+          Width = 503
+          Height = 82
           ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
           Lines.Strings = (
             'Memo1')
@@ -467,26 +467,26 @@ object MainForm: TMainForm
   end
   object Panel5: TPanel
     Left = 0
-    Top = 164
-    Width = 1212
-    Height = 597
+    Top = 202
+    Width = 1449
+    Height = 545
     Align = alClient
     Caption = 'Panel5'
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1210
-      Height = 3
+      Width = 1447
+      Height = 4
       Cursor = crVSplit
       Align = alTop
     end
     object PageControl2: TPageControl
       Left = 1
-      Top = 4
-      Width = 1210
-      Height = 592
-      ActivePage = TabSheet4
+      Top = 5
+      Width = 1447
+      Height = 539
+      ActivePage = ts1
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -494,8 +494,8 @@ object MainForm: TMainForm
         object Chart1: TChart
           Left = 0
           Top = 0
-          Width = 1202
-          Height = 328
+          Width = 1439
+          Height = 404
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           MarginBottom = 0
@@ -618,9 +618,9 @@ object MainForm: TMainForm
         end
         object Chart2: TChart
           Left = 0
-          Top = 328
-          Width = 1202
-          Height = 236
+          Top = 404
+          Width = 1439
+          Height = 104
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           MarginBottom = 0
@@ -740,8 +740,8 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1202
-          Height = 564
+          Width = 1439
+          Height = 508
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
@@ -808,32 +808,32 @@ object MainForm: TMainForm
         object Panel6: TPanel
           Left = 0
           Top = 0
-          Width = 1202
-          Height = 41
+          Width = 1439
+          Height = 50
           Align = alTop
           TabOrder = 0
           object startDacbtn: TSpeedButton
-            Left = 8
-            Top = 4
-            Width = 65
-            Height = 33
+            Left = 10
+            Top = 5
+            Width = 80
+            Height = 41
             Caption = 'Start'
             OnClick = startDacbtnClick
           end
         end
         object Panel7: TPanel
           Left = 0
-          Top = 41
-          Width = 1202
-          Height = 523
+          Top = 50
+          Width = 1439
+          Height = 458
           Align = alClient
           Caption = 'Panel7'
           TabOrder = 1
           object Chart4: TChart
             Left = 1
             Top = 1
-            Width = 1200
-            Height = 521
+            Width = 1437
+            Height = 456
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             Title.Text.Strings = (
@@ -864,12 +864,183 @@ object MainForm: TMainForm
           end
         end
       end
+      object ts1: TTabSheet
+        Caption = 'Expositions'
+        ImageIndex = 3
+        object pnl1: TPanel
+          Left = 0
+          Top = 0
+          Width = 664
+          Height = 508
+          Align = alClient
+          Caption = 'pnl1'
+          TabOrder = 0
+          object pnl3: TPanel
+            Left = 627
+            Top = 1
+            Width = 36
+            Height = 506
+            Align = alRight
+            Caption = 'pnl3'
+            TabOrder = 0
+            object addbtn: TSpeedButton
+              Left = 3
+              Top = 3
+              Width = 30
+              Height = 30
+              Glyph.Data = {
+                F6060000424DF606000000000000360000002800000018000000180000000100
+                180000000000C006000074120000741200000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0B0B016161600000000000000000000
+                0000000000000000000000000000000000000000000000000000000000000000
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1515150000000000
+                0000000000000000000000000000000000000000000000000000000000000000
+                0000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFB0B0B016
+                1616000000000000000000000000000000000000000000000000000000000000
+                000000000000171717B2B2B2FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF15151500000000000000000000000000000000000000000000000000
+                0000000000000000000000000000000000171717FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00000000000000000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000000000
+                000000000000000000FFFFFFFFFFFF0000000000000000000000000000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF00000000
+                0000000000000000000000000000000000FFFFFFFFFFFF000000000000000000
+                000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF000000000000000000000000000000000000000000FFFFFFFFFFFF00
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00FFFFFFFFFFFF000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000FFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF00000000
+                0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF000000000000000000000000000000000000000000FFFFFFFFFFFF00
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00FFFFFFFFFFFF000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000000000
+                000000000000000000FFFFFFFFFFFF0000000000000000000000000000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+                0000000000000000000000000000000000FFFFFFFFFFFF000000000000000000
+                000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFF00000000000000000000000000000000000000000000000000000000
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFF1616160000000000000000000000000000000000
+                00000000000000000000000000000000000000000000000000161616FFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAEAEAE161616000000000000
+                0000000000000000000000000000000000000000000000000000000000001515
+                15B0B0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+            end
+            object rembtn: TSpeedButton
+              Left = 3
+              Top = 35
+              Width = 30
+              Height = 30
+              Glyph.Data = {
+                F6060000424DF606000000000000360000002800000018000000180000000100
+                180000000000C006000074120000741200000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB0B0B016161600000000000000000000
+                0000000000000000000000000000000000000000000000000000000000000000
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1515150000000000
+                0000000000000000000000000000000000000000000000000000000000000000
+                0000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFB0B0B016
+                1616000000000000000000000000000000000000000000000000000000000000
+                000000000000171717B2B2B2FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF15151500000000000000000000000000000000000000000000000000
+                0000000000000000000000000000000000171717FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00000000000000000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000000000
+                0000000000000000000000000000000000000000000000000000000000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF00000000
+                0000000000000000000000000000000000020202020202000000000000000000
+                000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF00000000000000000000000000000000000000000001010101010100
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00040404040404000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000FFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF00000000
+                0000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFF
+                FFFFFFFF00000000000000000000000000000000000000000010101012121200
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                000000000000FFFFFFFFFFFF0000000000000000000000000000000000000000
+                00000000000000000000000000000000000000000000000000000000FFFFFFFF
+                FFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFF000000000000000000000000
+                0000000000000000000707070303030000000000000000000000000000000000
+                00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+                0000000000000000000000000000000000060606020202000000000000000000
+                000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFF00000000000000000000000000000000000000000000000000000000
+                0000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFF1616160000000000000000000000000000000000
+                00000000000000000000000000000000000000000000000000161616FFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAEAEAE161616000000000000
+                0000000000000000000000000000000000000000000000000000000000001515
+                15B0B0B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+            end
+          end
+          object dbgrd1: TDBGrid
+            Left = 1
+            Top = 1
+            Width = 626
+            Height = 506
+            Align = alClient
+            DataSource = ds1
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -14
+            TitleFont.Name = 'MS Sans Serif'
+            TitleFont.Style = []
+          end
+        end
+        object pnl2: TPanel
+          Left = 664
+          Top = 0
+          Width = 775
+          Height = 508
+          Align = alRight
+          Caption = 'pnl2'
+          TabOrder = 1
+        end
+      end
     end
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 792
-    Width = 1212
+    Top = 785
+    Width = 1449
     Height = 30
     Panels = <
       item
@@ -886,5 +1057,53 @@ object MainForm: TMainForm
     OnTimer = Timer1Timer
     Left = 1124
     Top = 63
+  end
+  object con1: TADOConnection
+    Provider = 'ADsDSOObject'
+    Left = 654
+    Top = 282
+  end
+  object con2: TZConnection
+    ControlsCodePage = cGET_ACP
+    AutoEncodeStrings = False
+    Connected = True
+    Port = 0
+    Database = 'G:\home\RHL\Files\SRC\daq_5790.delphi7\daq_5790\exp.db'
+    Protocol = 'sqlite-3'
+    Left = 702
+    Top = 250
+  end
+  object zqry1: TZQuery
+    Connection = con2
+    BeforePost = zqry1BeforePost
+    Active = True
+    SQL.Strings = (
+      'select * from seanses')
+    Params = <>
+    Left = 710
+    Top = 298
+    object zqry1num: TLargeintField
+      FieldName = 'num'
+    end
+    object zqry1LowV: TLargeintField
+      FieldName = 'LowV'
+      Required = True
+    end
+    object zqry1HighV: TLargeintField
+      FieldName = 'HighV'
+    end
+    object zqry1exposition: TLargeintField
+      FieldName = 'exposition'
+      Required = True
+    end
+    object zqry1Dead_time: TLargeintField
+      FieldName = 'Dead_time'
+      Required = True
+    end
+  end
+  object ds1: TDataSource
+    DataSet = zqry1
+    Left = 686
+    Top = 370
   end
 end
