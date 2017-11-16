@@ -171,9 +171,11 @@ int main(int argc, char** argv) {
     int ret = bcm2835_init();
     if (ret != 1) {
         fprintf(stderr, "Error in bcm2835_init()\n");
+    
 
         return -1;
     }
+    fprintf(stderr, "bcm2835_init()\n");
 
     ret = bcm2835_spi_begin();
     if (ret != 1) {
@@ -194,6 +196,8 @@ int main(int argc, char** argv) {
         init_DAC();
 
     } else {
+        fprintf(stderr, "start without init  5790\n" );
+
     }
 
 
@@ -212,6 +216,7 @@ int main(int argc, char** argv) {
     if (bind(sock, (struct sockaddr *) &svr_addr, sizeof (svr_addr)) == -1) {
         close(sock);
         err(1, "Can't bind");
+	return 0;
     }
     double setval;
     uint16_t dsetval;
@@ -220,19 +225,19 @@ int main(int argc, char** argv) {
     while (1) {
         client_fd = accept(sock, (struct sockaddr *) &cli_addr, &sin_len);
 
-           printf("got connection\n");
+//           printf("got connection\n");
 
         if (client_fd == -1) {
-            perror("Can't accept");
+//            perror("Can't accept");
             continue;
         }
 
         timer = time(NULL);
         u = localtime(&timer);
         f = settime(u);
-        printf("req %d %s\n", timer, f);
+        printf("\n####################################\n %s",  f);
         rdlen = read(client_fd, answer, 2000);
-                printf("answer %s \n", answer);
+                printf(" request: %s \n", answer);
         strstart = 0;
         strpos = 0;
         /*    nword = "";
