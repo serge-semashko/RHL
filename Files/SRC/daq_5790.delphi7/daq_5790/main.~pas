@@ -1,13 +1,13 @@
 unit main;
-
+
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, gpib_user, Adgpib, ComCtrls, ExtCtrls, TeEngine, Series, TeeProcs,
   Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
-  Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset,
-  ZAbstractDataset, ZDataset, ZAbstractConnection, ZConnection;
+  Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
+  ZDataset, ZAbstractConnection, ZConnection;
 
 type
   TDAQThread = class(TThread)
@@ -116,6 +116,7 @@ type
   public
     function delay(ms: integer): integer;
     function InitCounterAndGPIB: integer;
+    procedure INITGPIB_UpdateStartInterval;
     procedure CreatedataFileName;
     procedure UpdateStartInterval;
     { Public declarations }
@@ -130,6 +131,8 @@ type
   Varray = array of vrecord;
 
 var
+  GPIB_Ready: Boolean = false;
+  counter_ready: boolean = false;
   meanVoltage: double = 0;
   LastVoltage: array[0..5] of double = (0, 0, 0, 0, 0, 0);
   Stage: integer;
@@ -548,9 +551,50 @@ begin
   bCfgChg := False;
   gszSend := StrAlloc(100);
   gszReceive := StrAlloc(100);
-//     restorecomponents(self);
-  UpdateStartInterval;
+  INITGPIB_UpdateStartInterval;
 end;
+procedure TMainForm.INITGPIB_UpdateStartInterval;
+var
+  dstep: integer;
+begin
+  gettingData := false;
+  InitCounterAndGPIB();
+  if (not GPIB_Ready) then exit;
+
+  delay(deadspn.Value);
+  if abs(CurVoltage) > 1000 then
+  begin;
+  end
+  else
+  begin;
+    Bottomspn.Value := trunc(CurVoltage * 10000);
+    Topspn.Value := trunc(CurVoltage * 10000);
+  end;
+  ibonl(dev, 0);
+  gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+  if (ibsta AND ERR) <> 0 THEN
+  begin
+    memoRead.Lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' +
+      'Err: Error in offline the GPIB interface card.' + #10);
+    writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' +
+      'Err: Error in offline the GPIB interface card.' + #10);
+  end;
+  StartCycle.Enabled := true;
+  iRet := close_Com(gcPort);
+  If iRet > 0 Then
+  Begin
+    Beep;
+    iConfirm := MessageDlg('close_COM Error Code:' + IntToStr(iRet) + #13 +
+      IGetErrorString(iRet) + #13 + 'Quit this demo?', mtConfirmation,
+      [mbYes, mbNo], 0);
+
+  End;
+  DaqGetdata;
+  bComOpen := false;
+  bCfgChg := false;
+
+end;
+
 
 procedure TimerProc(uTimerID, uMessage: UINT; dwUser, dw1, dw2: DWORD) stdcall;
 begin
@@ -645,7 +689,6 @@ begin
   delay(3);
   daqGetdata;
   memoread.Lines.Add('Set ok. wait 4 sec');
-//while (now-start_Step)*24*3600<4 do application.processmessages;
   daqthread.Resume;
   start_step := now;
 
@@ -795,16 +838,13 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
-  if paramcount > 0 then
+  if (not GPIB_Ready) then
   begin
-    if paramstr(1) = 'continue' then
-    begin
-      caption := 'Continue';
-      cycBox.Checked := true;
-      StartCycle.Click;
-
-    end;
+    showmessage('GPIB(цифровой вольметр)недоступен');
+    close;
+    application.terminate;
   end;
+
 end;
 
 procedure TMainForm.Chart1DblClick(Sender: TObject);
@@ -829,7 +869,6 @@ begin
     exit;
   end;
   startdacbtn.Caption := 'Stop';
-  InitCounterAndGPIB();
   gettingData := false;
   border_high := v_convert(v_ref, topspn.Value / 10000);
   border_low := v_convert(v_ref, bottomspn.Value / 10000);
@@ -850,37 +889,17 @@ begin
         break;
     setDPotential(curControl);
     delay(1);
-    daqGetdata;
 //    dacseries.AddXY(curControl,curVoltage);
     writetimelog(dataFileName, format('%.5d %9.7f', [curControl, curVoltage]));
     curControl := curControl + dstep * trunc((100.0 * $FFFFF / 50000));
   end;
   delay(1);
-  daqGetdata;
   if startdacbtn.Caption <> 'Stop' then
   begin
   end;
   startdacbtn.Caption := 'Start';
 
-  ibonl(dev, 0);
-  gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-  if (ibsta and ERR) <> 0 then
-  begin
-    memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in offline the GPIB interface card.' + #10);
-    writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in offline the GPIB interface card.' + #10);
-  end;
   StartCycle.Enabled := true;
-  iRet := close_Com(gcPort);
-  if iRet > 0 then
-  begin
-    Beep;
-    iConfirm := MessageDlg('close_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13 + 'Quit this demo?', mtConfirmation, [mbYes, mbNo], 0);
-
-  end;
-
-  bComOpen := false;
-  bCfgChg := False;
-
 end;
 
 function TMainForm.delay(ms: integer): integer;
@@ -899,21 +918,26 @@ var
   wrtbuf: array[0..2000] of char;
 begin
 
-  if counter_and_GPIB_ready then
+  if counter_ready and GPIB_ready then
     exit;
-  gcPort := Char(ComComboBox.ItemIndex + 1);      // Setting Com Port
-  gdwBaudRate := 9600;
-
-  iRet := Open_Com(gcPort, gdwBaudRate, gcDataBit, gcParity, gcStopBit);
-  if iRet > 0 then
+  if (not counter_ready) then
   begin
-    Beep;
-    iConfirm := MessageDlg('OPEN_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13 + 'Quit this demo?', mtConfirmation, [mbYes, mbNo], 0);
 
+    gcPort := Char(ComComboBox.ItemIndex + 1);      // Setting Com Port
+    gdwBaudRate := 9600;
+
+    iRet := Open_Com(gcPort, gdwBaudRate, gcDataBit, gcParity, gcStopBit);
+    if iRet > 0 then
+    begin
+      Beep;
+      iConfirm := MessageDlg('OPEN_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13 + 'Quit this demo?', mtConfirmation, [mbYes, mbNo], 0);
+
+    end;
+
+    bComOpen := True;
+    bCfgChg := False;
+    counter_ready := true;
   end;
-
-  bComOpen := True;
-  bCfgChg := False;
 
   dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
   StartCycle.Enabled := false;
@@ -1105,12 +1129,9 @@ end;
 
 procedure TMainForm.zqry1BeforePost(DataSet: TDataSet);
 begin
-  showmessage( dataset.FieldByName('num').Value+' '+
-               dataset.FieldByName('lowv').Value+' '+
-               dataset.FieldByName('highv').Value+' '+
-               dataset.FieldByName('exposition').Value+' ');
+  showmessage(DataSet.FieldByName('num').AsString + ' ' + DataSet.FieldByName('lowv').AsString + ' ' + DataSet.FieldByName('highv').AsString + ' ' + DataSet.FieldByName('exposition').AsString + ' ');
 end;
-
 
 end.
 
+
