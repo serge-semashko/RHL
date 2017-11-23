@@ -105,6 +105,7 @@ type
     Varray = array of vrecord;
 
 var
+    daq_mode : integer = 0;
     GPIB_Ready: Boolean = false;
     counter_ready: boolean = false;
     meanVoltage: double = 0;
@@ -164,6 +165,14 @@ implementation
 uses
     math, logging, SetMinMax, das_const, i7000, i7000u, dcon_pc;
 {$R *.DFM}
+function delay(ms: integer): integer;
+var
+    st: double;
+begin
+    st := now;
+    while (now - st) * 24 * 3600 < ms do
+        application.ProcessMessages;
+end;
 
 function V_Convert(v_cur: double): dword;
 begin
@@ -234,10 +243,28 @@ begin
         correctVoltage(target);
         delay(1);
     end;
-    if (Bottomspn.Value * 1.0 - meanVoltage * 10000) > 0.2 then
+    if (target * 1.0 - meanVoltage * 10000) > 0.2 then
         result := false
     else
         result := true;
+end;
+Function SetIntervalBorder(target:double):boolean;
+  var
+    tarcontrol: int64;
+    startsetTime: double;
+begin
+    startsetTime := now;
+    while ((target * 1.0 - meanVoltage * 10000) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+        correctVoltage(target);
+        delay(1);
+    end;
+    if (target * 1.0 - meanVoltage * 10000) > 1 then begin
+        result := false;
+        exit;
+    end;
+    result := setVoltage(target);
+end;
+
 end;
 
 
@@ -590,6 +617,11 @@ begin
             curTarget := newTarget;
             if (dstep > 0) then begin
                 if newTarget > border_high then begin
+                    zqry1.MoveBy(1);
+                    if zqry1.Eof then begin
+                      if mode
+
+                    end;
                     dstep := -1;
                     Stage := Stage + 1;
                 end;

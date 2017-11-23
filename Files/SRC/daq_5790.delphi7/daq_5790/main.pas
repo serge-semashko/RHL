@@ -265,7 +265,6 @@ begin
     result := setVoltage(target);
 end;
 
-end;
 
 
 procedure CalcStdAndMean(cur, len: integer);
@@ -495,20 +494,6 @@ end;
 
 procedure TMainForm.StartCycleClick(Sender: TObject);
 
-    procedure ClearSeries;
-    begin
-        ch1StdSeries.clear;
-        series1.Clear;
-        ch1VoltSeries.clear;
-        CountPerVSeries.Clear;
-        ch1VoltSeries.clear;
-        ch1MeanSeries.clear;
-        MEANvOLTAGEseries.clear;
-        STDvOLTAGEseries.clear;
-        Counterseries.clear;
-
-    end;
-
 var
   //Declare variables
     wrtbuf, rdbuf: packed array[0..399] of char;
@@ -523,6 +508,43 @@ var
     CounterStep: integer;
     Stepstr: string;
     newTarget, curTarget: double;
+    procedure ClearSeries;
+    begin
+        ch1StdSeries.clear;
+        series1.Clear;
+        ch1VoltSeries.clear;
+        CountPerVSeries.Clear;
+        ch1VoltSeries.clear;
+        ch1MeanSeries.clear;
+        MEANvOLTAGEseries.clear;
+        STDvOLTAGEseries.clear;
+        Counterseries.clear;
+
+    end;
+Function SelectNewRegion:boolean;
+begin
+
+              if (dstep > 0) then begin
+                if newTarget > border_high then begin
+                    zqry1.MoveBy(1);
+                    if zqry1.Eof then begin
+                      if daq_mode = 0 then begin
+                      end;
+
+                    end;
+                    dstep := -1;
+                    Stage := Stage + 1;
+                end;
+            end
+            else begin
+                if newTarget < border_low then begin
+                    Stage := Stage + 1;
+                    dstep := 1;
+                end
+            end;
+
+end;
+
 begin
     Stage := 1;
     CreateDataFileName;
@@ -615,30 +637,15 @@ begin
 
             newTarget := curTarget + dstep * stepspn.Value;
             curTarget := newTarget;
-            if (dstep > 0) then begin
-                if newTarget > border_high then begin
-                    zqry1.MoveBy(1);
-                    if zqry1.Eof then begin
-                      if mode
-
-                    end;
-                    dstep := -1;
-                    Stage := Stage + 1;
-                end;
-            end
-            else begin
-                if newTarget < border_low then begin
-                    Stage := Stage + 1;
-                    dstep := 1;
-                end
+            if (curtarget>Border_High) or (curtarget<Border_low) then begin
+              selectNewRegion();
             end;
-
-            while abs(curTarget * 1.0 - meanVoltage * 10000) > 0.03 do begin
-                curControl := curControl + trunc((curTarget * 1.0 - curVoltage * 10000) / (50000 / $FFFFF));
-                setdPotential(curControl);
-
-                delay(2);
+            if not setVoltage(curtarget) then begin
+              //
             end;
+            StartStep:= now;
+            SetVoltage(curtarget);
+
             while (now - start_Step) * 24 * 3600 < deadspn.Value - 2 do
                 application.processmessages;
 
