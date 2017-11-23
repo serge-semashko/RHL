@@ -45,10 +45,6 @@ type
         con1: TADOConnection;
         con2: TZConnection;
         zqry1: TZQuery;
-        zqry1LowV: TLargeintField;
-        zqry1HighV: TLargeintField;
-        zqry1exposition: TLargeintField;
-        zqry1Dead_time: TLargeintField;
         ds1: TDataSource;
         dbgrd1: TDBGrid;
         Bottomspn: TSpinEdit;
@@ -77,6 +73,7 @@ type
         memoRead: TMemo;
         CycBox: TCheckBox;
         dbgrd2: TDBGrid;
+    btn1: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -87,6 +84,7 @@ type
         procedure zqry1BeforePost(DataSet: TDataSet);
         procedure pnl3Click(Sender: TObject);
         procedure rembtnClick(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
     private
     { Private declarations }
     public
@@ -989,6 +987,7 @@ begin
     zqry1.FieldValues['HighV'] := topspn.Value;
     zqry1.FieldValues['dead_time'] := deadspn.Value;
     zqry1.FieldValues['exposition'] := expspn.Value;
+    zqry1.FieldValues['step'] := stepspn.Value;
     zqry1.Post;
     zqry1.Close;
     zqry1.Open;
@@ -997,7 +996,17 @@ end;
 procedure TMainForm.rembtnClick(Sender: TObject);
 begin
     zqry1.Delete;
-    zqry1.Refresh;
+   zqry1.close;
+   zqry1.open;
+end;
+
+procedure TMainForm.btn1Click(Sender: TObject);
+begin
+  while zqry1.RecordCount >0 do begin
+   zqry1.Delete;
+   zqry1.close;
+   zqry1.open;
+ end;
 end;
 
 end.

@@ -407,7 +407,7 @@ object MainForm: TMainForm
         object pnl1: TPanel
           Left = 0
           Top = 0
-          Width = 643
+          Width = 713
           Height = 643
           Align = alLeft
           Caption = 'pnl1'
@@ -415,7 +415,7 @@ object MainForm: TMainForm
           object pnl3: TPanel
             Left = 1
             Top = 577
-            Width = 641
+            Width = 711
             Height = 65
             Align = alBottom
             Caption = 'pnl3'
@@ -548,6 +548,14 @@ object MainForm: TMainForm
                 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
               OnClick = rembtnClick
             end
+            object btn1: TSpeedButton
+              Left = 584
+              Top = 16
+              Width = 81
+              Height = 22
+              Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+              OnClick = btn1Click
+            end
             object Bottomspn: TSpinEdit
               Left = 81
               Top = 21
@@ -656,7 +664,7 @@ object MainForm: TMainForm
           object dbgrd1: TDBGrid
             Left = 1
             Top = 1
-            Width = 641
+            Width = 711
             Height = 576
             Align = alClient
             DataSource = ds1
@@ -671,9 +679,9 @@ object MainForm: TMainForm
           end
         end
         object pnl2: TPanel
-          Left = 643
+          Left = 713
           Top = 0
-          Width = 778
+          Width = 708
           Height = 643
           Align = alClient
           Caption = 'pnl2'
@@ -681,7 +689,7 @@ object MainForm: TMainForm
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 776
+            Width = 706
             Height = 641
             Align = alClient
             TabOrder = 0
@@ -754,7 +762,7 @@ object MainForm: TMainForm
             object Panel2: TPanel
               Left = 1
               Top = 256
-              Width = 774
+              Width = 704
               Height = 384
               Align = alBottom
               TabOrder = 3
@@ -908,21 +916,6 @@ object MainForm: TMainForm
     Params = <>
     Left = 710
     Top = 298
-    object zqry1LowV: TLargeintField
-      FieldName = 'LowV'
-      Required = True
-    end
-    object zqry1HighV: TLargeintField
-      FieldName = 'HighV'
-    end
-    object zqry1exposition: TLargeintField
-      FieldName = 'exposition'
-      Required = True
-    end
-    object zqry1Dead_time: TLargeintField
-      FieldName = 'Dead_time'
-      Required = True
-    end
   end
   object ds1: TDataSource
     DataSet = zqry1

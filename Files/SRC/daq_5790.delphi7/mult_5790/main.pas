@@ -45,10 +45,6 @@ type
         con1: TADOConnection;
         con2: TZConnection;
         zqry1: TZQuery;
-        zqry1LowV: TLargeintField;
-        zqry1HighV: TLargeintField;
-        zqry1exposition: TLargeintField;
-        zqry1Dead_time: TLargeintField;
         ds1: TDataSource;
         dbgrd1: TDBGrid;
         Bottomspn: TSpinEdit;
@@ -77,6 +73,7 @@ type
         memoRead: TMemo;
         CycBox: TCheckBox;
         dbgrd2: TDBGrid;
+        btn1: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -87,6 +84,7 @@ type
         procedure zqry1BeforePost(DataSet: TDataSet);
         procedure pnl3Click(Sender: TObject);
         procedure rembtnClick(Sender: TObject);
+        procedure btn1Click(Sender: TObject);
     private
     { Private declarations }
     public
@@ -120,6 +118,7 @@ var
     HTTP: THTTPSend = nil;
     StepStartIndex: int64;
     Border_High, Border_low: dword;
+    step_value, dead_value : int64;
     dstep: integer;
     DaqThread: Tdaqthread;
     CurVoltage: double;
@@ -481,7 +480,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
-   con2.Database := extractfilepath(application.ExeName)+'exp.db'    ;
+    con2.Database := extractfilepath(application.ExeName) + 'exp.db';
     cmbGPIB.ItemIndex := 0;
     cmbInst.ItemIndex := 15;
     memoRead.Text := '';
@@ -540,6 +539,16 @@ var
         halt(1);
     end;
 
+    procedure setrangeparams;
+    begin
+       border_low := zqry1.FieldValues['lowV'];
+       border_high := zqry1.FieldValues['HighV'];
+       dead_value :=zqry1.FieldValues['dead_time'];
+       step_value :=zqry1.FieldValues['step'];
+       step_len := zqry1.FieldValues['exposition'];
+
+    end;
+
     function SetNewRegion: boolean;
     begin
         if daq_mode = 1 then begin
@@ -558,6 +567,7 @@ var
                     if daq_mode = 0 then begin
                         dstep := -1;
                         curTarget := zqry1.FieldValues['HighV'];
+
                     end
                     else begin
                         zqry1.MoveBy(-zqry1.RecNo);
@@ -565,6 +575,7 @@ var
                     end;
                 end;
                 countPerVSeries.Clear;
+                setrangeparams;
                 Stage := Stage + 1;
                 exit;
             end;
@@ -575,18 +586,15 @@ var
             if newTarget < border_low then begin
                 zqry1.MoveBy(-1);
                 if zqry1.bof then begin
-                    if daq_mode = 0 then begin
-                        dstep := 1;
-                        curTarget := zqry1.FieldValues['lowV'];
-                    end
-                    else
-                        showerrorrange;
-
-                end;
+                    dstep := 1;
+                    curTarget := zqry1.FieldValues['lowV'];
+                end
+                else
+                    curTarget := zqry1.FieldValues['HighV'];
                 countPerVSeries.Clear;
+                setrangeparams;
                 Stage := Stage + 1;
                 exit;
-
             end
         end;
         showmessage('set range illegal sutiation');
@@ -611,13 +619,15 @@ begin
     border_low := Bottomspn.Value;
     step_len := expspn.Value;
     SetRegionBorder(border_low);
-    for i1 := 0 to 10 do begin
-      if SetVoltage(border_low) then break;
-      if i1 = 10 then begin
-        showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
-        exit;
-      end;
+    for I1 := 0 to 10 do begin
+        if SetVoltage(border_low) then
+            break;
+        if I1 = 10 then begin
+            showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+            exit;
+        end;
     end;
+//    setreg
     memoread.Lines.Add('Set ok. wait 4 sec');
     start_step := now;
 
@@ -689,7 +699,7 @@ begin
 
             StepStartIndex := vindex + 1;
 
-            newTarget := curTarget + dstep * stepspn.Value;
+            newTarget := curTarget + dstep * step_Value;
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 SetNewRegion();
@@ -697,11 +707,11 @@ begin
                 SetVoltage(curTarget);
             end
             else begin
-                while (now - start_dead) * 24 * 3600 < deadspn.Value do begin
+                while (now - start_dead) * 24 * 3600 < dead_Value do begin
                     CorrectVoltage(curTarget);
                     delay(1000);
                 end;
-                while (now - start_dead) * 24 * 3600 < deadspn.Value do begin
+                while (now - start_dead) * 24 * 3600 < dead_Value do begin
                     delay(300);
                 end;
             end;
@@ -989,6 +999,7 @@ begin
     zqry1.FieldValues['HighV'] := topspn.Value;
     zqry1.FieldValues['dead_time'] := deadspn.Value;
     zqry1.FieldValues['exposition'] := expspn.Value;
+    zqry1.FieldValues['step'] := stepspn.Value;
     zqry1.Post;
     zqry1.Close;
     zqry1.Open;
@@ -997,7 +1008,17 @@ end;
 procedure TMainForm.rembtnClick(Sender: TObject);
 begin
     zqry1.Delete;
-    zqry1.Refresh;
+    zqry1.close;
+    zqry1.open;
+end;
+
+procedure TMainForm.btn1Click(Sender: TObject);
+begin
+    while zqry1.RecordCount > 0 do begin
+        zqry1.Delete;
+        zqry1.close;
+        zqry1.open;
+    end;
 end;
 
 end.

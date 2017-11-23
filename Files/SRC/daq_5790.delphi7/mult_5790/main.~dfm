@@ -85,7 +85,7 @@ object MainForm: TMainForm
       Top = 5
       Width = 1429
       Height = 674
-      ActivePage = TabSheet5
+      ActivePage = ts1
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -548,6 +548,13 @@ object MainForm: TMainForm
                 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
               OnClick = rembtnClick
             end
+            object btn1: TSpeedButton
+              Left = 584
+              Top = 16
+              Width = 23
+              Height = 22
+              OnClick = btn1Click
+            end
             object Bottomspn: TSpinEdit
               Left = 81
               Top = 21
@@ -660,6 +667,7 @@ object MainForm: TMainForm
             Height = 576
             Align = alClient
             DataSource = ds1
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
             ReadOnly = True
             TabOrder = 1
             TitleFont.Charset = DEFAULT_CHARSET
@@ -907,21 +915,6 @@ object MainForm: TMainForm
     Params = <>
     Left = 710
     Top = 298
-    object zqry1LowV: TLargeintField
-      FieldName = 'LowV'
-      Required = True
-    end
-    object zqry1HighV: TLargeintField
-      FieldName = 'HighV'
-    end
-    object zqry1exposition: TLargeintField
-      FieldName = 'exposition'
-      Required = True
-    end
-    object zqry1Dead_time: TLargeintField
-      FieldName = 'Dead_time'
-      Required = True
-    end
   end
   object ds1: TDataSource
     DataSet = zqry1
