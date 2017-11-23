@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<!-- saved from url=(0056)https://wiki.analog.com/resources/quick-start/ad5791?do= -->
+<html class="js js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths" lang="en" dir="ltr"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/aquant.js" async="" type="text/javascript"></script><script type="text/javascript" src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/300lo.json"></script><script type="text/javascript" src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/_ate.track.config_resp"></script>
+    
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>AD5781/AD5791 Quick Start Guide [Analog Devices Wiki]</title>
+
+    <script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satelliteLib-6918599d4993e6e0537845174bbba34655d0ec94.js" type="text/javascript" async=""></script><script>(function (H) {
+            H.className = H.className.replace(/\bno-js\b/, 'js')
+        })(document.documentElement)</script>
+    <meta name="generator" content="DokuWiki">
+<meta name="robots" content="index,follow">
+<meta name="keywords" content="resources,quick-start,ad5791">
+<link rel="search" type="application/opensearchdescription+xml" href="https://wiki.analog.com/lib/exe/opensearch.php" title="Analog Devices Wiki">
+<link rel="start" href="https://wiki.analog.com/">
+<link rel="contents" href="https://wiki.analog.com/resources/quick-start/ad5791?do=index" title="Sitemap">
+<link rel="alternate" type="application/rss+xml" title="Recent changes" href="https://wiki.analog.com/feed.php">
+<link rel="alternate" type="application/rss+xml" title="Current namespace" href="https://wiki.analog.com/feed.php?mode=list&amp;ns=resources:quick-start">
+<link rel="alternate" type="text/html" title="Plain HTML" href="https://wiki.analog.com/_export/xhtml/resources/quick-start/ad5791">
+<link rel="alternate" type="text/plain" title="Wiki Markup" href="https://wiki.analog.com/_export/raw/resources/quick-start/ad5791">
+<link rel="canonical" href="https://wiki.analog.com/resources/quick-start/ad5791">
+<link rel="stylesheet" type="text/css" href="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/css.php">
+<script type="text/javascript">/*<![CDATA[*/var NS='resources:quick-start';var JSINFO = {"id":"resources:quick-start:ad5791","namespace":"resources:quick-start","plugin_folded":{"hide":"hide","reveal":"reveal"},"move_renameokay":false};
+/*!]]>*/</script>
+<script type="text/javascript" charset="utf-8" src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/js.php"></script><style type="text/css" media="screen"><!--/*--><![CDATA[/*><!--*/ .folded.hidden { display: none; } .folder .indicator { visibility: visible; } /*]]>*/--></style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="https://wiki.analog.com/lib/tpl/analog2014/images/favicon.ico">
+
+    <script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/modernizr.js" type="text/javascript" defer="true"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/lib/tpl/analog2014/assets/js/adi/html5ie.js" type="text/javascript"></script>
+    <![endif]-->
+
+    <!-- LIVE tracking -->
+<script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/AdiAnalytics.js" type="text/javascript"></script>
+<style type="text/css">.at-icon{fill:#fff;border:0}.at-icon-wrapper{display:inline-block;overflow:hidden}a .at-icon-wrapper{cursor:pointer}.at-rounded,.at-rounded-element .at-icon-wrapper{border-radius:12%}.at-circular,.at-circular-element .at-icon-wrapper{border-radius:50%}.addthis_32x32_style .at-icon{width:2pc;height:2pc}.addthis_24x24_style .at-icon{width:24px;height:24px}.addthis_20x20_style .at-icon{width:20px;height:20px}.addthis_16x16_style .at-icon{width:1pc;height:1pc}#at16lb{display:none;position:absolute;top:0;left:0;width:100%;height:100%;z-index:1001;background-color:#000;opacity:.001}#at16pc,#at16pi,#at16pib,#at_complete,#at_error,#at_share,#at_success{position:static!important}.at15dn{display:none}.at15a{border:0;height:0;margin:0;padding:0;width:230px}#at15s,#at16nms,#at16p,#at16p form input,#at16p label,#at16p textarea,#at16recap,#at16sas,#at_msg,#at_share .at_item{font-family:arial,helvetica,tahoma,verdana,sans-serif!important;font-size:9pt!important;outline-style:none;outline-width:0;line-height:1em}* html #at15s.mmborder{position:absolute!important}#at15s.mmborder{position:fixed!important;width:250px!important}#at15s{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtJREFUeNpiZGBgaGAgAjAxEAlGFVJHIUCAAQDcngCUgqGMqwAAAABJRU5ErkJggg==);float:none;line-height:1em;margin:0;overflow:visible;padding:5px;text-align:left;position:absolute}#at15s a,#at15s span{outline:0;direction:ltr;text-transform:none}#at15s .at-label{margin-left:5px}#at15s .at-icon-wrapper,#at16ps .at-icon-wrapper{width:1pc;height:1pc;vertical-align:middle}#at15s .at-icon,#at16ps .at-icon{width:1pc;height:1pc}.at4-icon{display:inline-block;background-repeat:no-repeat;background-position:top left;margin:0;overflow:hidden;cursor:pointer}.addthis_16x16_style .at4-icon,.addthis_default_style .at4-icon,.at4-icon,.at-16x16{width:1pc;height:1pc;line-height:1pc;background-size:1pc!important}.addthis_32x32_style .at4-icon,.at-32x32{width:2pc;height:2pc;line-height:2pc;background-size:2pc!important}.addthis_24x24_style .at4-icon,.at-24x24{width:24px;height:24px;line-height:24px;background-size:24px!important}.addthis_20x20_style .at4-icon,.at-20x20{width:20px;height:20px;line-height:20px;background-size:20px!important}.at4-icon.circular,.circular .at4-icon,.circular.aticon{border-radius:50%}.at4-icon.rounded,.rounded .at4-icon{border-radius:4px}.at4-icon-left{float:left}#at15s .at4-icon{text-indent:20px;padding:0;overflow:visible;white-space:nowrap;background-size:1pc;width:1pc;height:1pc;background-position:top left;display:inline-block;line-height:1pc}.addthis_vertical_style .at4-icon,.at4-follow-container .at4-icon,.sortable-list-container .at4-icon{margin-right:5px}html>body #at15s{width:250px!important}#at15s.atm{background:none!important;padding:0!important;width:10pc!important}#at15s.atiemode2{width:252px!important}#at15s_inner{background:#fff;border:1px solid #fff;margin:0}#at15s_head{position:relative;background:#f2f2f2;padding:4px;cursor:default;border-bottom:1px solid #e5e5e5}.at15s_head_success{background:#cafd99!important;border-bottom:1px solid #a9d582!important}.at15s_head_success a,.at15s_head_success span{color:#000!important;text-decoration:none}#at15s_brand,#at15sptx,#at16_brand{position:absolute}#at15s_brand{top:4px;right:4px}.at15s_brandx{right:20px!important}a#at15sptx{top:4px;right:4px;text-decoration:none;color:#4c4c4c;font-weight:700}#at15s.atiemode2 a#at15sptx{right:8px}#at15sptx:hover{text-decoration:underline}#at16_brand{top:5px;right:30px;cursor:default}#at_hover{padding:4px}#at_hover .at_item,#at_share .at_item{background:#fff!important;float:left!important;color:#4c4c4c!important}#at_share .at_item .at-icon-wrapper{margin-right:5px}#at_hover .at_bold{font-weight:700;color:#000!important}#at16nms,#at16sas{padding:4px 5px}#at16nms{display:none}#at16sas{clear:left;padding-top:1pc;padding-bottom:1pc}#at_hover .at_item{width:7pc!important;padding:2px 3px!important;margin:1px;text-decoration:none!important}#at_hover .at_item.atiemode2{width:114px!important}#at_hover .at_item.athov,#at_hover .at_item:focus,#at_hover .at_item:hover{margin:0!important}#at16ps .at_item:focus,#at_hover .at_item.athov,#at_hover .at_item:focus,#at_hover .at_item:hover,#at_share .at_item.athov,#at_share .at_item:hover{background:#f2f2f2!important;border:1px solid #e5e5e5;color:#000!important;text-decoration:none}.ipad #at_hover .at_item:focus{background:#fff!important;border:1px solid #fff}#at_sending{top:130px;left:110px;position:absolute;text-align:center}#at_sending img{padding:10px}.at15t{display:block!important;height:1pc!important;line-height:1pc!important;padding-left:20px!important;background-position:0 0;text-align:left}.addthis_button,.at15t{cursor:pointer}.addthis_toolbox a.at300b,.addthis_toolbox a.at300m{width:auto}.addthis_toolbox a{margin-bottom:5px;line-height:initial}.addthis_toolbox.addthis_vertical_style{width:200px}.addthis_toolbox.addthis_close_style .addthis_button_google_plusone{width:65px;overflow:hidden}.addthis_toolbox.addthis_close_style .addthis_button_facebook_like{width:85px;overflow:hidden}.addthis_toolbox.addthis_close_style .addthis_button_tweet{width:62px;overflow:hidden}.addthis_button_facebook_like .fb_iframe_widget{line-height:100%}.addthis_button_facebook_like iframe.fb_iframe_widget_lift{max-width:none}.addthis_toolbox a.addthis_button_counter,.addthis_toolbox a.addthis_button_facebook_like,.addthis_toolbox a.addthis_button_facebook_send,.addthis_toolbox a.addthis_button_facebook_share,.addthis_toolbox a.addthis_button_foursquare,.addthis_toolbox a.addthis_button_google_plusone,.addthis_toolbox a.addthis_button_linkedin_counter,.addthis_toolbox a.addthis_button_pinterest_pinit,.addthis_toolbox a.addthis_button_stumbleupon_badge,.addthis_toolbox a.addthis_button_tweet{display:inline-block}.at-share-tbx-element .google_plusone_iframe_widget>span>div{vertical-align:top!important}.addthis_toolbox span.addthis_follow_label{display:none}.addthis_toolbox.addthis_vertical_style span.addthis_follow_label{display:block;white-space:nowrap}.addthis_toolbox.addthis_vertical_style a{display:block}.addthis_toolbox.addthis_vertical_style.addthis_32x32_style a{line-height:2pc;height:2pc}.addthis_toolbox.addthis_vertical_style .at300bs{margin-right:4px;float:left}.addthis_toolbox.addthis_20x20_style span{line-height:20px;*height:20px}.addthis_toolbox.addthis_32x32_style span{line-height:2pc;*height:2pc}.addthis_toolbox.addthis_pill_combo_style .addthis_button_compact .at15t_compact,.addthis_toolbox.addthis_pill_combo_style a{float:left}.addthis_toolbox.addthis_pill_combo_style a.addthis_button_tweet{margin-top:-2px}.addthis_toolbox.addthis_pill_combo_style .addthis_button_compact .at15t_compact{margin-right:4px}.addthis_default_style .addthis_separator{margin:0 5px;display:inline}div.atclear{clear:both}.addthis_default_style .addthis_separator,.addthis_default_style .at4-icon,.addthis_default_style .at300b,.addthis_default_style .at300bo,.addthis_default_style .at300bs,.addthis_default_style .at300m{float:left}.at300b img,.at300bo img{border:0}a.at300b .at4-icon,a.at300m .at4-icon{display:block}.addthis_default_style .at300b,.addthis_default_style .at300bo,.addthis_default_style .at300m{padding:0 2px}.at300b,.at300bo,.at300bs,.at300m{cursor:pointer}.addthis_button_facebook_like.at300b:hover,.addthis_button_facebook_like.at300bs:hover,.addthis_button_facebook_send.at300b:hover,.addthis_button_facebook_send.at300bs:hover{opacity:1;-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";filter:alpha(opacity=100)}.addthis_20x20_style .at15t,.addthis_20x20_style .at300bs,.addthis_20x20_style .dummy .at300bs{overflow:hidden;display:block;height:20px!important;width:20px!important;line-height:20px!important}.addthis_32x32_style .at15t,.addthis_32x32_style .at300bs,.addthis_32x32_style .dummy .at300bs{overflow:hidden;display:block;height:2pc!important;width:2pc!important;line-height:2pc!important}.at300bs{background-position:0 0}.at16nc,.at300bs{overflow:hidden;display:block;height:1pc;width:1pc;line-height:1pc!important}.at16t{padding-left:20px!important;width:auto;cursor:pointer;text-align:left;overflow:visible!important}#at_feed{display:none;padding:10px;height:300px}#at_feed span{margin-bottom:10px;font-size:9pt}#at_feed div{width:102px!important;height:26px!important;line-height:26px!important;float:left!important;margin-right:68px}#at_feed div.at_litem{margin-right:0}#at_feed a{margin:10px 0;height:17px;line-height:17px}#at_feed.atused .fbtn{background:url(//s7.addthis.com/static/r05/feed00.gif) no-repeat;float:left;width:102px;cursor:pointer;text-indent:-9000px}#at_feed .fbtn.bloglines{background-position:0 0!important;width:94px;height:20px!important;line-height:20px!important;margin-top:8px!important}#at_feed .fbtn.yahoo{background-position:0 -20px!important}#at_feed .fbtn.newsgator,.fbtn.newsgator-on{background-position:0 -37px!important}#at_feed .fbtn.technorati{background-position:0 -71px!important}#at_feed .fbtn.netvibes{background-position:0 -88px!important}#at_feed .fbtn.pageflakes{background-position:0 -141px!important}#at_feed .fbtn.feedreader{background-position:0 -172px!important}#at_feed .fbtn.newsisfree{background-position:0 -207px!important}#at_feed .fbtn.google{background-position:0 -54px!important;width:78pt}#at_feed .fbtn.winlive{background-position:0 -105px!important;width:75pt;height:19px!important;line-height:19px;margin-top:9px!important}#at_feed .fbtn.mymsn{background-position:0 -158px;width:71px;height:14px!important;line-height:14px!important;margin-top:9pt!important}#at_feed .fbtn.aol{background-position:0 -189px;width:92px;height:18px!important;line-height:18px!important}.addthis_default_style .at15t_compact,.addthis_default_style .at15t_expanded{margin-right:4px}#at16clb{font-size:16pt;font-family:verdana bold,verdana,arial,sans-serif}#at_share .at_item{width:123px!important;padding:4px;margin-right:2px;border:1px solid #fff}#at16pm{background:#fff;width:298px;height:380px;text-align:left;border-right:1px solid #ccc;position:static}#at16pcc,#at16pccImg{position:fixed;top:0;left:0;width:100%;margin:0 auto;font-size:10px!important;color:#4c4c4c;padding:0;z-index:10000001;overflow:visible}#at16pccImg{height:100%}#at16abifc{overflow:hidden;margin:0;top:10px;left:10px;height:355px;width:492px;position:absolute;border:0}#at16abifc iframe{border:0;position:absolute;height:380px;width:516px;top:-10px;left:-10px}* html div#at16abifc.atiemode2{height:374px;width:482px}* html #at16abifc iframe{height:23pc;left:-10px;top:-10px;overflow:hidden}#at16p{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtJREFUeNpiZGBgaGAgAjAxEAlGFVJHIUCAAQDcngCUgqGMqwAAAABJRU5ErkJggg==);z-index:10000001;position:absolute;top:50%;left:50%;width:300px;padding:10px;margin:0 auto;margin-top:-185px;margin-left:-155px;font-family:arial,helvetica,tahoma,verdana,sans-serif;font-size:9pt;color:#5e5e5e}#at_share{margin:0;padding:0}#at16ps{overflow-y:scroll;height:19pc;padding:5px}a#at16pit{position:absolute;top:37px;right:10px;display:block;background:url(data:image/gif;base64,R0lGODlhEAAUAKIFAKqqquHh4cLCwszMzP///////wAAAAAAACH5BAEAAAUALAAAAAAQABQAAAMtOLqsAqWQSSsN0OoLthfeNoTaSFbmOaUqe7okHMoeLaqUXeITiGM/SGM4eEQSADs=) no-repeat;width:1pc;height:20px;line-height:19px;margin-right:-17px;text-align:center;overflow:hidden;color:#36b}#at16pi{background:#e5e5e5;text-align:left;border:1px solid #ccc;border-bottom:0}#at16pi a{text-decoration:none;color:#36b}#at16p #at16abc{margin-left:2px!important}#at16pi a:hover{text-decoration:underline}#at16pt{position:relative;background:#f2f2f2;height:13px;padding:5px 10px}#at16pt a,#at16pt h4{font-weight:700}#at16pt h4{display:inline;margin:0;padding:0;font-size:9pt;color:#4c4c4c;cursor:default}#at16pt a{position:absolute;top:5px;right:10px;color:#4c4c4c;text-decoration:none;padding:2px}#at15sptx:focus,#at16pt a:focus{outline:thin dotted}#at16pc form{margin:0}#at16pc form label{display:block;font-size:11px;font-weight:700;padding-bottom:4px;float:none;text-align:left}#at16pc form label span{font-weight:400;color:#4c4c4c;display:inline}#at16pc textarea{height:3pc}#at16pc form input:focus,#at16pc textarea:focus{background:ivory;color:#333}#at16p .atbtn,#at16recap .atbtn{background:#fff;border:1px solid #b5b5b5;width:60px!important;padding:2px 4px;margin:0;margin-right:2px!important;font-size:11px!important;font-weight:700;color:#333;cursor:pointer}#at16p .atbtn:focus,#at16p .atbtn:hover,#at16recap .atbtn:focus,#at16recap .atbtn:hover{border-color:#444;color:#06c}#at16p .atrse,#at16recap .atrse{font-weight:400!important;color:#666;margin-left:2px!important}#atsb .atbtn{width:78px!important;margin:0!important}#at16pc{height:343px!important;font-size:11px;text-align:left;color:#4c4c4c}#at16psf{position:relative;background:#f2f2f2 url(data:image/gif;base64,R0lGODlhGQEVAMQYAGZmZuDg4Ozs7MjIyMzMzPj4+LOzs3BwcMbGxsvLy5+fn/X19djY2IODg+bm5paWlnl5eeLi4oyMjKmpqdXV1dvb28/Pz////////wAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAABgALAAAAAAZARUAAAX/ICaOGJFYaKqubOu+cCzPdG3feK7vPJwQpOBoEChcjsikcslsOp/QqHRKrVqv2Kx2Gy0EBkKRgMEtm8/otHrNTjMEQYGjTa/b7/h82gEfVfSAgYKDhGcVQ0sLBhAAEAYLhZGSk5RqYBgBSgsNAA0GnA2QlaOkpaZHASVGSQYACEgIABOntLW2eAUmSxASShIHt8HCw1snSwAGSq3EzM3OSyhLBw9KD8DP2Nm30UoKrrAACtrj5KMWCYmcCgbeAAcR5fHygT+rSQvtAA8A7vDz/wDV5MIUJVa/gAgTZkmFYYAUg70USpz45BKGPwUPiKPIseOhEXI6ihzphE8cMiRTMI58E6ZhEZUwEXqx2LIEAwsUKujcybOnz59AgwodSrSo0aNIkypdyrSpU58ofoQJAQA7) no-repeat center center;border-bottom:1px solid #ccc;height:20px;padding:4px 10px;text-align:center}* html #at16psf input,:first-child+html #at16psf input{padding:0}#at16psf input,#at16psf input:focus{background:#fff;border:none;width:220px;margin:2px 0 0;color:#666;outline-style:none;outline-width:0;padding:2px 0 0;line-height:9pt;font-family:arial,helvetica,tahoma,verdana,sans-serif;font-size:9pt}#at16pcc .at_error,#at16recap .at_error{background:#f26d7d;border-bottom:1px solid #df5666;padding:5px 10px;color:#fff}#at16pcc #at_success{background:#d0fbda;border-bottom:1px solid #a8e7b7;padding:5px 10px;color:#4c4c4c}#at_complete{font-size:13pt;color:#47731d;text-align:center;padding-top:130px;height:13pc!important;width:472px}.at_baa{display:block;overflow:hidden;outline:0}#at15s #at16pf a{top:1px}#at16pc form #at_send{width:5pc!important}#at16pp{color:#4c4c4c;position:absolute;top:9pt;right:9pt;font-size:11px}#at16pp label{font-size:11px!important}#at16pp .atinp{width:156px}#at16eatdr{position:absolute;background:#fff;border-top:0;max-height:110px;overflow:auto;z-index:500;top:129px;left:21px;width:277px}#at16eatdr a{display:block;overflow:hidden;border-bottom:1px dotted #eee;padding:4px 8px}#at16eatdr a.hover,#at16eatdr a:hover{background:#e0eefa;text-decoration:none;color:#333}#at_pspromo{height:130px;padding-top:10px}#at15psp,#at_pspromo{width:205px;padding-left:5px}#at_testpromo{font-size:9pt;width:220px;display:none}.atm-i #at_pspromo{height:150px}.atm-i #at_pspromo,.atm-i #at_testpromo{width:140px}#at_testpromo input{width:200px}#at_promo .at-promo-content,#at_testpromo .at-promo-content{margin-top:9pt}#at_promo .at-promo-btn,#at_testpromo .at-promo-btn{padding-top:10px}#at_promo h4,#at_testpromo h4{font-family:arial,helvetica,tahoma,verdana,sans-serif;background:0;font-size:14px;font-weight:700;margin:0 0 4px;padding:0;line-height:18px;height:36px}.atm-i #at_promo h4,.atm-i #at_testpromo h4{height:66px}#at_testpromo h4{font-size:13.5px}#at_promo h4 sup{font-size:11px;color:#ee6a44}#at_promo span{display:block}#_atssh{width:1px!important;height:1px!important;border:0!important}.at-promo-single{padding:10px;padding-top:2px;line-height:1.5em}.at-promo-single img{padding:3px}.at-promo-content img{margin-right:5px;margin-bottom:20px;float:left}.atm{width:10pc!important;padding:0;margin:0;line-height:9pt;letter-spacing:normal;font-family:arial,helvetica,tahoma,verdana,sans-serif;font-size:9pt;color:#444;background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABtJREFUeNpiZGBgaGAgAjAxEAlGFVJHIUCAAQDcngCUgqGMqwAAAABJRU5ErkJggg==);padding:4px}.atm-f{text-align:right;border-top:1px solid #ddd;padding:5px 8px}.atm-i{background:#fff;border:1px solid #d5d6d6;padding:0;margin:0;box-shadow:1px 1px 5px rgba(0,0,0,.15)}.atm-s{margin:0!important;padding:0!important}.atm-s a:focus{border:transparent;outline:0;-webkit-transition:none;transition:none}#at_hover.atm-s a,.atm-s a{display:block;text-decoration:none;padding:4px 10px;color:#235dab!important;font-weight:400;font-style:normal;-webkit-transition:none;transition:none}#at_hover.atm-s .at_bold{color:#235dab!important}#at_hover.atm-s a:hover,.atm-s a:hover{background:#2095f0;text-decoration:none;color:#fff!important}#at_hover.atm-s .at_bold{font-weight:700}#at_hover.atm-s a:hover .at_bold{color:#fff!important}.atm-s a .at-label{vertical-align:middle;margin-left:5px;direction:ltr}.atm-i #atic_settings{border:none!important;border-top:1px solid #d5d6d6!important;padding-top:6px!important;top:4px}.at_a11y{position:absolute!important;top:auto!important;width:1px!important;height:1px!important;overflow:hidden!important}.at_a11y_container{margin:0;padding:0}.at_redloading{background:url(data:image/gif;base64,R0lGODlhCgAKAJEDAMzMzP9mZv8AAP///yH/C05FVFNDQVBFMi4wAwEAAAAh+QQFAAADACwAAAAACgAKAAACF5wncgaAGgJzJ647cWua4sOBFEd62VEAACH5BAUAAAMALAEAAAAIAAMAAAIKnBM2IoMDAFMQFAAh+QQFAAADACwAAAAABgAGAAACDJwHMBGofKIRItJYAAAh+QQFAAADACwAAAEAAwAIAAACChxgOBPBvpYQYxYAIfkEBQAAAwAsAAAEAAYABgAAAgoEhmPJHOGgEGwWACH5BAUAAAMALAEABwAIAAMAAAIKBIYjYhOhRHqpAAAh+QQFAAADACwEAAQABgAGAAACDJwncqi7EQYAA0p6CgAh+QQJAAADACwHAAEAAwAIAAACCpRmoxoxvQAYchQAOw==);height:1pc;width:1pc;background-repeat:no-repeat;margin:0 auto}.at-promo-single-dl-ch{width:90pt;height:37px}.at-promo-single-dl-ff{width:90pt;height:44px}.at-promo-single-dl-saf{width:90pt;height:3pc}.at-promo-single-dl-ie{width:129px;height:51px}.at_PinItButton{display:block;width:40px;height:20px;padding:0;margin:0;background-image:url(//s7.addthis.com/static/t00/pinit00.png);background-repeat:no-repeat}.at_PinItButton:hover{background-position:0 -20px}.addthis_toolbox .addthis_button_pinterest_pinit{position:relative}.at-share-tbx-element .fb_iframe_widget span{vertical-align:baseline!important}.service-icon{padding:4px 8px}.service-icon:hover{background:#2095f0;color:#fff}.service-icon span{padding-left:20px}#at16pf{height:auto;text-align:right;padding:4px 8px}.at-privacy-info{position:absolute;left:7px;bottom:7px;cursor:pointer;text-decoration:none;font-family:helvetica,arial,sans-serif;font-size:10px;line-height:9pt;letter-spacing:.2px;color:#666}.at-privacy-info:hover{color:#000}.body .wsb-social-share .wsb-social-share-button-vert{padding-top:0;padding-bottom:0}.body .wsb-social-share.addthis_counter_style .addthis_button_tweet.wsb-social-share-button{padding-top:44px}.body .wsb-social-share.addthis_counter_style .addthis_button_google_plusone.wsb-social-share-button{padding-top:4px}@media print{#at4-follow,#at4-share,#at4-thankyou,#at4-whatsnext,#at4m-mobile,#at15s,.at4,.at4-recommended{display:none!important}}@media screen and (max-width:400px){.at4win{width:100%}}@media screen and (max-height:700px) and (max-width:400px){.at4-thankyou-inner .at4-recommended-container{height:122px;overflow:hidden}.at4-thankyou-inner .at4-recommended .at4-recommended-item:first-child{border-bottom:1px solid #c5c5c5}}</style><style type="text/css">.at-branding-logo{font-family:helvetica,arial,sans-serif;text-decoration:none;font-size:10px;display:inline-block;margin:2px 0;letter-spacing:.2px}.at-branding-logo .at-branding-icon{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAMAAAC67D+PAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAZQTFRF////+GlNUkcc1QAAAB1JREFUeNpiYIQDBjQmAwMmkwEM0JnY1WIxFyDAABGeAFEudiZsAAAAAElFTkSuQmCC")}.at-branding-logo .at-branding-icon,.at-branding-logo .at-privacy-icon{display:inline-block;height:10px;width:10px;margin-left:4px;margin-right:3px;margin-bottom:-1px;background-repeat:no-repeat}.at-branding-logo .at-privacy-icon{background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAMAAABR24SMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhQTFRF8fr9ot/xXcfn2/P5AKva////////AKTWodjhjAAAAAd0Uk5T////////ABpLA0YAAAA6SURBVHjaJMzBDQAwCAJAQaj7b9xifV0kUKJ9ciWxlzWEWI5gMF65KUTv0VKkjVeTerqE/x7+9BVgAEXbAWI8QDcfAAAAAElFTkSuQmCC")}.at-branding-logo span{text-decoration:none}.at-branding-logo .at-branding-addthis,.at-branding-logo .at-branding-powered-by{color:#666}.at-branding-logo .at-branding-addthis:hover{color:#333}.at-cv-with-image .at-branding-addthis,.at-cv-with-image .at-branding-addthis:hover{color:#fff}a.at-branding-logo:visited{color:initial}.at-branding-info{display:inline-block;padding:0 5px;color:#666;border:1px solid #666;border-radius:50%;font-size:10px;line-height:9pt;opacity:.7;transition:all .3s ease;text-decoration:none}.at-branding-info span{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.at-branding-info:before{content:'i';font-family:Times New Roman}.at-branding-info:hover{color:#0780df;border-color:#0780df}</style><script type="text/javascript" charset="utf-8" async="" src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/menu.bb539d41a97cf1854481.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-56cc8ed164746d7ba8000ce3.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-5411d669337e8a6a18000324.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-541205dc760382913000056f.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-55b1278f6161360014000851.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-54c685ed3030310018330500.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-5720490a64746d54ac0022ec.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/s-code-contents-1e1faf4ca7b5be533164e434ee1d0be2b1427d97.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-54de3a1d6561620016c90000.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-573cde7064746d64d900666b.js"></script><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/pixel" style="display: none;"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/pixel(1)" style="display: none;"><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/elqCfg.min.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/gateway.js"></script><script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/satellite-56cc8de464746d1a99000a02.js"></script></head>
+
+<!-- List of supported themes thm-education, thm-applications, thm-parametric, thm-product, thm-community, thm-design-center, thm-my-analog, thm-support -->
+<body class="home persistant-nav">
+
+
+<!-- tpl_header.php -->
+<div class="tools-header" id="dokuwiki__top">
+    <div class="content-wrap clearfix">
+        <ul class="list-inline pull-left logomenu clearfix">
+            <li class="iconbar">
+                <span class="iconbar-icon"></span>
+                <ul class="submenu">
+                    <li class="prevlink"><a href="javascript:history.go(-1);">&lt;- Return to previous page</a></li>
+                    <li class="parametric"><a href="http://www.analog.com/en/parametric-search/">Parametric Search</a></li>
+                    <li class="products"><a href="http://www.analog.com/en/products/">Products</a></li>
+                    <li class="application"><a href="http://www.analog.com/en/applications/">Applications</a></li>
+                    <li class="designcenter"><a href="http://www.analog.com/en/design-center/">Design Center</a></li>
+                    <li class="community"><a href="http://ez.analog.com/">Community</a></li>
+                    <li class="education"><a href="http://www.analog.com/en/education/">Education</a></li>
+                    <li class="support"><a href="http://www.analog.com/en/support/">Support</a></li>
+                </ul>
+            </li>
+            <li class="logobar" style="left: 27%;">
+                <a href="https://wiki.analog.com/start">
+                    <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ADI_Logo_AWP_Large.png" width="112" height="44" style="margin-top: -7px" border="0" alt="Logo">
+                </a>
+            </li>
+            <li class="separator"></li>
+            <li class="titlebar">
+                <div class="tools-title">Wiki</div>
+            </li>
+        </ul>
+        <!-- user identity -->
+        <ul class="list-inline pull-right myanalogmenu clearfix">
+            <li>
+                <a href="https://my.analog.com/">
+                    <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/tools-my-analog.png" height="17" border="0" alt="Logo" title="ADI Logo">
+                </a>
+            </li>
+            <li class="separator"></li>
+                        <li><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=login&amp;sectok=0aec47db20e54d7d12ced122f9351b57" class="action login" rel="nofollow" title="Login">Login</a></li>
+        </ul>
+    </div>
+
+    <div class="navigation-bar">
+        <div class="content-wrap clearfix">
+            <ul class="list-inline pull-left nav-links clearfix">
+<li class="dropdown"><div class="li"> <a href="https://wiki.analog.com/resources" class="wikilink1" title="resources">Resources and Tools</a></div>
+<ul class="submenu">
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/eval" class="wikilink1" title="resources:eval">Evaluation Boards &amp; Kits</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/fpga" class="wikilink1" title="resources:fpga">FPGA Reference Designs</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/quick-start" class="wikilink1" title="resources:quick-start">Quick Start Guides</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/linux-drivers-all" class="wikilink1" title="resources:tools-software:linux-drivers-all">Linux Software Drivers</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/uc-drivers-all" class="wikilink1" title="resources:tools-software:uc-drivers-all">Microcontroller Software Drivers</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/sigmastudio" class="wikilink1" title="resources:tools-software:sigmastudio">SigmaStudio and SigmaDSP Documentation</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/ace" class="wikilink1" title="resources:tools-software:ace">ACE Software</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/technical-guides" class="wikilink1" title="resources:technical-guides">Technical Guides</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li"> <a href="https://wiki.analog.com/university/courses/tutorials/index" class="wikilink1" title="university:courses:tutorials:index">Education Content</a></div>
+<ul class="submenu">
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/tools/m1k" class="wikilink1" title="university:tools:m1k">ADALM1000 (M1k) Active Learning Module</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/engineering_discovery" class="wikilink1" title="university:courses:engineering_discovery">Engineering Discovery Program</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/tutorials/index" class="wikilink1" title="university:courses:tutorials:index">Tutorials</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/electronics/text/electronics-toc" class="wikilink1" title="university:courses:electronics:text:electronics-toc">On Line Electronics I/II</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/electronics/labs" class="wikilink1" title="university:courses:electronics:labs">Labs for Electronics I/II</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/eps/main-page" class="wikilink1" title="university:courses:eps:main-page">Energy/Power systems</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li"> <a href="https://wiki.analog.com/wiki/help" class="wikilink1" title="wiki:help">Wiki Help</a></div>
+<ul class="submenu">
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/wiki/help" class="wikilink1" title="wiki:help">Help</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/wiki/introduction" class="wikilink1" title="wiki:introduction">About Wiki</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/playground/playground" class="wikilink1" title="playground:playground">Playground</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/start?do=index" class="wikilink1" title="start">Wiki Site Map</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#">Wiki Tools</a></div><ul class="submenu"><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=recent" class="action recent" accesskey="r" rel="nofollow" title="Recent changes [R]">Recent changes</a></li><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=media&amp;ns=resources%3Aquick-start" class="action media" rel="nofollow" title="Media Manager">Media Manager</a></li><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=index" class="action index" accesskey="x" rel="nofollow" title="Sitemap [X]">Sitemap</a></li></ul></li></ul>
+            <ul class="list-inline pull-right searchmenu clearfix">
+                <li class="search-box">
+                    <form action="https://wiki.analog.com/analog/www/start" accept-charset="utf-8" class="search clearfix" id="dw__search" method="get" role="search">
+                        <div class="no">
+                            <input type="hidden" name="do" value="search">
+                            <input type="text" autocomplete="off" id="qsearch__in" accesskey="f" name="id" class="edit" placeholder="search wiki">
+                            <button type="submit" value="Search" class="button search-icon" title="Search"></button>
+
+                            <div id="qsearch__out" class="ajax_qsearch JSpopup" style="display: none; white-space: nowrap;">
+                            </div>
+                        </div>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile view navigation drawer-->
+<div class="wiki-mob-body">
+    <div class="content" role="main">
+        <div class="col-md-12 wiki-head-row">
+            <div class="row ">
+                <div class="title-nophoto">
+                    <div class="container page-title ">
+                        <h1 data-page-title="true">Analog Devices Wiki</h1>
+                    </div>
+                <button class="button-nav">&gt;&gt;</button></div>
+            </div>
+            <div class="col-md-12 floater-menu-container">
+                <div class="row product-row">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-2 wiki-right-panel">
+                                <div class="row">
+                                    <div class="product-bookmarks" id="affix-nav" name="adi_products_left_navigation">
+                                        <ul class="nav" id="affix-ul">
+                                            <li class="">
+
+                                                <a data-toggle="collapse" data-parent="#accordion" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#" name="SDR-home_2e322e80-5ec4-4b20-b8b8-71702b590a25">Analog Devices
+                                                    Wiki
+                                                </a>
+
+                                            </li>
+                                            <!--Wiki-->
+                                            <ul class="list-inline pull-left nav-links clearfix">
+<li class="dropdown"><div class="li Res_tools_parent"> <a href="https://wiki.analog.com/resources" class="wikilink1" title="resources">Resources and Tools</a></div>
+<ul class="submenu Res_tools_child">
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/eval" class="wikilink1" title="resources:eval">Evaluation Boards &amp; Kits</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/fpga" class="wikilink1" title="resources:fpga">FPGA Reference Designs</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/quick-start" class="wikilink1" title="resources:quick-start">Quick Start Guides</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/linux-drivers-all" class="wikilink1" title="resources:tools-software:linux-drivers-all">Linux Software Drivers</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/uc-drivers-all" class="wikilink1" title="resources:tools-software:uc-drivers-all">Microcontroller Software Drivers</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/sigmastudio" class="wikilink1" title="resources:tools-software:sigmastudio">SigmaStudio and SigmaDSP Documentation</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/tools-software/ace" class="wikilink1" title="resources:tools-software:ace">ACE Software</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/resources/technical-guides" class="wikilink1" title="resources:technical-guides">Technical Guides</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li Res_tools_parent"> <a href="https://wiki.analog.com/university/courses/tutorials/index" class="wikilink1" title="university:courses:tutorials:index">Education Content</a></div>
+<ul class="submenu Res_tools_child">
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/tools/m1k" class="wikilink1" title="university:tools:m1k">ADALM1000 (M1k) Active Learning Module</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/engineering_discovery" class="wikilink1" title="university:courses:engineering_discovery">Engineering Discovery Program</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/tutorials/index" class="wikilink1" title="university:courses:tutorials:index">Tutorials</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/electronics/text/electronics-toc" class="wikilink1" title="university:courses:electronics:text:electronics-toc">On Line Electronics I/II</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/electronics/labs" class="wikilink1" title="university:courses:electronics:labs">Labs for Electronics I/II</a></div>
+</li>
+<li class="level2"><div class="li"> <a href="https://wiki.analog.com/university/courses/eps/main-page" class="wikilink1" title="university:courses:eps:main-page">Energy/Power systems</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li Res_tools_parent"> <a href="https://wiki.analog.com/wiki/help" class="wikilink1" title="wiki:help">Wiki Help</a></div>
+<ul class="submenu Res_tools_child">
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/wiki/help" class="wikilink1" title="wiki:help">Help</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/wiki/introduction" class="wikilink1" title="wiki:introduction">About Wiki</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/playground/playground" class="wikilink1" title="playground:playground">Playground</a></div>
+</li>
+<li class="level3"><div class="li"> <a href="https://wiki.analog.com/start?do=index" class="wikilink1" title="start">Wiki Site Map</a></div>
+</li>
+</ul>
+</li>
+<li class="dropdown"><div class="li Res_tools_parent"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#">Wiki Tools</a></div><ul class="submenu Res_tools_child"><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=recent" class="action recent" accesskey="r" rel="nofollow" title="Recent changes [R]">Recent changes</a></li><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=media&amp;ns=resources%3Aquick-start" class="action media" rel="nofollow" title="Media Manager">Media Manager</a></li><li class="level2"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=index" class="action index" accesskey="x" rel="nofollow" title="Sitemap [X]">Sitemap</a></li></ul></li></ul>                                            <!--Wiki-->
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="special-content">
+            <div class="accordion-group language-footer-block">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#English">English<span class="glyphicon  pull-right glyphicon-chevron-down visible-phone"></span>
+                    </a>
+                </div>
+                <div id="English" class="accordion-body collapse">
+                    <div class="accordion-inner language-footer">
+                        <a href="http://www.analog.com/en/landing-pages/001/sdr/sdr-get-started.html">
+                            <img data-image-source="//assets.analog.com/images/language_en.jpg" class="mobile-images" width="100%" alt="English"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-group language-footer-block">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#简体中文">简体中文<span class="glyphicon  pull-right glyphicon-chevron-down visible-phone"></span>
+                    </a>
+                </div>
+                <div id="简体中文" class="accordion-body collapse">
+                    <div class="accordion-inner language-footer">
+                        <a href="http://www.analog.com/cn/landing-pages/001/sdr/sdr-get-started.html">
+                            <img data-image-source="//assets.analog.com/images/language_cn.jpg" class="mobile-images" width="100%" alt="简体中文"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-group language-footer-block">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#日本語">日本語<span class="glyphicon  pull-right glyphicon-chevron-down visible-phone"></span>
+                    </a>
+                </div>
+                <div id="日本語" class="accordion-body collapse">
+                    <div class="accordion-inner language-footer">
+                        <a href="http://www.analog.com/jp/landing-pages/001/sdr/sdr-get-started.html">
+                            <img data-image-source="//assets.analog.com/images/language_jp.jpg" class="mobile-images" width="100%" alt="日本語"></a>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-group language-footer-block">
+                <div class="accordion-heading">
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion4" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#Руccкий">Руccкий<span class="glyphicon  pull-right glyphicon-chevron-down visible-phone"></span>
+                    </a>
+                </div>
+                <div id="Руccкий" class="accordion-body collapse">
+                    <div class="accordion-inner language-footer">
+                        <a href="http://www.analog.com/ru/landing-pages/001/sdr/sdr-get-started.html">
+                            <img data-image-source="//assets.analog.com/images/language_ru.jpg" class="mobile-images" width="100%" alt="Руccкий"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Mobile view navigation drawer-->
+
+<!-- /tpl_header.php -->
+
+
+
+<div id="dokuwiki__site" role="main" class="main-body content">
+    <div class="site dokuwiki mode_show tpl_analog2014   ">
+        <div class="container">
+
+            <!-- ********** CONTENT ********** -->
+            <div id="dokuwiki__content">
+                <div class="pad group">
+
+                    <div class="page group">
+                        
+                                                <!-- wikipage start -->
+                        <div class="approval approved_yes"><span class="approval_approved">This version (<span class="approval_date">16 Apr 2013 17:08</span>) was <em>approved</em> by EstiS, clon.</span><span class="approval_previous">The <a href="https://wiki.analog.com/resources/quick-start/ad5791?rev=1360684584">Previously approved version</a> (12 Feb 2013 16:56) is available.<a href="https://wiki.analog.com/resources/quick-start/ad5791?rev2[]=1360684584&amp;rev2[]=1366121929&amp;do[diff]=1" class="approved_diff_link"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/diff.png" class="approved_diff_link" alt="Diff"></a></span></div><!-- TOC START -->
+<div id="dw__toc">
+<h3 class="toggle open" style="cursor: pointer;"><strong><span>−</span></strong>Table of Contents</h3>
+<div>
+
+<ul class="toc" aria-expanded="true" style="">
+<li class="level1"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#ad5781ad5791_quick_start_guide">AD5781/AD5791 Quick Start Guide</a></div>
+<ul class="toc">
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#features">Features</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#functional_block_diagram">Functional Block Diagram</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#pin_configuration">Pin Configuration</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#hardware_control_pins_truth_table">Hardware Control Pins Truth Table</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#input_shift_register_contents">Input Shift Register Contents</a></div>
+<ul class="toc">
+<li class="level3"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#control_register">Control Register</a></div></li>
+<li class="level3"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#software_control_register">Software Control Register</a></div></li>
+</ul>
+</li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#transfer_function">Transfer Function</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#example_1initializing_and_writing_to_the_dac_register">Example 1: Initializing and Writing to the DAC Register</a></div></li>
+<li class="level2"><div class="li"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#example_2clearing_the_dac_to_a_defined_value">Example 2: Clearing the DAC to a Defined Value</a></div></li>
+</ul></li>
+</ul>
+</div>
+</div>
+<!-- TOC END -->
+
+<h1 class="sectionedit1" id="ad5781ad5791_quick_start_guide">AD5781/AD5791 Quick Start Guide</h1>
+<div class="level1">
+
+<p>
+<strong> Single, 18-/20-Bit, Voltage Output DACs, <abbr title="Serial Peripheral Interface">SPI</abbr> Interface </strong>
+</p>
+
+</div>
+
+<h2 class="sectionedit2" id="features">Features</h2>
+<div class="level2">
+<ul>
+<li class="level1"><div class="li"> High relative accuracy (INL): ±0.5 <abbr title="least significant bit">LSB</abbr> maximum (18-bit <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>)</div>
+</li>
+<li class="level1"><div class="li"> 1 ppm resolution, 1 ppm INL (20-bit <a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a>)</div>
+</li>
+<li class="level1"><div class="li"> 7.5 <abbr title="nanovolt">nV</abbr>/√Hz output noise spectral density</div>
+</li>
+<li class="level1"><div class="li"> 0.19 <abbr title="least significant bit">LSB</abbr> long-term linearity error stability (20-bit <a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a>)</div>
+</li>
+<li class="level1"><div class="li"> &lt;0.05 ppm/°C temperature drift </div>
+</li>
+<li class="level1"><div class="li"> 1 <abbr title="microsecond">μs</abbr> output voltage settling time</div>
+</li>
+<li class="level1"><div class="li"> 1.4 <abbr title="nanovolt">nV</abbr>-sec midscale glitch impulse</div>
+</li>
+<li class="level1"><div class="li"> Operating temperature range: −40°C to +125°C</div>
+</li>
+<li class="level1"><div class="li"> 20-lead TSSOP package</div>
+</li>
+<li class="level1"><div class="li"> Wide power supply range of up to ±16.5 <abbr title="volt">V</abbr></div>
+</li>
+<li class="level1"><div class="li"> 35 <abbr title="megahertz">MHz</abbr> Schmitt triggered digital interface</div>
+</li>
+<li class="level1"><div class="li"> 1.8 <abbr title="volt">V</abbr> compatible digital interface</div>
+</li>
+</ul>
+
+</div>
+
+<h2 class="sectionedit3" id="functional_block_diagram">Functional Block Diagram</h2>
+<div class="level2">
+
+<p>
+<a href="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_block_diagram.png" class="media" title="resources:quick-start:ad5781_ad5791_block_diagram.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ad5781_ad5791_block_diagram.png" class="mediacenter" alt="" width="500"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 1. </em>
+</p>
+</div><div class="wrap_clear plugin_wrap"></div>
+<p>
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit8" id="pin_configuration">Pin Configuration</h2>
+<div class="level2">
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<a href="https://wiki.analog.com/_media/resources/quick-start/ad5781_ad5791_pin_configuration.png" class="media" title="resources:quick-start:ad5781_ad5791_pin_configuration.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ad5781_ad5791_pin_configuration.png" class="mediacenter" alt="" width="300"></a>
+</p>
+</div><div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 2. 20-Lead TSSOP Pin Configuration</em> 
+</p>
+</div><div class="wrap_clear plugin_wrap"></div>
+<p>
+<br>
+
+<br>
+
+</p>
+
+<p>
+<strong>Table 1. Function Descriptions for Quick Start</strong>
+<br>
+
+</p>
+<div class="table sectionedit15"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 centeralign">   Mnemonic           </th><th class="col1 leftalign"> Description                    </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign">INV                      </td><td class="col1"> Inverting input connection for external amplifier.</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>OUT</sub>          </td><td class="col1 leftalign"> Analog output voltage.         </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>REFPS</sub>         </td><td class="col1 leftalign"> Positive reference sense voltage input. Connect a voltage in the range of 5 <abbr title="volt">V</abbr> to <abbr title="volt">V</abbr><sub>DD</sub> - 2.5 <abbr title="volt">V</abbr>.    </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>REFPF</sub>         </td><td class="col1 leftalign"> Positive reference force voltage input. Connect a voltage in the range of 5 <abbr title="volt">V</abbr> to <abbr title="volt">V</abbr><sub>DD</sub> - 2.5 <abbr title="volt">V</abbr>.    </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>DD</sub>           </td><td class="col1 leftalign"> Positive analog supply connection. Connect a voltage in the range of 7.5 <abbr title="volt">V</abbr> to 16.5 <abbr title="volt">V</abbr>. <abbr title="volt">V</abbr><sub>DD</sub> must be decoupled to AGND.    </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img.php" class="medianormal mathpublish" alt="overline{RESET}" title="overline{RESET}" style="display: inline-block; vertical-align:-6px"> </td><td class="col1 leftalign"> Active low reset. Asserting this pin returns the DAC to its power-on status.   </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(1).php" class="medianormal mathpublish" alt="overline{CLR}" title="overline{CLR}" style="display: inline-block; vertical-align:-6px"> </td><td class="col1 leftalign"> Active low input. Asserting this pin sets the DAC register to a user defined value and updates the DAC output.    </td>
+	</tr>
+	<tr class="row8">
+		<td class="col0"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(2).php" class="medianormal mathpublish" alt="overline{LDAC}" title="overline{LDAC}" style="display: inline-block; vertical-align:-6px"> </td><td class="col1 leftalign"> Active low load DAC logic input. This is used to update the DAC register and, consequently, the analog output.   </td>
+	</tr>
+	<tr class="row9">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>CC</sub>          </td><td class="col1 leftalign"> Digital supply. Connect a voltage in the range of 2.7 <abbr title="volt">V</abbr> to 5.5 <abbr title="volt">V</abbr>. <abbr title="volt">V</abbr><sub>CC</sub> must be decoupled to DGND.    </td>
+	</tr>
+	<tr class="row10">
+		<td class="col0 leftalign">IOV<sub>CC</sub>          </td><td class="col1 leftalign"> Digital interface supply. Voltage range is from 1.71 <abbr title="volt">V</abbr> to 5.5 <abbr title="volt">V</abbr>.    </td>
+	</tr>
+	<tr class="row11">
+		<td class="col0 leftalign">SDO                       </td><td class="col1">Serial data output.</td>
+	</tr>
+	<tr class="row12">
+		<td class="col0 leftalign">SDIN                      </td><td class="col1 leftalign"> Serial data input.  </td>
+	</tr>
+	<tr class="row13">
+		<td class="col0 leftalign"><abbr title="System Clock">SCLK</abbr>                  </td><td class="col1 leftalign"> Serial clock input. Data can be transferred at clock rates of up to 35 <abbr title="megahertz">MHz</abbr>.   </td>
+	</tr>
+	<tr class="row14">
+		<td class="col0"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(3).php" class="medianormal mathpublish" alt="overline{SYNC}" title="overline{SYNC}" style="display: inline-block; vertical-align:-6px"> </td><td class="col1 leftalign"> Active low digital interface synchronization input. This is the frame synchronization signal for the input data.   </td>
+	</tr>
+	<tr class="row15">
+		<td class="col0 leftalign">DGND                  </td><td class="col1 leftalign"> Ground reference for digital circuitry.   </td>
+	</tr>
+	<tr class="row16">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>REFNF</sub>         </td><td class="col1 leftalign"> Negative reference force voltage input. Connect a voltage in the range of <abbr title="volt">V</abbr><sub>SS</sub> + 2.5 <abbr title="volt">V</abbr> to 0 <abbr title="volt">V</abbr>.    </td>
+	</tr>
+	<tr class="row17">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>REFNS</sub>         </td><td class="col1 leftalign"> Negative reference sense voltage input. Connect a voltage in the range of <abbr title="volt">V</abbr><sub>SS</sub> + 2.5 <abbr title="volt">V</abbr> to 0 <abbr title="volt">V</abbr>.    </td>
+	</tr>
+	<tr class="row18">
+		<td class="col0 leftalign"><abbr title="volt">V</abbr><sub>SS</sub>   </td><td class="col1"> Negative analog supply connection. Connect a voltage in the range of -16.5 <abbr title="volt">V</abbr> to -2.5 <abbr title="volt">V</abbr>. <abbr title="volt">V</abbr><sub>SS</sub> must be decoupled to AGND. </td>
+	</tr>
+	<tr class="row19">
+		<td class="col0 leftalign">AGND    </td><td class="col1 leftalign"> Ground reference for analog circuitry.  </td>
+	</tr>
+	<tr class="row20">
+		<td class="col0 leftalign">R<sub>FB</sub>         </td><td class="col1 leftalign"> Feedback connection for external amplifier.    </td>
+	</tr>
+</tbody></table></div>
+
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit16" id="hardware_control_pins_truth_table">Hardware Control Pins Truth Table</h2>
+<div class="level2">
+
+<p>
+<br>
+
+<strong>Table 2. Hardware Control Pins Truth Table</strong>
+</p>
+<div class="table sectionedit17"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">/LDAC                </th><th class="col1 leftalign">/CLR                </th><th class="col2 leftalign">/RESET                </th><th class="col3 leftalign">Function  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign">X<sup>1</sup>        </td><td class="col1 leftalign">X<sup>1</sup>	   </td><td class="col2 leftalign">0		          </td><td class="col3">DAC in reset mode. The device cannot be programmed.</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign">X<sup>1</sup>        </td><td class="col1 leftalign">X<sup>1</sup>	   </td><td class="col2 leftalign">⇑<sup>2</sup>		          </td><td class="col3">DAC is returned to its power-on state. All registers are set to their default values.</td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">0                    </td><td class="col1 leftalign">0	           </td><td class="col2 leftalign">1		          </td><td class="col3">DAC register loaded with the clearcode register value and output set accordingly.</td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign">0                    </td><td class="col1 leftalign">1	           </td><td class="col2 leftalign">1		          </td><td class="col3">Output set according to the DAC register value.</td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">1                    </td><td class="col1 leftalign">0                   </td><td class="col2 leftalign">1                     </td><td class="col3">DAC register loaded with the clearcode register value and output set accordingly. </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 leftalign">⇓<sup>3</sup>        </td><td class="col1 leftalign">1	           </td><td class="col2 leftalign">1		          </td><td class="col3">Output set according to the DAC register value. </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">⇓<sup>3</sup>        </td><td class="col1 leftalign">0	           </td><td class="col2 leftalign">1	                  </td><td class="col3">Output remains at the clearcode register value.</td>
+	</tr>
+	<tr class="row8">
+		<td class="col0 leftalign">⇑<sup>2</sup>        </td><td class="col1 leftalign">1	           </td><td class="col2 leftalign">1	                  </td><td class="col3">Output remains set according to the DAC register value.</td>
+	</tr>
+	<tr class="row9">
+		<td class="col0 leftalign">⇑<sup>2</sup>        </td><td class="col1 leftalign">0	           </td><td class="col2 leftalign">1	                  </td><td class="col3">Output remains at the clearcode register value.</td>
+	</tr>
+	<tr class="row10">
+		<td class="col0 leftalign">1                    </td><td class="col1 leftalign">⇓<sup>3</sup>	   </td><td class="col2 leftalign">1	                  </td><td class="col3">DAC register loaded with the clearcode register value and output set accordingly.</td>
+	</tr>
+	<tr class="row11">
+		<td class="col0 leftalign">0                    </td><td class="col1 leftalign">⇓<sup>3</sup>	   </td><td class="col2 leftalign">1	                  </td><td class="col3">DAC register loaded with the clearcode register value and output set accordingly.</td>
+	</tr>
+	<tr class="row12">
+		<td class="col0 leftalign">1                    </td><td class="col1 leftalign">⇑<sup>2</sup>	   </td><td class="col2 leftalign">1	                  </td><td class="col3">Output remains at the clearcode register value.</td>
+	</tr>
+	<tr class="row13">
+		<td class="col0 leftalign">0                    </td><td class="col1 leftalign">⇑<sup>2</sup>	   </td><td class="col2 leftalign">1	                  </td><td class="col3">Output set according to the DAC register value.</td>
+	</tr>
+</tbody></table></div>
+
+<p>
+<sup>1</sup> X is don't care.
+<br>
+
+<sup>2</sup> ⇑ is rising edge.
+<br>
+
+<sup>3</sup> ⇓ is falling edge.
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit18" id="input_shift_register_contents">Input Shift Register Contents</h2>
+<div class="level2">
+
+<p>
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_shift_register_contents.png" class="media" title="resources:quick-start:ad5781_91_shift_register_contents.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ad5781_91_shift_register_contents.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 3. Input Shift Register Contents </em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+<strong>Table 3. Register Address Definitions</strong>
+</p>
+<div class="table sectionedit21"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0"></th><th class="col1" colspan="3">Register Address </th><th class="col4"></th>
+	</tr>
+	<tr class="row1">
+		<th class="col0">Read/Write (R/W)</th><th class="col1 leftalign">C2	</th><th class="col2 leftalign">C1	</th><th class="col3 leftalign">C0	</th><th class="col4 leftalign">Description  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row2">
+		<td class="col0 leftalign">X<sup>1</sup>    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">0	</td><td class="col3 leftalign">0	</td><td class="col4">No operation</td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">0    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">0	</td><td class="col3 leftalign">1	</td><td class="col4">Write to the DAC register</td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign">0    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">1	</td><td class="col3 leftalign">0	</td><td class="col4">Write to the control register</td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">0    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">1	</td><td class="col3 leftalign">1	</td><td class="col4">Write to the clearcode register</td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 leftalign">0    </td><td class="col1 leftalign">1        </td><td class="col2 leftalign">0      </td><td class="col3 leftalign">0      </td><td class="col4">Write to the software control register </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">1    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">0	</td><td class="col3 leftalign">1	</td><td class="col4">Read from the DAC register </td>
+	</tr>
+	<tr class="row8">
+		<td class="col0 leftalign">1    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">1	</td><td class="col3 leftalign">0	</td><td class="col4">Read from the control register</td>
+	</tr>
+	<tr class="row9">
+		<td class="col0 leftalign">1    </td><td class="col1 leftalign">0	</td><td class="col2 leftalign">1	</td><td class="col3 leftalign">1	</td><td class="col4">Read from the clearcode register</td>
+	</tr>
+</tbody></table></div>
+
+<p>
+<sup>1</sup> X = don't care.
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h3 class="sectionedit22" id="control_register">Control Register</h3>
+<div class="level3">
+
+<p>
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_control_register.png" class="media" title="resources:quick-start:ad5781_91_control_register.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ad5781_91_control_register.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 4. Control Register </em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+<strong>Table 4. Control Register Functions</strong>
+</p>
+<div class="table sectionedit25"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">Bit Name            </th><th class="col1 leftalign" colspan="2">Description  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign" rowspan="4">RBUF                </td><td class="col1 leftalign" colspan="2">Output amplifier configuration control.  </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">0  </td><td class="col1 leftalign">Internal amplifier powered up.  </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0">1 (default)</td><td class="col1">Internal amplifier powered down. </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign" rowspan="4">OPGND               </td><td class="col1" colspan="2">Output ground clamp control. </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">0  </td><td class="col1 leftalign">DAC output clamp to ground removed and DAC placed in normal mode.  </td>
+	</tr>
+	<tr class="row8">
+		<td class="col0 leftalign">1 (default)  </td><td class="col1">DAC output clamped to ground and DAC placed in tristate mode. </td>
+	</tr>
+	<tr class="row9">
+		<td class="col0 leftalign" rowspan="4">DACTRI              </td><td class="col1" colspan="2">DAC tristate control. </td>
+	</tr>
+	<tr class="row10">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row11">
+		<td class="col0 leftalign">0  </td><td class="col1">DAC in normal operating mode. </td>
+	</tr>
+	<tr class="row12">
+		<td class="col0 leftalign">1 (default)  </td><td class="col1 leftalign">DAC in tristate mode.  </td>
+	</tr>
+	<tr class="row13">
+		<td class="col0 leftalign" rowspan="4">BIN/2sC             </td><td class="col1 leftalign" colspan="2">DAC register coding selection.  </td>
+	</tr>
+	<tr class="row14">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row15">
+		<td class="col0 leftalign">0 (default)  </td><td class="col1">DAC register uses twos complement coding. </td>
+	</tr>
+	<tr class="row16">
+		<td class="col0 leftalign">1  </td><td class="col1">DAC register uses offset binary coding. </td>
+	</tr>
+	<tr class="row17">
+		<td class="col0 leftalign" rowspan="4">SDODIS              </td><td class="col1" colspan="2">SDO pin enable/disable control. </td>
+	</tr>
+	<tr class="row18">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row19">
+		<td class="col0 leftalign">0 (default)  </td><td class="col1 leftalign">SDO pin enabled.  </td>
+	</tr>
+	<tr class="row20">
+		<td class="col0 leftalign">1  </td><td class="col1 leftalign">SDO pin disabled (tristate).  </td>
+	</tr>
+	<tr class="row21">
+		<td class="col0 leftalign" rowspan="7">LIN COMP            </td><td class="col1" colspan="2">Linearity error compensation for varying reference input spans. Note that the reference input span options for the <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a> are: up to 10 <abbr title="volt">V</abbr> (0000) and 20 <abbr title="volt">V</abbr> (1100). See the <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a> data sheet for additional details.</td>
+	</tr>
+	<tr class="row22">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row23">
+		<td class="col0 leftalign">0000 (default)  </td><td class="col1">Reference input span up to 10 <abbr title="volt">V</abbr>. </td>
+	</tr>
+	<tr class="row24">
+		<td class="col0 leftalign">1001  </td><td class="col1 leftalign">Reference input span between 10 <abbr title="volt">V</abbr> and 12 <abbr title="volt">V</abbr>.  </td>
+	</tr>
+	<tr class="row25">
+		<td class="col0 leftalign">1010  </td><td class="col1 leftalign">Reference input span between 12 <abbr title="volt">V</abbr> and 16 <abbr title="volt">V</abbr>.  </td>
+	</tr>
+	<tr class="row26">
+		<td class="col0 leftalign">1011  </td><td class="col1 leftalign">Reference input span between 16 <abbr title="volt">V</abbr> and 19 <abbr title="volt">V</abbr>.  </td>
+	</tr>
+	<tr class="row27">
+		<td class="col0 leftalign">1100  </td><td class="col1 leftalign">Reference input span between 19 <abbr title="volt">V</abbr> and 20 <abbr title="volt">V</abbr>.  </td>
+	</tr>
+	<tr class="row28">
+		<td class="col0 leftalign" rowspan="4">R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px">       </td><td class="col1 leftalign" colspan="2">Read/write select bit.  </td>
+	</tr>
+	<tr class="row29">
+		<td class="col0 leftalign"><strong>Setting</strong>  </td><td class="col1 leftalign"><strong>Function</strong>  </td>
+	</tr>
+	<tr class="row30">
+		<td class="col0 leftalign">0  </td><td class="col1 leftalign"><a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>/<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a> addressed for a write operation.  </td>
+	</tr>
+	<tr class="row31">
+		<td class="col0 leftalign">1  </td><td class="col1 leftalign"><a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>/<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a> addressed for a read operation.  </td>
+	</tr>
+</tbody></table></div>
+
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h3 class="sectionedit26" id="software_control_register">Software Control Register</h3>
+<div class="level3">
+
+<p>
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/ad5781_91_software_control_register.png" class="media" title="resources:quick-start:ad5781_91_software_control_register.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/ad5781_91_software_control_register.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 5. Software Control Register </em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+<strong>Table 5. Software Control Register Functions</strong>
+</p>
+<div class="table sectionedit29"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">Bit Name            </th><th class="col1 leftalign">Description  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign">LDAC<sup>1</sup>                </td><td class="col1">Setting this bit to 1 updates the DAC register and, consequently, the DAC output.</td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign">CLR<sup>2</sup>               </td><td class="col1">Setting this bit to 1 sets the DAC register to a user defined value and updates the DAC output.</td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">RESET               </td><td class="col1">Setting this bit to 1 returns the <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>/<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a> to its power-on state.</td>
+	</tr>
+</tbody></table></div>
+
+<p>
+<sup>1</sup> The LDAC function has no effect when the <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(1).php" class="medianormal mathpublish" alt="overline{CLR}" title="overline{CLR}" style="display: inline-block; vertical-align:-6px"> pin is low. Refer to Table 2 in the <span class="curid"><a href="https://wiki.analog.com/resources/quick-start/ad5791#hardware_control_pins_truth_table" class="wikilink1" title="resources:quick-start:ad5791">Hardware Control Pins Truth Table</a></span> section for additional details.<br>
+
+<sup>2</sup> The CLR function has no effect when the <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(2).php" class="medianormal mathpublish" alt="overline{LDAC}" title="overline{LDAC}" style="display: inline-block; vertical-align:-6px"> pin is low. Refer to Table 2 in the <span class="curid"><a href="https://wiki.analog.com/resources/quick-start/ad5791#hardware_control_pins_truth_table" class="wikilink1" title="resources:quick-start:ad5791">Hardware Control Pins Truth Table</a></span> section for additional details.
+</p>
+
+<p>
+<br>
+
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit30" id="transfer_function">Transfer Function</h2>
+<div class="level2">
+
+<p>
+<br>
+
+ <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(5).php" class="medianormal mathpublish" alt="V_OUT = (V_REFP - V_REFN) * D/(2^N-1) + V_REFN" title="V_OUT = (V_REFP - V_REFN) * D/(2^N-1) + V_REFN" style="display: inline-block; vertical-align:-36px"><br>
+
+<br>
+
+where:<br>
+
+<em><abbr title="volt">V</abbr><sub>REFN</sub></em> is the negative voltage applied at the <abbr title="volt">V</abbr><sub>REFNx</sub> input pin. <br>
+
+<em><abbr title="volt">V</abbr><sub>REFP</sub></em> is the positive voltage applied at the <abbr title="volt">V</abbr><sub>REFPx</sub> input pin. <br>
+
+<em>D</em> is the 18-bit (<a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>) or 20-bit (<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a>) code programmed to the DAC. <br>
+
+<em>N</em> is the number of bits. <br>
+
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit31" id="example_1initializing_and_writing_to_the_dac_register">Example 1: Initializing and Writing to the DAC Register</h2>
+<div class="level2">
+
+<p>
+<br>
+
+</p>
+
+</div>
+
+<h4 id="initializing_the_dac">Initializing the DAC</h4>
+<div class="level4">
+<div class="wrap_tip plugin_wrap">
+<p>
+ To initialize the part,
+</p>
+<ul>
+<li class="level1"><div class="li"> Because this initialization is a write to the part, set the R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px"> bit to a Logic 0.</div>
+</li>
+<li class="level1"><div class="li"> Keep the default mode for LIN COMP, SDODIS, and RBUF.</div>
+</li>
+<li class="level1"><div class="li"> To write in binary coding, select BIN/2sC = 1.</div>
+</li>
+<li class="level1"><div class="li"> Set DACTRI = 0 and OPGND = 0  to place the DAC in normal operating mode and remove the DAC output clamp to ground, respectively. </div>
+</li>
+</ul>
+
+<p>
+Write the following over the serial interface: 0010 0000 0000 0000 0001 0010 (R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px"> bit, three register address bits, 20 data bits).
+<br>
+
+<br>
+
+See Table 6 and Figure 6.
+<br>
+
+<br>
+
+<strong>Table 6. Bit Settings to Initialize and Write to the Part</strong>
+</p>
+<div class="table sectionedit34"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">Bit(s)  </th><th class="col1 leftalign">Bit Name  </th><th class="col2 leftalign">Setting  </th><th class="col3 leftalign">Description  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign">23  </td><td class="col1 leftalign">R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px">  </td><td class="col2 leftalign">0  </td><td class="col3 leftalign"><a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>/<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a> addressed for a write operation  </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign">[22:20]  </td><td class="col1 leftalign">C2, C1, C0  </td><td class="col2 leftalign">010  </td><td class="col3 leftalign">Write to the control register  </td>
+	</tr>
+	<tr class="row3">
+		<td class="col0 leftalign">[9:6]  </td><td class="col1 leftalign">LIN COMP  </td><td class="col2 leftalign">0000  </td><td class="col3">Linearity error compensation for a reference input span up to 10 <abbr title="volt">V</abbr> </td>
+	</tr>
+	<tr class="row4">
+		<td class="col0 leftalign">5  </td><td class="col1 leftalign">SDODIS  </td><td class="col2 leftalign">0  </td><td class="col3">The SDO pin enabled for future readings from the part </td>
+	</tr>
+	<tr class="row5">
+		<td class="col0 leftalign">4  </td><td class="col1 leftalign">BIN/2sC  </td><td class="col2 leftalign">1  </td><td class="col3">Offset binary coding </td>
+	</tr>
+	<tr class="row6">
+		<td class="col0 leftalign">3  </td><td class="col1 leftalign">DACTRI  </td><td class="col2 leftalign">0  </td><td class="col3"> Place the DAC in normal operating mode </td>
+	</tr>
+	<tr class="row7">
+		<td class="col0 leftalign">2  </td><td class="col1 leftalign">OPGND  </td><td class="col2 leftalign">0  </td><td class="col3 leftalign"> Remove the DAC output clamp to ground  </td>
+	</tr>
+	<tr class="row8">
+		<td class="col0 leftalign">1  </td><td class="col1 leftalign">RBUF  </td><td class="col2 leftalign"> 1  </td><td class="col3 leftalign">Internal amplifier powered down  </td>
+	</tr>
+</tbody></table></div>
+<div class="wrap_center wrap_round wrap_important plugin_wrap" style="width: 60%;">
+<p>
+To write in offset binary coding, set BIN/2sC = 1. 
+<br>
+
+<br>
+
+The default coding is twos complement. The same 24-bit data impacts the values that the user writes to or reads from the part in a different way depending on the coding selected. The user must verify the coding used by writing to the control register or reading  back from it.
+</p>
+</div></div>
+<p>
+<br>
+
+<br>
+
+</p>
+
+<p>
+<a href="https://wiki.analog.com/_media/resources/quick-start/example1_step1_ad5781_91.png" class="media" title="resources:quick-start:example1_step1_ad5781_91.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/example1_step1_ad5781_91.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 6. Initializing the Part</em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h4 id="writing_to_the_dac_register">Writing to the DAC Register</h4>
+<div class="level4">
+<div class="wrap_tip plugin_wrap">
+<p>
+To write a midscale code to the DAC register,
+</p>
+<ul>
+<li class="level1"><div class="li"> Set R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px"> = 0 to select the write option from the read/write bit. </div>
+</li>
+<li class="level1"><div class="li"> Set C[2:0] = 001 for the correspondent register address.</div>
+</li>
+<li class="level1"><div class="li"> Set D[19:0], the data bits, for a midscale code.</div>
+</li>
+</ul>
+
+<p>
+The 24-bit data to write over the serial interface is as follows:
+<br>
+
+<br>
+
+18-bit <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>: 0001 1000 0000 0000 0000 00XX
+<br>
+
+20-bit <a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a>: 0001 1000 0000 0000 0000 0000
+<br>
+
+<br>
+
+where X = don't care.
+<br>
+
+<br>
+
+See Table 7 and Figure 7. 
+<br>
+
+<br>
+
+<strong>Table 7. Bit Settings to Write to DAC Register</strong>
+</p>
+<div class="table sectionedit41"><table class="inline">
+	<thead>
+	<tr class="row0">
+		<th class="col0 leftalign">Bit(s)  </th><th class="col1 leftalign">Bit Name  </th><th class="col2 leftalign">Setting  </th><th class="col3 leftalign">Description  </th>
+	</tr>
+	</thead>
+	<tbody><tr class="row1">
+		<td class="col0 leftalign">23  </td><td class="col1 leftalign">R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px">  </td><td class="col2 leftalign">0  </td><td class="col3 leftalign"><a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>/<a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a> addressed for a write operation  </td>
+	</tr>
+	<tr class="row2">
+		<td class="col0 leftalign">[22:20]  </td><td class="col1 leftalign">C2, C1, C0  </td><td class="col2 leftalign">001  </td><td class="col3 leftalign">Write to the DAC register  </td>
+	</tr>
+</tbody></table></div>
+</div>
+<p>
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/example1_step2_ad5781_91.png" class="media" title="resources:quick-start:example1_step2_ad5781_91.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/example1_step2_ad5781_91.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 7. Writing to the DAC Register</em>
+</p>
+</div>
+<p>
+<br>
+
+</p>
+
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h2 class="sectionedit44" id="example_2clearing_the_dac_to_a_defined_value">Example 2: Clearing the DAC to a Defined Value</h2>
+<div class="level2">
+
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h4 id="writing_to_the_clearcode_register">Writing to the Clearcode Register</h4>
+<div class="level4">
+<div class="wrap_tip plugin_wrap">
+<p>
+To define the value at which the DAC output is set when the <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(1).php" class="medianormal mathpublish" alt="overline{CLR}" title="overline{CLR}" style="display: inline-block; vertical-align:-6px"> pin or CLR bit in the software control register is asserted, write the desired code to the clearcode register. 
+<br>
+
+<br>
+
+For a full-scale clear code, write the following over the serial interface: 
+<br>
+
+<br>
+
+18-bit <a href="http://www.analog.com/ad5781" class="interwiki iw_adi" title="http://www.analog.com/ad5781">AD5781</a>: 0011 1111 1111 1111 1111 11XX
+<br>
+
+20-bit <a href="http://www.analog.com/ad5791" class="interwiki iw_adi" title="http://www.analog.com/ad5791">AD5791</a>: 0011 1111 1111 1111 1111 1111
+<br>
+
+<br>
+
+where X = don't care. 
+<br>
+
+<br>
+
+See Figure 8.
+<br>
+
+<br>
+
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/example2_step1_ad5781_91.png" class="media" title="resources:quick-start:example2_step1_ad5781_91.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/example2_step1_ad5781_91.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 8. Writing Full-Scale Code to the Clearcode Register</em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h4 id="writing_to_the_software_control_register">Writing to the Software Control Register</h4>
+<div class="level4">
+<div class="wrap_tip plugin_wrap">
+<p>
+Set the CLR bit to a Logic 1 to set the DAC register to a user defined value and update the DAC output. 
+<br>
+
+<br>
+
+Write the following over the serial interface: 0100 0000 0000 0000 0000 0010 
+<br>
+
+<br>
+
+The user should see the DAC output value change to full-scale code.
+<br>
+
+<br>
+
+See Figure 9.
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/example2_step2_ad5781_91.png" class="media" title="resources:quick-start:example2_step2_ad5781_91.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/example2_step2_ad5781_91.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 9. Clearing the Part to a User Defined Value</em>
+</p>
+</div>
+<p>
+<br>
+
+<br>
+
+</p>
+
+</div>
+
+<h4 id="reading_from_the_clearcode_register">Reading From the Clearcode Register</h4>
+<div class="level4">
+<div class="wrap_tip plugin_wrap">
+<p>
+To confirm the clearcode value written to the part, read the data from the clearcode register (full scale for this example). 
+<br>
+
+<br>
+
+Write the following over the serial interface: 
+<br>
+
+<br>
+
+1011 XXXX XXXX XXXX XXXX XXXX
+<br>
+
+<br>
+
+where X = don't care.
+<br>
+
+<br>
+
+See Figure 10.
+<br>
+
+<br>
+
+</p>
+<div class="wrap_center wrap_round wrap_important plugin_wrap" style="width: 60%;">
+<p>
+Note that this action is a read function. Therefore, set the R/<img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/img(4).php" class="medianormal mathpublish" alt="overline{W}" title="overline{W}" style="display: inline-block; vertical-align:-6px"> bit = 1.
+<br>
+
+<br>
+
+D19 to D0, the data bits, are don't care bits because the intention is to read from the part, and not to write to the part.
+</p>
+</div></div>
+<p>
+<br>
+
+<br>
+
+<a href="https://wiki.analog.com/_media/resources/quick-start/example2_step3_ad5781_91.png" class="media" title="resources:quick-start:example2_step3_ad5781_91.png"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/example2_step3_ad5781_91.png" class="mediacenter" alt="" width="700"></a>
+</p>
+<div class="wrap_centeralign plugin_wrap">
+<p>
+<em>Figure 10. Reading from the Clearcode Register</em>
+</p>
+</div>
+<p>
+<br>
+
+</p>
+
+</div>
+
+                        <!-- wikipage stop -->
+                    </div>
+
+                    <div class="docInfo"><bdi>resources/quick-start/ad5791.txt</bdi> · Last modified: 16 Apr 2013 16:18 by <bdi>yng</bdi></div>
+
+                                    </div>
+            </div>
+            <!-- /content -->
+
+            <hr class="a11y">
+
+            <!-- PAGE ACTIONS -->
+            <div id="dokuwiki__pagetools">
+                <h3 class="a11y">Page Tools</h3>
+
+                <div class="tools">
+                    <ul>
+                        <li><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=edit" class="action source" accesskey="v" rel="nofollow" title="View Source [V]"><span>View Source</span></a></li><li><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=revisions" class="action revs" accesskey="o" rel="nofollow" title="History [O]"><span>History</span></a></li><li><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=backlink" class="action backlink" rel="nofollow" title="Backlinks"><span>Backlinks</span></a></li><li><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#dokuwiki__top" class="action top" accesskey="t" rel="nofollow" title="[ Back to top ] [T]"><span>[ Back to top ]</span></a></li>                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- /wrapper -->
+
+    </div>
+    <!-- /container -->
+</div>
+<!-- /site -->
+
+
+
+ <a class="backtotop" href="https://wiki.analog.com/resources/quick-start/ad5791?do=#header">&nbsp;</a>
+<footer class="footer" id="footer">
+    <div class="container">
+    
+
+            <div class="row footer-top visible-desktop" name="adi_footer_top">
+                
+<div class="col-md-8">
+             <div class="row">
+            <div class="tiles-big" name="adi_tiles_big">
+                <ul class="list-inline ">
+                   
+            <a href="http://www.analog.com/en/about-adi.html" target="" name="Employees_53c6a6a3-7113-400e-b299-320e2f5f43ae">
+                        <li class="boxes blue ">
+
+                           
+                            
+                            <div class="number">9,000</div>
+                                <div class="fact">Problem Solvers</div>
+                              
+                            
+                        </li>
+              
+                        </a>
+            <a href="http://www.analog.com/en/about-adi.html" target="" name="Customers_1350c01c-8972-4593-a0bf-0eb6ba1be865">
+                        <li class="boxes blue ">
+
+                           
+                            
+                            <div class="number">2,200</div>
+                                <div class="fact">Patents</div>
+                              
+                            
+                        </li>
+              
+                        </a>
+            <a href="http://www.analog.com/en/about-adi.html" target="" name="Countries_af6aaac4-a660-4ac9-86ee-fd52e3adddf9">
+                        <li class="boxes blue ">
+
+                           
+                            
+                            <div class="number">100,000</div>
+                                <div class="fact">Customers</div>
+                              
+                            
+                        </li>
+              
+                        </a>
+            <a href="http://www.analog.com/en/about-adi.html" target="" name="Years_f0252945-126f-49a1-8fbb-1c465709aa1e">
+                        <li class="boxes blue last">
+
+                           
+                            
+                            <div class="number">50</div>
+                                <div class="fact">Years</div>
+                              
+                            
+                        </li>
+              
+                        </a>
+                </ul>
+                <div class="clearfix">&nbsp;</div>
+              
+                <div class="row">
+                        <div class="col-xs-12">
+                            <div class="dividertop">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 dividerbottom">&nbsp;</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <span class="tac header4">Analog Devices. Dedicated to solving the toughest engineering challenges.</span>
+                        </div>
+                    </div>
+             
+            </div>
+       </div>
+             </div>
+
+
+
+
+    <div class="col-md-4">
+        <div class="callout">
+            <span class="ntm header3">Ahead of What's Possible</span>	        <div class="bg-head">&nbsp;</div>
+<p>
+ADI enables our customers to interpret the world around us by intelligently bridging the physical and digital with unmatched technologies that sense, measure and connect.  We collaborate with our customers to accelerate the pace of innovation and create breakthrough solutions that are ahead of what’s possible.
+<br>
+<br>
+<a href="http://www.analog.com/en/landing-pages/001/ahead-of-whats-possible.html">See the Innovations</a>
+</p>        </div>
+    </div>
+            </div>
+        
+        <div class="row footer-bottom" name="adi_footer_bottom">
+            <div class="col-md-12 clearfix">
+              
+                    
+    <div class="col-md-2" name="Footer_Social_Media_Links_eee39a50-a6b0-4426-9c6a-78dd1523c507">
+        <div class="row">
+        <div class="sociallinks">
+		   <span class="header4"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#" class="footer-collapse dropdown-toggle" data-toggle="dropdown">Social<span class="glyphicon pull-right glyphicon-chevron-down visible-phone"></span> </a></span>
+			    <ul class="pull-right list-social footer-dropdown-menu">
+				        <li class="ez-color"><a href="http://ez.analog.com/welcome" target="" title="Join Analog Devices on EngineerZone" name="EngineerZone_d74a8282-8c8e-41a3-b545-de77a972702b"></a></li>
+				        <li class="facebook-color"><a href="http://www.facebook.com/AnalogDevicesInc" target="_blank" title="Visit Analog Devices on Facebook" name="Facebook_b4a835b0-575b-4798-b6d0-9ce86fdc017b"></a></li>
+				        <li class="twitter-color"><a href="https://twitter.com/#!/adi_news" target="_blank" title="Follow Analog Devices on Twitter" name="Twitter_227c82a6-4516-4571-9330-5d41fe62e4cb"></a></li>
+				        <li class="linkedin-color"><a href="http://www.linkedin.com/company/3450" target="_blank" title="Join Analog Devices on LinkedIn" name="LinkedIn_36ed8b9d-d5e9-4480-918c-7461cc99c31e"></a></li>
+				        <li class="google-color"><a href="http://plus.google.com/116502491843999760953/posts" target="_blank" title="Follow us on Google+" name="GooglePlus_dc694c23-ce9a-49d8-9627-7d516c3638d2"></a></li>
+				        <li class="youtube-color"><a href="http://www.youtube.com/user/AnalogDevicesInc" target="_blank" title="View Analog Devices on YouTube" name="YouTube_dc3d3499-3062-4b36-932d-780467722fed"></a></li>
+				        <li class="rss-color"><a href="http://www.analog.com/en/content/rss_feeds/fca.html" target="_blank" title="RSS Feeds" name="RSS_Feeds_c24fd0be-4621-4ae5-91d3-29c8aab1d0f6"></a></li>
+			    </ul>
+        </div> 
+            </div>
+    </div>
+
+                    
+        <div class="col-md-4 quick" name="adi_footer_quicklinks"> 
+            <div class="quicklinks">
+                  <span class="header4"><a href="https://wiki.analog.com/resources/quick-start/ad5791?do=#" class="footer-collapse dropdown-toggle" data-toggle="dropdown">Quick Links<span class="glyphicon pull-right glyphicon-chevron-down visible-phone"></span> </a></span>
+                <ul class="list-unstyled footer-dropdown-menu">
+                        <li class=""><a href="http://www.analog.com/en/about-adi.html" target="" title="About ADI" name="About_ADI_a18d047b-e6c9-43eb-ac39-f2433cb55f1f">About ADI</a></li>
+                        <li class=""><a href="http://www.analog.com/library/analogDialogue/index.html" target="" title="Analog Dialogue" name="Analog_Dialogue_41ade380-bf31-4791-8015-2a7cc8211984">Analog Dialogue</a></li>
+                        <li class=""><a href="http://www.analog.com/en/about-adi/careers.html" target="" title="Careers" name="Careers_d3bc9a5a-eaac-4f74-a4eb-9588b983bae8">Careers</a></li>
+                        <li class=""><a href="http://www.analog.com/en/about-adi/contact-us.html" target="" title="Contact us" name="Contact_us_95dc0fe9-dc2d-4f85-81fa-1a49595a3d0d">Contact us</a></li>
+                        <li class=""><a href="http://investor.analog.com/" target="" title="Investor Relations" name="Investor_Relations_2ffc3744-f828-4aa2-8db4-3e3bb8854bb7">Investor Relations</a></li>
+                        <li class=""><a href="http://www.analog.com/en/about-adi/news-media-relations/news-room.html" target="" title="News Room" name="News_Room_0b77676a-6e78-428a-b729-3b12f20cb0d0">News Room</a></li>
+                        <li class=""><a href="http://www.analog.com/en/about-adi/quality-reliability.html" target="" title="Quality &amp; Reliability" name="Quality_N_Reliability_9f2071ca-97a4-4e6c-85f8-a28480bc998c">Quality &amp; Reliability</a></li>
+                        <li class=""><a href="http://www.analog.com/en/about-adi/corporate-information/sales-distribution.html" target="" title="Sales &amp; Distributors" name="Sales_N_Distributors_c71f89eb-3bca-4ca9-a79d-73a1172cfa1a">Sales &amp; Distribution</a></li>
+                </ul>
+            </div>
+        </div>
+ 
+                    
+        <div class="col-md-2 visible-desktop"> 
+            <span class="header4">Languages</span>
+            <div class="quicklinks" name="adi_footer_languages_quicklinks">
+                <ul class="list-unstyled">
+                        <li><a href="http://www.analog.com/en/" target="" title="English" name="English_2c0dae2c-e343-42a4-8ce2-cd8350c8ec55">English</a></li>
+                        <li><a href="http://www.analog.com/cn/" target="" title="简体中文" name="Chinese_8f00bfa0-df96-41b4-b43b-9937d78c4452">简体中文</a></li>
+                        <li><a href="http://www.analog.com/jp/" target="" title="日本語" name="Japanese_28d4203f-f1f1-4a94-acf1-e5023759cda3">日本語</a></li>
+                        <li><a href="http://www.analog.com/ru/" target="" title="Руccкий" name="Russian_08ad222c-9e19-46af-997d-9e7a12a99c0b">Руccкий</a></li>
+                </ul>
+            </div>
+        </div>
+ 
+
+
+    <div class="col-md-4 visible-desktop">
+        <div class="newsletter" name="Callouts_Newsletter_b24a4bad-d9d0-4b9a-bb7d-149bf3a624cf">
+			<span class="header4">Newsletter</span>
+			<p>Interested in the latest news and articles about ADI products, design tools, training and events? Choose from one of our 12 newsletters that match your product area of interest, delivered monthly or quarterly to your inbox.</p>
+            <div class="control-form">
+                
+
+                
+                 <a class="btn btn-primary" name="Newsletter_Sign Up_b24a4bad-d9d0-4b9a-bb7d-149bf3a624cf" href="https://my.analog.com/en/myanalog/manage-updates/manage-newsletters.html">Sign Up</a>
+            </div>
+		</div>
+        <div class="switch-mobile-view">
+                <a href="https://wiki.analog.com/resources/quick-start/ad5791?do=" id="btn-force-mobile-view" class="btn btn-primary">Switch to mobile view</a>
+              </div>
+
+    </div>
+
+                
+            </div>
+            <div class="col-md-12 clearfix visible-phone">
+                        <div class="container text-center">
+                              <button type="button" id="btn-force-desktop-view" class="btn btn-primary">
+                                    
+                                  Desktop View
+                                </button>
+                           </div>
+              </div>
+
+            <div class="col-md-12">
+                <div class="row copyright" name="adi_footer_copyright">
+                    <div class="col-md-6">
+                        
+                        <div data-src="//assets.analog.com/images/footer_logo.gif" class="visible-phone">
+                            <img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/footer_logo.gif" alt="Analog Logo" width="100">
+                        </div>
+                        <span class="copy">©</span>
+1995 - 2015 Analog Devices, Inc. All Rights Reserved                      
+                    </div>
+
+                    
+    <div class="col-md-6 visible-desktop" name="adi_footer_horizontal_links">
+		<ul class="list-inline pull-right">
+			    <li class=""><a href="http://www.analog.com/en/sitemap.html" target="" title="Sitemap" name="Sitemap_b8effdcc-bc20-42ab-af7b-e2a546667326">Sitemap</a></li>
+			    <li class=""><a href="http://www.analog.com/en/about-adi/landing-pages/001/privacy_security_statement.html" target="" title="Privacy &amp; Security" name="Privacy_N_Security_7bd22b0b-d67b-4530-ae22-266045bc4d73">Privacy &amp; Security</a></li>
+			    <li class=""><a href="http://www.analog.com/en/about-adi/landing-pages/001/terms_of_use.html" target="" title="Terms of use" name="Terms_of_Use_fd8a5f4a-6e7a-4d1d-9605-56488afcf6c6">Terms of use</a></li>
+		</ul>
+	</div>
+
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+           
+        <script src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/addthis_widget.js" type="text/javascript"></script>
+</footer><div id="_atssh" style="visibility: hidden; height: 1px; width: 1px; position: absolute; top: -9999px; z-index: 100000;"><iframe id="_atssh115" title="AddThis utility frame" style="height: 1px; width: 1px; position: absolute; top: 0px; z-index: 100000; border: 0px; left: 0px;" src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/sh.5146487cc7ea4d7c00930dfb.html"></iframe></div><style id="service-icons-0"></style>
+<font style="color: #F2F2F2;">沪ICP备09046653号</font>
+
+
+
+
+
+<script type="text/javascript">
+            if(typeof(_satellite) != 'undefined') {
+            _satellite.pageBottom();
+            }
+        </script>
+<div class="a11y" style="float: left"><img src="./AD5781_AD5791 Quick Start Guide [Analog Devices Wiki]_files/indexer.php" width="2" height="1" alt=""></div>
+
+
+<script aria-hidden="true" type="application/x-lastpass" id="hiddenlpsubmitdiv" style="display: none;"></script><script>try{(function() { for(var lastpass_iter=0; lastpass_iter < document.forms.length; lastpass_iter++){ var lastpass_f = document.forms[lastpass_iter]; if(typeof(lastpass_f.lpsubmitorig2)=="undefined"){ lastpass_f.lpsubmitorig2 = lastpass_f.submit; if (typeof(lastpass_f.lpsubmitorig2)=='object'){ continue;}lastpass_f.submit = function(){ var form=this; var customEvent = document.createEvent("Event"); customEvent.initEvent("lpCustomEvent", true, true); var d = document.getElementById("hiddenlpsubmitdiv"); if (d) {for(var i = 0; i < document.forms.length; i++){ if(document.forms[i]==form){ if (typeof(d.innerText) != 'undefined') { d.innerText=i.toString(); } else { d.textContent=i.toString(); } } } d.dispatchEvent(customEvent); }form.lpsubmitorig2(); } } }})()}catch(e){}</script></body></html>
