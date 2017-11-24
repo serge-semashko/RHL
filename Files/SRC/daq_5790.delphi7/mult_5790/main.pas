@@ -7,7 +7,7 @@ uses
     StdCtrls, gpib_user, Adgpib, ComCtrls, ExtCtrls, TeEngine, Series, TeeProcs,
     Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
     Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
-    ZDataset, ZAbstractConnection, ZConnection;
+    ZDataset, ZAbstractConnection, ZConnection,ZCompatibility;
 
 type
     TDAQThread = class(TThread)
@@ -43,8 +43,6 @@ type
         addbtn: TSpeedButton;
         rembtn: TSpeedButton;
         con1: TADOConnection;
-        con2: TZConnection;
-        zqry1: TZQuery;
         ds1: TDataSource;
         dbgrd1: TDBGrid;
         Bottomspn: TSpinEdit;
@@ -81,10 +79,10 @@ type
 //    procedure FormClose(Sender: TObject; var Action: TCloseAction);
         procedure Chart2DblClick(Sender: TObject);
         procedure Timer1Timer(Sender: TObject);
-        procedure zqry1BeforePost(DataSet: TDataSet);
         procedure pnl3Click(Sender: TObject);
         procedure rembtnClick(Sender: TObject);
         procedure btn1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
     private
     { Private declarations }
     public
@@ -104,6 +102,7 @@ type
     Varray = array of vrecord;
 
 var
+    daq_counter : int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
     GPIB_Ready: Boolean = false;
@@ -122,8 +121,8 @@ var
     dstep: integer;
     DaqThread: Tdaqthread;
     CurVoltage: double;
-    CurControl: int64;
-    oldControl: int64;
+    CurControl: int64 = 0;
+    oldControl: int64 = 0;
     MainForm: TMainForm;
     VoltageChangeTime: double;
     TimerID: dword;
@@ -161,6 +160,9 @@ var
     step_len: double = 60;
     start_step: double = 0;
     prevVoltage: shortstring = '';
+    con2: TZConnection;
+    zqry1: TZQuery;
+    zexe: TZQuery;
 
 implementation
 
@@ -173,7 +175,7 @@ var
     st: double;
 begin
     st := now;
-    while (now - st) * 24 * 3600 < ms do
+    while (now - st) * 24 * 3600*1000 < ms do
         application.ProcessMessages;
 end;
 
@@ -187,32 +189,15 @@ begin
     result := 5.0 * d_cur / $FFFFF;
 end;
 
-function setPotential(U: double): string;
-var
-    s1, url: string;
-begin
-    exit;
-    if http <> nil then begin
-        http.Free;
-        http := nil;
-    end;
-    HTTP := THTTPSend.Create;
-    s1 := format('%.10f', [U]);
-    s1 := ansiReplaceStr(s1, ',', '.');
-    url := 'http://192.168.0.10:8282/set=' + s1;
-
-    HTTP.HTTPMethod('GET', url);
-    http.Free;
-    http := nil;
-end;
 
 function setdPotential(U: dword): string;
 var
     s1, url: string;
 begin
-    if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
-        curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (oldControl - U) / abs(oldControl - U));
     curControl := U;
+    if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
+        curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (U - oldcontrol) / abs(oldControl - U));
+    if curControl <0 then curcontrol := 0;
     oldControl := CurControl;
 
     if http <> nil then begin
@@ -234,7 +219,7 @@ var
     tarcontrol: int64;
     startsetTime: double;
 begin
-    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) / (50000 / $FFFFF));
+    curControl := curControl + trunc((target * 1.0 - curVoltage * 10000) / (50000 / $FFFFF));
     setDPotential(curControl);
 end;
 
@@ -242,10 +227,13 @@ function SetVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
+    diff : double ;
 begin
     correctVoltage(target);
     delay(1000);
-    if (target * 1.0 - mean3Voltage * 10000) > 0.2 then
+    diff := mean3Voltage * 10000;
+    diff := target * 1.0 - mean3Voltage * 10000;
+    if abs(diff) > 0.2 then
         result := false
     else
         result := true;
@@ -255,12 +243,20 @@ function SetRegionBorder(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
+    Vdiff : double;
 begin
     startsetTime := now;
-    while ((target * 1.0 - meanVoltage * 10000) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+    while (abs((target * 1.0 - meanVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
+        vdiff :=abs((target * 1.0 - meanVoltage * 10000));
+        delay(2000);
+    end;
+    while (abs((target * 1.0 - meanVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+        correctVoltage(target);
+        vdiff :=abs((target * 1.0 - meanVoltage * 10000));
         delay(1000);
     end;
+
     if (target * 1.0 - meanVoltage * 10000) > 1 then begin
         result := false;
     end
@@ -456,6 +452,7 @@ begin
         if (gpib_ready) then begin
 
             DaqGetData;
+            inc (Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
                     LastVoltage[i] := CurVoltage
@@ -470,6 +467,7 @@ begin
                     mean3Voltage := mean3Voltage + LastVoltage[i];
             end;
             meanVoltage := meanVoltage / 6.0;
+            mean3Voltage := mean3Voltage / 3.0;
         end;
         sleep(300)
     end;
@@ -480,7 +478,26 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
+    con2 := TZConnection.Create(self);
+    with con2 do begin
+      ControlsCodePage := cGET_ACP;
+      AutoEncodeStrings := False;
+      Port := 0;
+      Database := 'G:\home\RHL\Files\SRC\daq_5790.delphi7\daq_5790\exp.db';
+      Protocol := 'sqlite-3';
+    end;
     con2.Database := extractfilepath(application.ExeName) + 'exp.db';
+    zexe := TZQuery.Create(self);
+    zexe.Connection := con2;
+    zqry1 := TZQuery.Create(self);
+    with zqry1 do begin
+      Connection := con2;
+      sql.Clear;
+      sql.Add('select * from seanses order by lowv');
+
+    end;
+    ds1.DataSet := zqry1;
+//    dbgrd1.DataSource := ds
     cmbGPIB.ItemIndex := 0;
     cmbInst.ItemIndex := 15;
     memoRead.Text := '';
@@ -563,6 +580,7 @@ var
                 showerrorRange;
             if round(newTarget) > border_high then begin
                 zqry1.MoveBy(1);
+                setrangeparams;
                 if zqry1.Eof then begin
                     if daq_mode = 0 then begin
                         dstep := -1;
@@ -573,9 +591,10 @@ var
                         zqry1.MoveBy(-zqry1.RecNo);
                         curTarget := zqry1.FieldValues['lowV'];
                     end;
+                end else begin
+                    curTarget := zqry1.FieldValues['lowV'];
                 end;
                 countPerVSeries.Clear;
-                setrangeparams;
                 Stage := Stage + 1;
                 exit;
             end;
@@ -589,8 +608,7 @@ var
                     dstep := 1;
                     curTarget := zqry1.FieldValues['lowV'];
                 end
-                else
-                    curTarget := zqry1.FieldValues['HighV'];
+                else   curTarget := zqry1.FieldValues['HighV'];
                 countPerVSeries.Clear;
                 setrangeparams;
                 Stage := Stage + 1;
@@ -602,23 +620,26 @@ var
     end;
 
 begin
+    if (Startcycle.Caption = 'Stop measurement') then begin
+     Startcycle.Caption := 'Finishing ....';
+     exit;
+    end ;
+    if (Startcycle.Caption <> 'Start measurement') then begin
+     exit;
+    end ;
     Stage := 1;
     CreateDataFileName;
 
     ClearSeries();
-    step_len := expspn.Value;
 
-    border_high := topspn.Value;
-    border_low := Bottomspn.Value;
     zqry1.MoveBy(-zqry1.RecNo);
-    topspn.Value := zqry1.FieldValues['HighV'];
-    bottomspn.Value := zqry1.FieldValues['LowV'];
-    expspn.Value := zqry1.FieldValues['exposition'];
-    deadspn.Value := zqry1.FieldValues['dead_time'];
-    border_high := topspn.Value;
-    border_low := Bottomspn.Value;
     step_len := expspn.Value;
-    SetRegionBorder(border_low);
+    setrangeparams;
+    if not SetRegionBorder(border_low) then begin
+            showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+            exit;
+    end;
+
     for I1 := 0 to 10 do begin
         if SetVoltage(border_low) then
             break;
@@ -643,6 +664,7 @@ begin
     start_step := now;
     dstep := 1;
     CorrectionTime := now;
+    curtarget := Border_low;
     GettingData := true;
 
 //######################################################################################
@@ -699,7 +721,7 @@ begin
 
             StepStartIndex := vindex + 1;
 
-            newTarget := curTarget + dstep * step_Value;
+            newTarget := curTarget + dstep * step_Value/10.0;
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 SetNewRegion();
@@ -730,28 +752,7 @@ begin
         end;
 
     end;
-//    timeKillEvent(TimerID);
-    daqThread.Terminate;
-    PrevMTime := TimegetTime;
-    while (timegettime() - PrevMtime) < 1000 do
-        application.ProcessMessages;
-  //Offline the GPIB interface card
-    ibonl(dev, 0);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in offline the GPIB interface card.' + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in offline the GPIB interface card.' + #10);
-    end;
     StartCycle.Enabled := true;
-    iRet := close_Com(gcPort);
-    if iRet > 0 then begin
-        Beep;
-        iConfirm := MessageDlg('close_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13 + 'Quit this demo?', mtConfirmation, [mbYes, mbNo], 0);
-
-    end;
-
-    bComOpen := false;
-    bCfgChg := False;
     Startcycle.Caption := 'Start measurement'
 
 end;
@@ -780,10 +781,10 @@ end;
 
 function TMainForm.delay(ms: integer): integer;
 var
-    st: double;
+    st, ctime: double;
 begin
     st := now;
-    while (now - st) * 24 * 3600 < ms do
+    while (now - st) * 24 * 3600*1000 < ms do
         application.ProcessMessages;
 end;
 
@@ -929,14 +930,14 @@ begin
     LastCounterTime := now;
     daqthread.Priority := tpTimeCritical;
     GettingData := false;
-
-    delay(2500);
     gpib_ready := true;
+    daqthread.Resume;
+    delay(2000);
+
     curControl := v_convert(meanVoltage);
     oldControl := CurControl;
     bottomspn.Value := trunc(meanVoltage * 10000);
     topspn.Value := trunc(meanVoltage * 10000);
-
     StartCycle.Enabled := true;
 
 //***********finished configure ******************
@@ -950,8 +951,7 @@ end;
 
 procedure TMainForm.CreatedataFileName;
 var
-    s1, s2: string;
-    r1: dword;
+    s1, s2: string;      r1: dword;
     Info: string;
 begin
     r1 := 80;
@@ -968,10 +968,6 @@ begin
     LogFileName := s2 + ' full.txt';
 end;
 
-procedure TMainForm.zqry1BeforePost(DataSet: TDataSet);
-begin
-    showmessage(DataSet.FieldByName('num').AsString + ' ' + DataSet.FieldByName('lowv').AsString + ' ' + DataSet.FieldByName('highv').AsString + ' ' + DataSet.FieldByName('exposition').AsString + ' ');
-end;
 
 function TMainForm.SetRVoltage(target: double): boolean;
 var
@@ -994,31 +990,46 @@ end;
 
 procedure TMainForm.pnl3Click(Sender: TObject);
 begin
+  if (Bottomspn.Value >= Topspn.Value) then begin
+   showmessage('Ќижн€€ граница должна быть меньше верхней ');
+   exit;
+  end;
     zqry1.Insert;
-    zqry1.FieldValues['LowV'] := Bottomspn.Value;
-    zqry1.FieldValues['HighV'] := topspn.Value;
-    zqry1.FieldValues['dead_time'] := deadspn.Value;
-    zqry1.FieldValues['exposition'] := expspn.Value;
-    zqry1.FieldValues['step'] := stepspn.Value;
+    zqry1.FieldByName('LowV').AsInteger := Bottomspn.Value;
+  zqry1.FieldByName('HighV').AsInteger := topspn.Value;
+  zqry1.FieldByName('dead_time').AsInteger := deadspn.Value;
+  zqry1.FieldByName('exposition').AsInteger := expspn.Value;
+  zqry1.FieldByName('step').AsInteger := stepspn.Value;
     zqry1.Post;
     zqry1.Close;
     zqry1.Open;
 end;
 
 procedure TMainForm.rembtnClick(Sender: TObject);
+var
+ lowV : int64;
 begin
-    zqry1.Delete;
-    zqry1.close;
-    zqry1.open;
+ if zqry1.RecordCount = 0 then exit;
+ lowv := zqry1.fieldbyname('lowV').AsInteger;
+ zqry1.Close;
+ zexe.SQL.Text := 'delete from seanses where lowV = '+IntToStr(lowV);
+ zexe.ExecSQL;
+ zqry1.Open;
 end;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 begin
-    while zqry1.RecordCount > 0 do begin
-        zqry1.Delete;
-        zqry1.close;
-        zqry1.open;
-    end;
+ zqry1.Close;
+ zexe.SQL.Text := 'delete from seanses';
+ zexe.ExecSQL;
+ zqry1.Open;
+end;
+
+procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+// DaqThread.Suspend;
+// DaqThread.terminate;
+  //DaqThread.free;;
 end;
 
 end.
