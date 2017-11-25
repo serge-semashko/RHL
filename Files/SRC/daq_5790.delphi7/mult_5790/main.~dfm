@@ -40,6 +40,20 @@ object MainForm: TMainForm
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Wavetek 1271'
+      object StartCycle: TSpeedButton
+        Left = 873
+        Top = 33
+        Width = 176
+        Height = 40
+        Caption = 'Start measurement'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -16
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        OnClick = StartCycleClick
+      end
       object dbgrd2: TDBGrid
         Left = 0
         Top = 0
@@ -781,14 +795,6 @@ object MainForm: TMainForm
                 Height = 13
                 Caption = 'Instrument:'
               end
-              object StartCycle: TSpeedButton
-                Left = 329
-                Top = 17
-                Width = 98
-                Height = 17
-                Caption = 'Start measurement'
-                OnClick = StartCycleClick
-              end
               object cmbGPIB: TComboBox
                 Left = 47
                 Top = 16
@@ -858,16 +864,18 @@ object MainForm: TMainForm
                   'Memo1')
                 TabOrder = 2
               end
-              object CycBox: TCheckBox
-                Left = 435
-                Top = 19
-                Width = 125
-                Height = 13
-                Caption = 'Continue read'
-                Checked = True
-                State = cbChecked
-                TabOrder = 3
-              end
+            end
+            object RadioGroup1: TRadioGroup
+              Left = 336
+              Top = 344
+              Width = 185
+              Height = 55
+              Caption = #1056#1077#1078#1080#1084
+              ItemIndex = 0
+              Items.Strings = (
+                #1044#1074#1091#1085#1072#1087#1088#1072#1074#1083#1077#1085#1085#1099#1081
+                #1054#1076#1085#1086#1085#1072#1087#1088#1072#1074#1083#1077#1085#1085#1099#1081)
+              TabOrder = 4
             end
           end
         end

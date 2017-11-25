@@ -65,13 +65,13 @@ type
         Panel2: TPanel;
         Label1: TLabel;
         Label2: TLabel;
-        StartCycle: TSpeedButton;
         cmbGPIB: TComboBox;
         cmbInst: TComboBox;
         memoRead: TMemo;
-        CycBox: TCheckBox;
         dbgrd2: TDBGrid;
         btn1: TSpeedButton;
+    RadioGroup1: TRadioGroup;
+    StartCycle: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -228,11 +228,16 @@ var
     tarcontrol: int64;
     startsetTime: double;
     diff : double ;
+    tmpstr : string;
 begin
+    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ',[target*1.0, curVoltage, mean3Voltage*10000, meanVoltage*10000]);
+    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
     delay(1000);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
+    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f',[target*1.0, curVoltage, mean3Voltage*10000, mean3oltage*10000,  diff]);
+    writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.2 then
         result := false
     else
@@ -526,6 +531,7 @@ var
     I1: INTEGER;
     T1, T2: DOUBLE;
     start_dead: double;
+    tmpstr : string;
 var
     dt: double;
     prt: tthreadpriority;
@@ -589,6 +595,7 @@ var
                     end
                     else begin
                         zqry1.MoveBy(-zqry1.RecNo);
+                        setrangeparams;
                         curTarget := zqry1.FieldValues['lowV'];
                     end;
                 end else begin
@@ -604,6 +611,8 @@ var
                 showerrorRange;
             if newTarget < border_low then begin
                 zqry1.MoveBy(-1);
+                         setrangeparams;
+
                 if zqry1.bof then begin
                     dstep := 1;
                     curTarget := zqry1.FieldValues['lowV'];
@@ -620,16 +629,26 @@ var
     end;
 
 begin
+    daq_mode := RadioGroup1.ItemIndex;
+    if (Startcycle.Caption = 'Stop measurement') then begin
+     Startcycle.Caption := 'Finishing ....';
+     Startcycle.Font.Color := clGreen;
+     exit;
+    end ;
+    if (Startcycle.Caption <> 'Start measurement') then begin
+     exit;
+    end ;
+    Startcycle.Enabled := false;
     Stage := 1;
     CreateDataFileName;
 
     ClearSeries();
 
     zqry1.MoveBy(-zqry1.RecNo);
-    step_len := expspn.Value;
     setrangeparams;
     if not SetRegionBorder(border_low) then begin
             showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+            Startcycle.Enabled := true;
             exit;
     end;
 
@@ -638,6 +657,7 @@ begin
             break;
         if I1 = 10 then begin
             showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+            Startcycle.Enabled := true;
             exit;
         end;
     end;
@@ -666,6 +686,8 @@ begin
 //#########################################            #################################
 //######################################################################################
     Startcycle.Caption := 'Stop measurement';
+     Startcycle.Font.Color := clRed;
+       Startcycle.Enabled := true;
     while (Startcycle.Caption = 'Stop measurement') do begin
         mainform.Caption := IntToStr(cntval);
 
@@ -713,6 +735,8 @@ begin
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;
+            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f',[curtarget*1.0, meanVoltage*10000, mean3Voltage*10000,  dstep * step_Value/10.0, border_low*1.0]);
+            writetimelog(DataDirName + 'range.txt', tmpstr);
 
             newTarget := curTarget + dstep * step_Value/10.0;
             curTarget := newTarget;
@@ -723,13 +747,14 @@ begin
             end
             else begin
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
-                    CorrectVoltage(curTarget);
-                    delay(1000);
+                    setVoltage(curTarget);
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
                     delay(300);
                 end;
             end;
+            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f',[curtarget*1.0,CurVoltage*10000,  meanVoltage*10000, mean3Voltage*10000,  dstep * step_Value/10.0, border_low*1.0]);
+            writetimelog(DataDirName + 'range.txt', tmpstr);
             GettingData := true;
             correctionTime := now;
             start_step := now;
@@ -746,7 +771,8 @@ begin
 
     end;
     StartCycle.Enabled := true;
-    Startcycle.Caption := 'Start measurement'
+    Startcycle.Caption := 'Start measurement';
+    Startcycle.Font.Color := clBlue;
 
 end;
 
@@ -953,9 +979,10 @@ begin
     s1 := extractfilepath(application.exename);
     Info := FormatDateTime('DD_MMMM_YY HH_NN_SS ', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
     s2 := s1 + '\data\';
-    DataDirName := s2;
     CreateDirectory(pchar(s2), nil);
-
+    s2 := s2+FormatDateTime('DD_MMMM_YY HH_NN_SS ', now)+'\';
+    DataDirName := s2;
+    CreateDirectory(pchar(DataDirName), nil);
     s2 := s2 + Info;
     DataFileName := s2 + '.txt';
     LogFileName := s2 + ' full.txt';
@@ -984,7 +1011,11 @@ end;
 procedure TMainForm.pnl3Click(Sender: TObject);
 begin
   if (Bottomspn.Value >= Topspn.Value) then begin
-   showmessage('Ќижн€€ граница должна быть меньше верхней ');
+   showmessage('Error: Ќижн€€ граница должна быть меньше верхней ');
+   exit;
+  end;
+  if ((Topspn.Value - Bottomspn.Value) * 10 mod stepspn.Value) <> 0 then begin
+   showmessage('Error: Ўирина интекрвала не кратна шагу');
    exit;
   end;
     zqry1.Insert;
