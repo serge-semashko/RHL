@@ -1,6 +1,6 @@
 unit main;
 //26 12 10 53
-
+
 interface
 
 uses
@@ -8,7 +8,7 @@ uses
     StdCtrls, gpib_user, Adgpib, ComCtrls, ExtCtrls, TeEngine, Series, TeeProcs,
     Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
     Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
-    ZDataset, ZAbstractConnection, ZConnection,ZCompatibility;
+    ZDataset, ZAbstractConnection, ZConnection, ZCompatibility;
 
 type
     TDAQThread = class(TThread)
@@ -67,16 +67,16 @@ type
         memoRead: TMemo;
         dbgrd2: TDBGrid;
         btn1: TSpeedButton;
-    StartCycle: TSpeedButton;
-    mmo1: TMemo;
-    Label1: TLabel;
-    cmbGPIB: TComboBox;
-    cmbInst: TComboBox;
-    se1: TSpinEdit;
-    RadioGroup1: TRadioGroup;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+        StartCycle: TSpeedButton;
+        DescMemo: TMemo;
+        Label1: TLabel;
+        cmbGPIB: TComboBox;
+        cmbInst: TComboBox;
+        seSweepCount: TSpinEdit;
+        rgSweepMode: TRadioGroup;
+        Label2: TLabel;
+        Label3: TLabel;
+        Label4: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -87,7 +87,7 @@ type
         procedure pnl3Click(Sender: TObject);
         procedure rembtnClick(Sender: TObject);
         procedure btn1Click(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+        procedure FormClose(Sender: TObject; var Action: TCloseAction);
     private
     { Private declarations }
     public
@@ -107,7 +107,7 @@ type
     Varray = array of vrecord;
 
 var
-    daq_counter : int64 = 0;
+    daq_counter: int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
     GPIB_Ready: Boolean = false;
@@ -122,7 +122,7 @@ var
     HTTP: THTTPSend = nil;
     StepStartIndex: int64;
     Border_High, Border_low: dword;
-    step_value, dead_value : int64;
+    step_value, dead_value: int64;
     dstep: integer;
     DaqThread: Tdaqthread;
     CurVoltage: double;
@@ -180,7 +180,7 @@ var
     st: double;
 begin
     st := now;
-    while (now - st) * 24 * 3600*1000 < ms do
+    while (now - st) * 24 * 3600 * 1000 < ms do
         application.ProcessMessages;
 end;
 
@@ -194,7 +194,6 @@ begin
     result := 5.0 * d_cur / $FFFFF;
 end;
 
-
 function setdPotential(U: dword): string;
 var
     s1, url: string;
@@ -202,7 +201,8 @@ begin
     curControl := U;
     if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
         curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (U - oldcontrol) / abs(oldControl - U));
-    if curControl <0 then curcontrol := 0;
+    if curControl < 0 then
+        curcontrol := 0;
     oldControl := CurControl;
 
     if http <> nil then begin
@@ -232,16 +232,16 @@ function SetVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
-    diff : double ;
-    tmpstr : string;
+    diff: double;
+    tmpstr: string;
 begin
-    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ',[target*1.0, curVoltage, mean3Voltage*10000, meanVoltage*10000]);
+    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
     writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
     delay(1000);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
-    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f',[target*1.0, curVoltage, mean3Voltage*10000, meanVoltage*10000,  diff]);
+    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
     writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.2 then
         result := false
@@ -253,17 +253,17 @@ function SetRegionBorder(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
-    Vdiff : double;
+    Vdiff: double;
 begin
     startsetTime := now;
     while (abs((target * 1.0 - meanVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
-        vdiff :=abs((target * 1.0 - meanVoltage * 10000));
+        Vdiff := abs((target * 1.0 - meanVoltage * 10000));
         delay(2000);
     end;
     while (abs((target * 1.0 - meanVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
-        vdiff :=abs((target * 1.0 - meanVoltage * 10000));
+        Vdiff := abs((target * 1.0 - meanVoltage * 10000));
         delay(1000);
     end;
 
@@ -462,7 +462,7 @@ begin
         if (gpib_ready) then begin
 
             DaqGetData;
-            inc (Daq_counter);
+            inc(Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
                     LastVoltage[i] := CurVoltage
@@ -490,20 +490,20 @@ var
 begin
     con2 := TZConnection.Create(self);
     with con2 do begin
-      ControlsCodePage := cGET_ACP;
-      AutoEncodeStrings := False;
-      Port := 0;
-      Database := 'G:\home\RHL\Files\SRC\daq_5790.delphi7\daq_5790\exp.db';
-      Protocol := 'sqlite-3';
+        ControlsCodePage := cGET_ACP;
+        AutoEncodeStrings := False;
+        Port := 0;
+        Database := 'G:\home\RHL\Files\SRC\daq_5790.delphi7\daq_5790\exp.db';
+        Protocol := 'sqlite-3';
     end;
     con2.Database := extractfilepath(application.ExeName) + 'exp.db';
     zexe := TZQuery.Create(self);
     zexe.Connection := con2;
     zqry1 := TZQuery.Create(self);
     with zqry1 do begin
-      Connection := con2;
-      sql.Clear;
-      sql.Add('select * from seanses order by lowv');
+        Connection := con2;
+        sql.Clear;
+        sql.Add('select * from seanses order by lowv');
 
     end;
     ds1.DataSet := zqry1;
@@ -536,7 +536,7 @@ var
     I1: INTEGER;
     T1, T2: DOUBLE;
     start_dead: double;
-    tmpstr : string;
+    tmpstr: string;
 var
     dt: double;
     prt: tthreadpriority;
@@ -566,22 +566,24 @@ var
 
         halt(1);
     end;
-    Procedure SetEnablingControl;
+
+    procedure SetEnablingControl;
     begin
-    if (Startcycle.Caption = 'Start measurement')
-    then ts1.Enabled := true
-    else ts1.Enabled := false;
+        if (Startcycle.Caption = 'Start measurement') then
+            ts1.Enabled := true
+        else
+            ts1.Enabled := false;
 
 //         fg,gb,b,bvvn
     end;
 
     procedure setrangeparams;
     begin
-       border_low := zqry1.FieldValues['LowV'];
-       border_high := zqry1.FieldValues['HighV'];
-       dead_value :=zqry1.FieldValues['dead_time'];
-       step_value :=zqry1.FieldValues['step'];
-       step_len := zqry1.FieldValues['exposition'];
+        border_low := zqry1.FieldValues['LowV'];
+        border_high := zqry1.FieldValues['HighV'];
+        dead_value := zqry1.FieldValues['dead_time'];
+        step_value := zqry1.FieldValues['step'];
+        step_len := zqry1.FieldValues['exposition'];
 
     end;
 
@@ -611,7 +613,8 @@ var
                         setrangeparams;
                         curTarget := zqry1.FieldValues['lowV'];
                     end;
-                end else begin
+                end
+                else begin
                     curTarget := zqry1.FieldValues['lowV'];
                 end;
                 countPerVSeries.Clear;
@@ -624,13 +627,14 @@ var
                 showerrorRange;
             if newTarget < border_low then begin
                 zqry1.MoveBy(-1);
-                         setrangeparams;
+                setrangeparams;
 
                 if zqry1.bof then begin
                     dstep := 1;
                     curTarget := zqry1.FieldValues['lowV'];
                 end
-                else   curTarget := zqry1.FieldValues['HighV'];
+                else
+                    curTarget := zqry1.FieldValues['HighV'];
                 countPerVSeries.Clear;
                 setrangeparams;
                 Stage := Stage + 1;
@@ -642,28 +646,37 @@ var
     end;
 
 begin
-    daq_mode := RadioGroup1.ItemIndex;
+    daq_mode := rgSweepmode.ItemIndex;
     if (Startcycle.Caption = 'Stop measurement') then begin
-     Startcycle.Caption := 'Finishing ....';
-     Startcycle.Font.Color := clGreen;
-     exit;
-    end ;
+        Startcycle.Caption := 'Finishing ....';
+        Startcycle.Font.Color := clGreen;
+        exit;
+    end;
     if (Startcycle.Caption <> 'Start measurement') then begin
-     exit;
-    end ;
+        exit;
+    end;
 
     Startcycle.Enabled := false;
     Stage := 1;
     CreateDataFileName;
+
+    zqry1.MoveBy(-zqry1.RecNo);
+    tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %d', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
+    WriteTimeLog(DataFileName, tmpstr);
+    while not (zqry1.Eof) do begin
+        tmpstr := format('Region %d:Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, channels= ', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
+        WriteTimeLog(DataFileName, tmpstr);
+    end;
+    WriteTimeLog(DataFileName, '');
 
     ClearSeries();
 
     zqry1.MoveBy(-zqry1.RecNo);
     setrangeparams;
     if not SetRegionBorder(border_low) then begin
-            showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
-            Startcycle.Enabled := true;
-            exit;
+        showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+        Startcycle.Enabled := true;
+        exit;
     end;
 
     for I1 := 0 to 10 do begin
@@ -691,7 +704,7 @@ begin
     start_step := now;
     dstep := 1;
     CorrectionTime := now;
-    curtarget := Border_low;
+    curTarget := Border_low;
     GettingData := true;
     Startcycle.Caption := 'Stop measurement';
     SetEnablingControl;
@@ -700,8 +713,8 @@ begin
 //######################################### main cycle #################################
 //#########################################            #################################
 //######################################################################################
-     Startcycle.Font.Color := clRed;
-       Startcycle.Enabled := true;
+    Startcycle.Font.Color := clRed;
+    Startcycle.Enabled := true;
     while (Startcycle.Caption = 'Stop measurement') do begin
         mainform.Caption := IntToStr(cntval);
 
@@ -749,15 +762,16 @@ begin
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;
-            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f',[curtarget*1.0, meanVoltage*10000, mean3Voltage*10000,  dstep * step_Value/10.0, border_low*1.0]);
+            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 10.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
 
-            newTarget := curTarget + dstep * step_Value/10.0;
+            newTarget := curTarget + dstep * step_Value / 10.0;
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 SetNewRegion();
                 SetRegionBorder(curTarget);
-                if (se1.Value >0 ) and (stage > se1.Value) then break;
+                if (seSweepCount.Value > 0) and (stage > seSweepCount.Value) then
+                    break;
                 SetVoltage(curTarget);
             end
             else begin
@@ -768,7 +782,7 @@ begin
                     delay(300);
                 end;
             end;
-            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f',[curtarget*1.0,CurVoltage*10000,  meanVoltage*10000, mean3Voltage*10000,  dstep * step_Value/10.0, border_low*1.0]);
+            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 10.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
             GettingData := true;
             correctionTime := now;
@@ -789,9 +803,7 @@ begin
     Startcycle.Caption := 'Start measurement';
     Startcycle.Font.Color := clBlue;
 
-
     SetEnablingControl;
-
 
 end;
 
@@ -822,7 +834,7 @@ var
     st, ctime: double;
 begin
     st := now;
-    while (now - st) * 24 * 3600*1000 < ms do
+    while (now - st) * 24 * 3600 * 1000 < ms do
         application.ProcessMessages;
 end;
 
@@ -989,7 +1001,8 @@ end;
 
 procedure TMainForm.CreatedataFileName;
 var
-    s1, s2: string;      r1: dword;
+    s1, s2: string;
+    r1: dword;
     Info: string;
 begin
     r1 := 80;
@@ -999,14 +1012,13 @@ begin
     Info := FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
     s2 := s1 + '\data\';
     CreateDirectory(pchar(s2), nil);
-    s2 := s2+FormatDateTime('DD_MMMM_YY-HH_NN_SS', now)+'\';
+    s2 := s2 + FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + '\';
     DataDirName := s2;
     CreateDirectory(pchar(DataDirName), nil);
     s2 := s2 + Info;
     DataFileName := s2 + '.txt';
     LogFileName := s2 + ' full.txt';
 end;
-
 
 function TMainForm.SetRVoltage(target: double): boolean;
 var
@@ -1029,20 +1041,20 @@ end;
 
 procedure TMainForm.pnl3Click(Sender: TObject);
 begin
-  if (Bottomspn.Value >= Topspn.Value) then begin
-   showmessage('Error: Ќижн€€ граница должна быть меньше верхней ');
-   exit;
-  end;
-  if ((Topspn.Value - Bottomspn.Value) * 10 mod stepspn.Value) <> 0 then begin
-   showmessage('Error: Ўирина интекрвала не кратна шагу');
-   exit;
-  end;
+    if (Bottomspn.Value >= Topspn.Value) then begin
+        showmessage('Error: Ќижн€€ граница должна быть меньше верхней ');
+        exit;
+    end;
+    if ((Topspn.Value - Bottomspn.Value) * 10 mod stepspn.Value) <> 0 then begin
+        showmessage('Error: Ўирина интекрвала не кратна шагу');
+        exit;
+    end;
     zqry1.Insert;
     zqry1.FieldByName('LowV').AsInteger := Bottomspn.Value;
-  zqry1.FieldByName('HighV').AsInteger := topspn.Value;
-  zqry1.FieldByName('dead_time').AsInteger := deadspn.Value;
-  zqry1.FieldByName('exposition').AsInteger := expspn.Value;
-  zqry1.FieldByName('step').AsInteger := stepspn.Value;
+    zqry1.FieldByName('HighV').AsInteger := topspn.Value;
+    zqry1.FieldByName('dead_time').AsInteger := deadspn.Value;
+    zqry1.FieldByName('exposition').AsInteger := expspn.Value;
+    zqry1.FieldByName('step').AsInteger := stepspn.Value;
     zqry1.Post;
     zqry1.Close;
     zqry1.Open;
@@ -1050,22 +1062,23 @@ end;
 
 procedure TMainForm.rembtnClick(Sender: TObject);
 var
- lowV : int64;
+    lowV: int64;
 begin
- if zqry1.RecordCount = 0 then exit;
- lowv := zqry1.fieldbyname('lowV').AsInteger;
- zqry1.Close;
- zexe.SQL.Text := 'delete from seanses where lowV = '+IntToStr(lowV);
- zexe.ExecSQL;
- zqry1.Open;
+    if zqry1.RecordCount = 0 then
+        exit;
+    lowV := zqry1.fieldbyname('lowV').AsInteger;
+    zqry1.Close;
+    zexe.SQL.Text := 'delete from seanses where lowV = ' + IntToStr(lowV);
+    zexe.ExecSQL;
+    zqry1.Open;
 end;
 
 procedure TMainForm.btn1Click(Sender: TObject);
 begin
- zqry1.Close;
- zexe.SQL.Text := 'delete from seanses';
- zexe.ExecSQL;
- zqry1.Open;
+    zqry1.Close;
+    zexe.SQL.Text := 'delete from seanses';
+    zexe.ExecSQL;
+    zqry1.Open;
 end;
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
