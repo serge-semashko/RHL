@@ -1,0 +1,6 @@
+
+G:\home\RHL\RHL>git add . 
+
+G:\home\RHL\RHL>git commit -m 26.11.2017 
+
+G:\home\RHL\RHL>git push -u origin master 
