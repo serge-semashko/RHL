@@ -693,13 +693,13 @@ begin
     CorrectionTime := now;
     curtarget := Border_low;
     GettingData := true;
+    Startcycle.Caption := 'Stop measurement';
     SetEnablingControl;
 //######################################################################################
 //#########################################            #################################
 //######################################### main cycle #################################
 //#########################################            #################################
 //######################################################################################
-    Startcycle.Caption := 'Stop measurement';
      Startcycle.Font.Color := clRed;
        Startcycle.Enabled := true;
     while (Startcycle.Caption = 'Stop measurement') do begin
