@@ -236,7 +236,7 @@ begin
     delay(1000);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
-    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f',[target*1.0, curVoltage, mean3Voltage*10000, mean3oltage*10000,  diff]);
+    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f',[target*1.0, curVoltage, mean3Voltage*10000, meanVoltage*10000,  diff]);
     writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.2 then
         result := false
