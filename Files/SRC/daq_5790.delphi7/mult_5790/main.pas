@@ -562,10 +562,14 @@ var
 
         halt(1);
     end;
+    Procedure SetEnablingControl;
+    begin
+//         fg,gb,b,bvvn
+    end;
 
     procedure setrangeparams;
     begin
-       border_low := zqry1.FieldValues['lowV'];
+       border_low := zqry1.FieldValues['LowV'];
        border_high := zqry1.FieldValues['HighV'];
        dead_value :=zqry1.FieldValues['dead_time'];
        step_value :=zqry1.FieldValues['step'];
@@ -639,6 +643,7 @@ begin
     if (Startcycle.Caption <> 'Start measurement') then begin
      exit;
     end ;
+
     Startcycle.Enabled := false;
     Stage := 1;
     CreateDataFileName;
@@ -680,7 +685,7 @@ begin
     CorrectionTime := now;
     curtarget := Border_low;
     GettingData := true;
-
+    SetEnablingControl;
 //######################################################################################
 //#########################################            #################################
 //######################################### main cycle #################################
@@ -774,6 +779,10 @@ begin
     StartCycle.Enabled := true;
     Startcycle.Caption := 'Start measurement';
     Startcycle.Font.Color := clBlue;
+
+
+    SetEnablingControl;
+
 
 end;
 

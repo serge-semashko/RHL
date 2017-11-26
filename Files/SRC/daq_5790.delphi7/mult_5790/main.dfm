@@ -1,7 +1,7 @@
 object MainForm: TMainForm
   Left = 431
   Top = 57
-  Width = 1238
+  Width = 1396
   Height = 914
   Caption = 'Read/Write'
   Color = clBtnFace
@@ -19,7 +19,7 @@ object MainForm: TMainForm
   object Panel1: TPanel
     Left = 0
     Top = 801
-    Width = 1220
+    Width = 1378
     Height = 38
     Align = alBottom
     TabOrder = 0
@@ -27,7 +27,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1220
+    Width = 1378
     Height = 202
     ActivePage = TabSheet1
     Align = alTop
@@ -82,7 +82,7 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 202
-    Width = 1220
+    Width = 1378
     Height = 599
     Align = alClient
     Caption = 'Panel5'
@@ -90,7 +90,7 @@ object MainForm: TMainForm
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1218
+      Width = 1376
       Height = 4
       Cursor = crVSplit
       Align = alTop
@@ -98,7 +98,7 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 5
-      Width = 1218
+      Width = 1376
       Height = 593
       ActivePage = ts1
       Align = alClient
@@ -696,7 +696,7 @@ object MainForm: TMainForm
         object pnl2: TPanel
           Left = 809
           Top = 0
-          Width = 401
+          Width = 559
           Height = 562
           Align = alClient
           Caption = 'pnl2'
@@ -704,7 +704,7 @@ object MainForm: TMainForm
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 399
+            Width = 557
             Height = 560
             Align = alClient
             TabOrder = 0
@@ -777,7 +777,7 @@ object MainForm: TMainForm
             object Panel2: TPanel
               Left = 1
               Top = 175
-              Width = 397
+              Width = 555
               Height = 384
               Align = alBottom
               TabOrder = 3
@@ -885,7 +885,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 839
-    Width = 1220
+    Width = 1378
     Height = 30
     Panels = <
       item
