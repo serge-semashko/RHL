@@ -1,39 +1,39 @@
 object MainForm: TMainForm
-  Left = 39
-  Top = 39
+  Left = 431
+  Top = 57
   Width = 1238
   Height = 914
   Caption = 'Read/Write'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 16
   object Panel1: TPanel
     Left = 0
-    Top = 815
-    Width = 1222
-    Height = 31
+    Top = 801
+    Width = 1220
+    Height = 38
     Align = alBottom
     TabOrder = 0
   end
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1222
-    Height = 164
+    Width = 1220
+    Height = 202
     ActivePage = TabSheet1
     Align = alTop
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
@@ -41,14 +41,14 @@ object MainForm: TMainForm
     object TabSheet1: TTabSheet
       Caption = 'Wavetek 1271'
       object StartCycle: TSpeedButton
-        Left = 873
-        Top = 33
-        Width = 176
-        Height = 40
+        Left = 1074
+        Top = 41
+        Width = 217
+        Height = 49
         Caption = 'Start measurement'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clNavy
-        Font.Height = -16
+        Font.Height = -20
         Font.Name = 'MS Sans Serif'
         Font.Style = [fsBold]
         ParentFont = False
@@ -57,14 +57,14 @@ object MainForm: TMainForm
       object dbgrd2: TDBGrid
         Left = 0
         Top = 0
-        Width = 801
-        Height = 129
+        Width = 986
+        Height = 163
         Align = alLeft
         DataSource = ds1
         Enabled = False
         Font.Charset = RUSSIAN_CHARSET
         Font.Color = clWindowText
-        Font.Height = -13
+        Font.Height = -17
         Font.Name = 'Courier New'
         Font.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -81,25 +81,25 @@ object MainForm: TMainForm
   end
   object Panel5: TPanel
     Left = 0
-    Top = 164
-    Width = 1222
-    Height = 651
+    Top = 202
+    Width = 1220
+    Height = 599
     Align = alClient
     Caption = 'Panel5'
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1220
-      Height = 3
+      Width = 1218
+      Height = 4
       Cursor = crVSplit
       Align = alTop
     end
     object PageControl2: TPageControl
       Left = 1
-      Top = 4
-      Width = 1220
-      Height = 646
+      Top = 5
+      Width = 1218
+      Height = 593
       ActivePage = ts1
       Align = alClient
       TabOrder = 0
@@ -108,8 +108,8 @@ object MainForm: TMainForm
         object Chart1: TChart
           Left = 0
           Top = 0
-          Width = 1212
-          Height = 328
+          Width = 1492
+          Height = 404
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           MarginBottom = 0
@@ -232,9 +232,9 @@ object MainForm: TMainForm
         end
         object Chart2: TChart
           Left = 0
-          Top = 328
-          Width = 1212
-          Height = 290
+          Top = 404
+          Width = 1492
+          Height = 357
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           MarginBottom = 0
@@ -354,8 +354,8 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1212
-          Height = 618
+          Width = 1492
+          Height = 761
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
@@ -422,24 +422,24 @@ object MainForm: TMainForm
         object pnl1: TPanel
           Left = 0
           Top = 0
-          Width = 657
-          Height = 618
+          Width = 809
+          Height = 562
           Align = alLeft
           Caption = 'pnl1'
           TabOrder = 0
           object pnl3: TPanel
             Left = 1
-            Top = 564
-            Width = 655
-            Height = 53
+            Top = 495
+            Width = 807
+            Height = 66
             Align = alBottom
             Caption = 'pnl3'
             TabOrder = 0
             object addbtn: TSpeedButton
               Left = 2
-              Top = 9
-              Width = 25
-              Height = 24
+              Top = 11
+              Width = 31
+              Height = 30
               Glyph.Data = {
                 F6060000424DF606000000000000360000002800000018000000180000000100
                 180000000000C006000074120000741200000000000000000000FFFFFFFFFFFF
@@ -500,10 +500,10 @@ object MainForm: TMainForm
               OnClick = pnl3Click
             end
             object rembtn: TSpeedButton
-              Left = 28
-              Top = 9
-              Width = 25
-              Height = 24
+              Left = 34
+              Top = 11
+              Width = 31
+              Height = 30
               Glyph.Data = {
                 F6060000424DF606000000000000360000002800000018000000180000000100
                 180000000000C006000074120000741200000000000000000000FFFFFFFFFFFF
@@ -564,68 +564,68 @@ object MainForm: TMainForm
               OnClick = rembtnClick
             end
             object btn1: TSpeedButton
-              Left = 475
-              Top = 13
-              Width = 65
-              Height = 18
+              Left = 585
+              Top = 16
+              Width = 80
+              Height = 22
               Caption = #1054#1095#1080#1089#1090#1080#1090#1100
               OnClick = btn1Click
             end
             object Bottomspn: TSpinEdit
-              Left = 66
-              Top = 17
-              Width = 66
-              Height = 22
+              Left = 81
+              Top = 21
+              Width = 81
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 0
               Value = 300
             end
             object Topspn: TSpinEdit
-              Left = 135
-              Top = 17
-              Width = 66
-              Height = 22
+              Left = 166
+              Top = 21
+              Width = 81
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
               Value = 500
             end
             object expspn: TSpinEdit
-              Left = 200
-              Top = 17
-              Width = 66
-              Height = 22
+              Left = 246
+              Top = 21
+              Width = 81
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
               Value = 60
             end
             object deadspn: TSpinEdit
-              Left = 267
-              Top = 17
-              Width = 65
-              Height = 22
+              Left = 329
+              Top = 21
+              Width = 80
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 3
               Value = 2
             end
             object stepspn: TSpinEdit
-              Left = 334
-              Top = 17
-              Width = 66
-              Height = 22
+              Left = 411
+              Top = 21
+              Width = 81
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 4
               Value = 1
             end
             object StaticText2: TStaticText
-              Left = 66
+              Left = 81
               Top = 2
-              Width = 65
-              Height = 18
+              Width = 80
+              Height = 23
               Alignment = taCenter
               AutoSize = False
               BevelKind = bkTile
@@ -634,10 +634,10 @@ object MainForm: TMainForm
               TabOrder = 5
             end
             object StaticText3: TStaticText
-              Left = 133
+              Left = 164
               Top = 2
-              Width = 65
-              Height = 18
+              Width = 80
+              Height = 23
               Alignment = taCenter
               AutoSize = False
               BevelKind = bkTile
@@ -646,30 +646,30 @@ object MainForm: TMainForm
               TabOrder = 6
             end
             object StaticText4: TStaticText
-              Left = 200
+              Left = 246
               Top = 2
-              Width = 51
-              Height = 17
+              Width = 64
+              Height = 20
               BevelKind = bkTile
               BorderStyle = sbsSingle
               Caption = 'Exp. Time'
               TabOrder = 7
             end
             object StaticText5: TStaticText
-              Left = 267
+              Left = 329
               Top = 2
-              Width = 52
-              Height = 17
+              Width = 66
+              Height = 20
               BevelKind = bkTile
               BorderStyle = sbsSingle
               Caption = 'Dead time'
               TabOrder = 8
             end
             object StaticText6: TStaticText
-              Left = 334
+              Left = 411
               Top = 2
-              Width = 26
-              Height = 17
+              Width = 32
+              Height = 20
               BevelKind = bkTile
               BorderStyle = sbsSingle
               Caption = 'Step'
@@ -679,8 +679,8 @@ object MainForm: TMainForm
           object dbgrd1: TDBGrid
             Left = 1
             Top = 1
-            Width = 655
-            Height = 563
+            Width = 807
+            Height = 494
             Align = alClient
             DataSource = ds1
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -688,55 +688,55 @@ object MainForm: TMainForm
             TabOrder = 1
             TitleFont.Charset = DEFAULT_CHARSET
             TitleFont.Color = clWindowText
-            TitleFont.Height = -11
+            TitleFont.Height = -14
             TitleFont.Name = 'MS Sans Serif'
             TitleFont.Style = []
           end
         end
         object pnl2: TPanel
-          Left = 657
+          Left = 809
           Top = 0
-          Width = 555
-          Height = 618
+          Width = 401
+          Height = 562
           Align = alClient
           Caption = 'pnl2'
           TabOrder = 1
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 553
-            Height = 616
+            Width = 399
+            Height = 560
             Align = alClient
             TabOrder = 0
             object Label5: TLabel
               Left = 1
-              Top = 18
-              Width = 45
-              Height = 13
+              Top = 22
+              Width = 56
+              Height = 16
               Caption = 'COM port'
             end
             object Label6: TLabel
-              Left = 159
-              Top = 18
-              Width = 54
-              Height = 13
+              Left = 196
+              Top = 22
+              Width = 67
+              Height = 16
               Caption = '7088d addr'
             end
             object Label9: TLabel
-              Left = 299
-              Top = 16
-              Width = 39
-              Height = 13
+              Left = 368
+              Top = 20
+              Width = 49
+              Height = 16
               Caption = 'Channel'
             end
             object ComComboBox: TComboBox
-              Left = 72
-              Top = 16
-              Width = 85
-              Height = 21
+              Left = 89
+              Top = 20
+              Width = 104
+              Height = 24
               Style = csDropDownList
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-              ItemHeight = 13
+              ItemHeight = 16
               ItemIndex = 0
               TabOrder = 0
               Text = 'COM1'
@@ -755,20 +755,20 @@ object MainForm: TMainForm
                 'COM12')
             end
             object address: TSpinEdit
-              Left = 245
-              Top = 13
-              Width = 52
-              Height = 22
+              Left = 302
+              Top = 16
+              Width = 64
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
               Value = 1
             end
             object edCh: TSpinEdit
-              Left = 369
-              Top = 13
-              Width = 41
-              Height = 22
+              Left = 454
+              Top = 16
+              Width = 51
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -776,32 +776,32 @@ object MainForm: TMainForm
             end
             object Panel2: TPanel
               Left = 1
-              Top = 303
-              Width = 551
-              Height = 312
+              Top = 175
+              Width = 397
+              Height = 384
               Align = alBottom
               TabOrder = 3
               object Label1: TLabel
                 Left = 1
-                Top = 18
-                Width = 28
-                Height = 13
+                Top = 22
+                Width = 34
+                Height = 16
                 Caption = 'GPIB:'
               end
               object Label2: TLabel
-                Left = 123
-                Top = 18
-                Width = 52
-                Height = 13
+                Left = 151
+                Top = 22
+                Width = 63
+                Height = 16
                 Caption = 'Instrument:'
               end
               object cmbGPIB: TComboBox
-                Left = 47
-                Top = 16
-                Width = 74
-                Height = 21
+                Left = 58
+                Top = 20
+                Width = 91
+                Height = 24
                 ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-                ItemHeight = 13
+                ItemHeight = 16
                 ItemIndex = 0
                 TabOrder = 0
                 Text = 'GPIB0'
@@ -812,13 +812,13 @@ object MainForm: TMainForm
                   'GPIB3')
               end
               object cmbInst: TComboBox
-                Left = 207
-                Top = 16
-                Width = 81
-                Height = 21
+                Left = 255
+                Top = 20
+                Width = 99
+                Height = 24
                 Style = csDropDownList
                 ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-                ItemHeight = 13
+                ItemHeight = 16
                 ItemIndex = 15
                 TabOrder = 1
                 Text = '16'
@@ -855,10 +855,10 @@ object MainForm: TMainForm
                   '30')
               end
               object memoRead: TMemo
-                Left = 8
-                Top = 116
-                Width = 378
-                Height = 77
+                Left = 10
+                Top = 143
+                Width = 465
+                Height = 95
                 ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
                 Lines.Strings = (
                   'Memo1')
@@ -866,10 +866,10 @@ object MainForm: TMainForm
               end
             end
             object RadioGroup1: TRadioGroup
-              Left = 336
-              Top = 344
-              Width = 185
-              Height = 55
+              Left = 414
+              Top = 423
+              Width = 227
+              Height = 68
               Caption = #1056#1077#1078#1080#1084
               ItemIndex = 0
               Items.Strings = (
@@ -884,8 +884,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 846
-    Width = 1222
+    Top = 839
+    Width = 1220
     Height = 30
     Panels = <
       item

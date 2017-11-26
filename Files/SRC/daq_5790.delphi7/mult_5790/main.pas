@@ -978,10 +978,10 @@ begin
     getcomputername(@charbuf, r1);
     compname := charbuf;
     s1 := extractfilepath(application.exename);
-    Info := FormatDateTime('DD_MMMM_YY HH_NN_SS ', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
+    Info := FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
     s2 := s1 + '\data\';
     CreateDirectory(pchar(s2), nil);
-    s2 := s2+FormatDateTime('DD_MMMM_YY HH_NN_SS ', now)+'\';
+    s2 := s2+FormatDateTime('DD_MMMM_YY-HH_NN_SS', now)+'\';
     DataDirName := s2;
     CreateDirectory(pchar(DataDirName), nil);
     s2 := s2 + Info;
