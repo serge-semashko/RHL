@@ -64,17 +64,19 @@ type
         address: TSpinEdit;
         edCh: TSpinEdit;
         Panel2: TPanel;
-        Label2: TLabel;
         memoRead: TMemo;
         dbgrd2: TDBGrid;
         btn1: TSpeedButton;
-    RadioGroup1: TRadioGroup;
     StartCycle: TSpeedButton;
     mmo1: TMemo;
     Label1: TLabel;
     cmbGPIB: TComboBox;
     cmbInst: TComboBox;
     se1: TSpinEdit;
+    RadioGroup1: TRadioGroup;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -566,6 +568,10 @@ var
     end;
     Procedure SetEnablingControl;
     begin
+    if (Startcycle.Caption = 'Start measurement')
+    then ts1.Enabled := true
+    else ts1.Enabled := false;
+
 //         fg,gb,b,bvvn
     end;
 
@@ -687,13 +693,13 @@ begin
     CorrectionTime := now;
     curtarget := Border_low;
     GettingData := true;
+    Startcycle.Caption := 'Stop measurement';
     SetEnablingControl;
 //######################################################################################
 //#########################################            #################################
 //######################################### main cycle #################################
 //#########################################            #################################
 //######################################################################################
-    Startcycle.Caption := 'Stop measurement';
      Startcycle.Font.Color := clRed;
        Startcycle.Enabled := true;
     while (Startcycle.Caption = 'Stop measurement') do begin
@@ -751,6 +757,7 @@ begin
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 SetNewRegion();
                 SetRegionBorder(curTarget);
+                if (se1.Value >0 ) and (stage > se1.Value) then break;
                 SetVoltage(curTarget);
             end
             else begin
@@ -988,7 +995,7 @@ begin
     r1 := 80;
     getcomputername(@charbuf, r1);
     compname := charbuf;
-    s1 := extractfilepath(application.exename);
+    s1 := extractfiledrive(application.exename);
     Info := FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
     s2 := s1 + '\data\';
     CreateDirectory(pchar(s2), nil);

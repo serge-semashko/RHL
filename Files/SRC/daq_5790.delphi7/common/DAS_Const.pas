@@ -432,7 +432,7 @@ end;
 
 Procedure WriteTimeLog(Logname,LogData:String);
 begin
-  WriteLog(LogName,FormatdateTime(#10+'DD/MM/YYYY HH:NN:SS',now)+' '+LogData);
+  WriteLog(LogName,FormatdateTime('DD/MM/YYYY HH:NN:SS',now)+' '+LogData+#10);
 end;
 
 Function   ChangeChar(const str:string;SrcChar,DstChar:Char):String;
