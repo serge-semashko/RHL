@@ -729,6 +729,13 @@ object MainForm: TMainForm
               Height = 16
               Caption = 'Channel'
             end
+            object Label1: TLabel
+              Left = 6
+              Top = 67
+              Width = 34
+              Height = 16
+              Caption = 'GPIB:'
+            end
             object ComComboBox: TComboBox
               Left = 89
               Top = 20
@@ -781,13 +788,6 @@ object MainForm: TMainForm
               Height = 384
               Align = alBottom
               TabOrder = 3
-              object Label1: TLabel
-                Left = 1
-                Top = 22
-                Width = 34
-                Height = 16
-                Caption = 'GPIB:'
-              end
               object Label2: TLabel
                 Left = 151
                 Top = 22
@@ -795,79 +795,39 @@ object MainForm: TMainForm
                 Height = 16
                 Caption = 'Instrument:'
               end
-              object cmbGPIB: TComboBox
-                Left = 58
-                Top = 20
-                Width = 91
-                Height = 24
-                ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-                ItemHeight = 16
-                ItemIndex = 0
-                TabOrder = 0
-                Text = 'GPIB0'
-                Items.Strings = (
-                  'GPIB0'
-                  'GPIB1'
-                  'GPIB2'
-                  'GPIB3')
-              end
-              object cmbInst: TComboBox
-                Left = 255
-                Top = 20
-                Width = 99
-                Height = 24
-                Style = csDropDownList
-                ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-                ItemHeight = 16
-                ItemIndex = 15
-                TabOrder = 1
-                Text = '16'
-                Items.Strings = (
-                  '1'
-                  '2'
-                  '3'
-                  '4'
-                  '5'
-                  '6'
-                  '7'
-                  '8'
-                  '9'
-                  '10'
-                  '11'
-                  '12'
-                  '13'
-                  '14'
-                  '15'
-                  '16'
-                  '17'
-                  '18'
-                  '19'
-                  '20'
-                  '21'
-                  '22'
-                  '23'
-                  '24'
-                  '25'
-                  '26'
-                  '27'
-                  '28'
-                  '29'
-                  '30')
-              end
               object memoRead: TMemo
-                Left = 10
-                Top = 143
+                Left = 18
+                Top = 255
                 Width = 465
                 Height = 95
                 ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
                 Lines.Strings = (
                   'Memo1')
+                TabOrder = 0
+              end
+              object mmo1: TMemo
+                Left = 8
+                Top = 24
+                Width = 281
+                Height = 89
+                Lines.Strings = (
+                  'mmo1')
+                TabOrder = 1
+              end
+              object se1: TSpinEdit
+                Left = 313
+                Top = 101
+                Width = 81
+                Height = 26
+                MaxValue = 0
+                MinValue = 0
                 TabOrder = 2
+                Value = 1
               end
             end
             object RadioGroup1: TRadioGroup
-              Left = 414
-              Top = 423
+              Left = 310
+              Top = 194
               Width = 227
               Height = 68
               Caption = #1056#1077#1078#1080#1084
@@ -876,6 +836,65 @@ object MainForm: TMainForm
                 #1044#1074#1091#1085#1072#1087#1088#1072#1074#1083#1077#1085#1085#1099#1081
                 #1054#1076#1085#1086#1085#1072#1087#1088#1072#1074#1083#1077#1085#1085#1099#1081)
               TabOrder = 4
+            end
+            object cmbGPIB: TComboBox
+              Left = 89
+              Top = 62
+              Width = 91
+              Height = 24
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ItemHeight = 16
+              ItemIndex = 0
+              TabOrder = 5
+              Text = 'GPIB0'
+              Items.Strings = (
+                'GPIB0'
+                'GPIB1'
+                'GPIB2'
+                'GPIB3')
+            end
+            object cmbInst: TComboBox
+              Left = 198
+              Top = 70
+              Width = 99
+              Height = 24
+              Style = csDropDownList
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ItemHeight = 16
+              ItemIndex = 15
+              TabOrder = 6
+              Text = '16'
+              Items.Strings = (
+                '1'
+                '2'
+                '3'
+                '4'
+                '5'
+                '6'
+                '7'
+                '8'
+                '9'
+                '10'
+                '11'
+                '12'
+                '13'
+                '14'
+                '15'
+                '16'
+                '17'
+                '18'
+                '19'
+                '20'
+                '21'
+                '22'
+                '23'
+                '24'
+                '25'
+                '26'
+                '27'
+                '28'
+                '29'
+                '30')
             end
           end
         end

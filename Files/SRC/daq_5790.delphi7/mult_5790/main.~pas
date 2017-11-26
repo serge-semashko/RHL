@@ -564,12 +564,12 @@ var
     end;
     Procedure SetEnablingControl;
     begin
-         fg,gb,b,bvvn
+//         fg,gb,b,bvvn
     end;
 
     procedure setrangeparams;
     begin
-       border_low := zqry1.FieldValues['LowV,'];
+       border_low := zqry1.FieldValues['LowV'];
        border_high := zqry1.FieldValues['HighV'];
        dead_value :=zqry1.FieldValues['dead_time'];
        step_value :=zqry1.FieldValues['step'];
