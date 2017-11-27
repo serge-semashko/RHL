@@ -63,10 +63,10 @@ object MainForm: TMainForm
         DataSource = ds1
         Enabled = False
         Font.Charset = RUSSIAN_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -18
+        Font.Color = clBlack
+        Font.Height = -17
         Font.Name = 'Courier New'
-        Font.Style = []
+        Font.Style = [fsBold]
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
         ParentFont = False
         ReadOnly = True
@@ -609,7 +609,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 5
+              Value = 0
             end
             object stepspn: TSpinEdit
               Left = 411
@@ -630,7 +630,7 @@ object MainForm: TMainForm
               AutoSize = False
               BevelKind = bkTile
               BorderStyle = sbsSingle
-              Caption = 'Bottom'
+              Caption = 'Ubeg(V)'
               TabOrder = 5
             end
             object StaticText3: TStaticText
@@ -642,7 +642,7 @@ object MainForm: TMainForm
               AutoSize = False
               BevelKind = bkTile
               BorderStyle = sbsSingle
-              Caption = 'Top'
+              Caption = 'Uend(V)'
               TabOrder = 6
             end
             object StaticText4: TStaticText
@@ -765,6 +765,7 @@ object MainForm: TMainForm
               ItemIndex = 0
               TabOrder = 0
               Text = 'COM1'
+              OnChange = ComComboBoxChange
               Items.Strings = (
                 'COM1'
                 'COM2'
@@ -783,21 +784,23 @@ object MainForm: TMainForm
               Left = 234
               Top = 22
               Width = 49
-              Height = 22
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
               Value = 1
+              OnChange = addressChange
             end
             object edCh: TSpinEdit
-              Left = 346
+              Left = 349
               Top = 22
               Width = 50
-              Height = 22
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
               Value = 0
+              OnChange = edChChange
             end
             object Panel2: TPanel
               Left = 1
@@ -858,7 +861,7 @@ object MainForm: TMainForm
                 Left = 253
                 Top = 48
                 Width = 81
-                Height = 22
+                Height = 26
                 MaxValue = 0
                 MinValue = 0
                 TabOrder = 2
@@ -880,13 +883,14 @@ object MainForm: TMainForm
             object cmbGPIB: TComboBox
               Left = 74
               Top = 66
-              Width = 86
+              Width = 80
               Height = 24
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 16
               ItemIndex = 0
               TabOrder = 4
               Text = 'GPIB0'
+              OnChange = cmbGPIBChange
               Items.Strings = (
                 'GPIB0'
                 'GPIB1'
@@ -904,6 +908,7 @@ object MainForm: TMainForm
               ItemIndex = 15
               TabOrder = 5
               Text = '16'
+              OnChange = cmbInstChange
               Items.Strings = (
                 '1'
                 '2'

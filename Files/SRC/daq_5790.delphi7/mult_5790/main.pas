@@ -9,6 +9,8 @@ uses
     Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
     Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
     ZDataset, ZAbstractConnection, ZConnection, ZCompatibility;
+const
+      sweepmodes : array[0..4] of string = ('UpDown','Up','Down','err','Up');
 
 type
     TDAQThread = class(TThread)
@@ -88,6 +90,11 @@ type
         procedure rembtnClick(Sender: TObject);
         procedure btn1Click(Sender: TObject);
         procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure addressChange(Sender: TObject);
+    procedure ComComboBoxChange(Sender: TObject);
+    procedure edChChange(Sender: TObject);
+    procedure cmbGPIBChange(Sender: TObject);
+    procedure cmbInstChange(Sender: TObject);
     private
     { Private declarations }
     public
@@ -107,6 +114,7 @@ type
     Varray = array of vrecord;
 
 var
+   headerstr :string;
     daq_counter: int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
@@ -488,22 +496,26 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
-    con2 := TZConnection.Create(self);
-    with con2 do begin
+ address.Value := cf.readInteger('hardware','counter_addr',0);
+ ComComboBox.ItemIndex := cf.readInteger('hardware','counter_port',0);
+ cmbGPIB.ItemIndex := cf.readInteger('hardware','gpib',0);
+ cmbInst.ItemIndex := cf.readInteger('hardware','gpib_instrument',0);
+ edch.Value := cf.readInteger('hardware','counter_channel',0);
+    con2 := TZConnection.Create(self);
+    with con2 do begin
         ControlsCodePage := cGET_ACP;
         AutoEncodeStrings := False;
         Port := 0;
-        Database := 'G:\home\RHL\Files\SRC\daq_5790.delphi7\daq_5790\exp.db';
+        Database := extractfilepath(application.ExeName) + 'exp.db';
         Protocol := 'sqlite-3';
     end;
-    con2.Database := extractfilepath(application.ExeName) + 'exp.db';
     zexe := TZQuery.Create(self);
     zexe.Connection := con2;
     zqry1 := TZQuery.Create(self);
     with zqry1 do begin
         Connection := con2;
         sql.Clear;
-        sql.Add('select * from seanses order by lowv');
+        sql.Add('select * from seanses order by Ubeg');
 
     end;
     ds1.DataSet := zqry1;
@@ -562,7 +574,7 @@ var
 
     procedure showerrorRange;
     begin
-        showmessage('Program error. mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' lowV= ' + intToStr(border_low) + ' HighV= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo));
+        showmessage('Program error. mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo));
 
         halt(1);
     end;
@@ -579,11 +591,20 @@ var
 
     procedure setrangeparams;
     begin
-        border_low := zqry1.FieldValues['LowV'];
-        border_high := zqry1.FieldValues['HighV'];
+        border_low := zqry1.FieldValues['Ubeg'];
+        border_high := zqry1.FieldValues['Uend'];
         dead_value := zqry1.FieldValues['dead_time'];
         step_value := zqry1.FieldValues['step'];
         step_len := zqry1.FieldValues['exposition'];
+
+    end;
+    procedure             writeSweepHeader;
+    var
+        tmpstr : string;
+    begin
+      tmpstr := Format('Region: %d, Sweep= %d, SweepMode= %s',[ zqry1.RecordCount, Stage, sweepmodes[daq_mode+2]]);
+      WriteLog(DataDirName+IntToStr(stage),headerstr);
+      WriteLog(DataDirName+IntToStr(stage),'');
 
     end;
 
@@ -605,20 +626,21 @@ var
                 if zqry1.Eof then begin
                     if daq_mode = 0 then begin
                         dstep := -1;
-                        curTarget := zqry1.FieldValues['HighV'];
+                        curTarget := zqry1.FieldValues['Uend'];
 
                     end
                     else begin
                         zqry1.MoveBy(-zqry1.RecNo);
                         setrangeparams;
-                        curTarget := zqry1.FieldValues['lowV'];
+                        curTarget := zqry1.FieldValues['Ubeg'];
                     end;
                 end
                 else begin
-                    curTarget := zqry1.FieldValues['lowV'];
+                    curTarget := zqry1.FieldValues['Ubeg'];
                 end;
                 countPerVSeries.Clear;
                 Stage := Stage + 1;
+                writeSweepHeader;
                 exit;
             end;
         end;
@@ -631,13 +653,14 @@ var
 
                 if zqry1.bof then begin
                     dstep := 1;
-                    curTarget := zqry1.FieldValues['lowV'];
+                    curTarget := zqry1.FieldValues['Ubeg'];
                 end
                 else
-                    curTarget := zqry1.FieldValues['HighV'];
+                    curTarget := zqry1.FieldValues['Uend'];
                 countPerVSeries.Clear;
                 setrangeparams;
                 Stage := Stage + 1;
+                writeSweepHeader;
                 exit;
             end
         end;
@@ -661,12 +684,15 @@ begin
     CreateDataFileName;
 
     zqry1.MoveBy(-zqry1.RecNo);
-    tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %d', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
-    WriteTimeLog(DataFileName, tmpstr);
+    tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %s', [zqry1.RecordCount, seSweepCount.Value,sweepmodes[rgSweepMode.ItemIndex]]);
+    Writelog(DataFileName, tmpstr);
+    Headerstr := '';
     while not (zqry1.Eof) do begin
-        tmpstr := format('Region %d:Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, channels= ', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
-        WriteTimeLog(DataFileName, tmpstr);
+      headerstr := headerstr+ format('Region %d:Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d ',
+        [zqry1.FieldByName('Ubeg').AsInteger,zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('step').AsInteger / 10.0, zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead').AsInteger])+#10;
     end;
+    WriteLog(DataFileName, headerstr);
+
     WriteTimeLog(DataFileName, '');
 
     ClearSeries();
@@ -809,6 +835,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
+
     if (not GPIB_Ready) then begin
         showmessage('GPIB(цифровой вольметр)недоступен');
 //        close;
@@ -1050,11 +1077,11 @@ begin
         exit;
     end;
     zqry1.Insert;
-    zqry1.FieldByName('LowV').AsInteger := Bottomspn.Value;
-    zqry1.FieldByName('HighV').AsInteger := topspn.Value;
+    zqry1.FieldByName('Ubeg').AsInteger := Bottomspn.Value;
+    zqry1.FieldByName('Uend').AsInteger := topspn.Value;
     zqry1.FieldByName('dead_time').AsInteger := deadspn.Value;
     zqry1.FieldByName('exposition').AsInteger := expspn.Value;
-    zqry1.FieldByName('step').AsInteger := stepspn.Value;
+    zqry1.FieldByName('Ustep').AsInteger := stepspn.Value;
     zqry1.Post;
     zqry1.Close;
     zqry1.Open;
@@ -1062,13 +1089,13 @@ end;
 
 procedure TMainForm.rembtnClick(Sender: TObject);
 var
-    lowV: int64;
+    Ubeg: int64;
 begin
     if zqry1.RecordCount = 0 then
         exit;
-    lowV := zqry1.fieldbyname('lowV').AsInteger;
+    Ubeg := zqry1.fieldbyname('Ubeg').AsInteger;
     zqry1.Close;
-    zexe.SQL.Text := 'delete from seanses where lowV = ' + IntToStr(lowV);
+    zexe.SQL.Text := 'delete from seanses where Ubeg = ' + IntToStr(Ubeg);
     zexe.ExecSQL;
     zqry1.Open;
 end;
@@ -1086,6 +1113,33 @@ begin
 // DaqThread.Suspend;
 // DaqThread.terminate;
   //DaqThread.free;;
+end;
+
+procedure TMainForm.addressChange(Sender: TObject);
+begin
+ cf.WriteInteger('hardware','counter_addr',tspinedit(sender).Value);
+end;
+
+procedure TMainForm.ComComboBoxChange(Sender: TObject);
+begin
+ cf.WriteInteger('hardware','counter_port',TComboBox(sender).ItemIndex);
+
+end;
+
+procedure TMainForm.edChChange(Sender: TObject);
+begin
+ cf.WriteInteger('hardware','counter_channel',tspinedit(sender).Value);
+end;
+
+procedure TMainForm.cmbGPIBChange(Sender: TObject);
+begin
+ cf.WriteInteger('hardware','gpib',TComboBox(sender).ItemIndex);
+
+end;
+
+procedure TMainForm.cmbInstChange(Sender: TObject);
+begin
+ cf.WriteInteger('hardware','gpib_instrument',TComboBox(sender).ItemIndex);
 end;
 
 end.
