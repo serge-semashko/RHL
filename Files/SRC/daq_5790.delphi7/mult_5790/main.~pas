@@ -9,6 +9,8 @@ uses
     Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
     Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
     ZDataset, ZAbstractConnection, ZConnection, ZCompatibility;
+const
+      sweepmodes : array[0..4] of string = ('UpDown','Up','Down','err','Up');
 
 type
     TDAQThread = class(TThread)
@@ -112,6 +114,7 @@ type
     Varray = array of vrecord;
 
 var
+   headerstr :string;
     daq_counter: int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
@@ -493,6 +496,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
+  deadspn.Value := 5;
  address.Value := cf.readInteger('hardware','counter_addr',0);
  ComComboBox.ItemIndex := cf.readInteger('hardware','counter_port',0);
  cmbGPIB.ItemIndex := cf.readInteger('hardware','gpib',0);
@@ -572,8 +576,8 @@ var
     procedure showerrorRange;
     begin
         showmessage('Program error. mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo));
+       halt(1);
 
-        halt(1);
     end;
 
     procedure SetEnablingControl;
@@ -591,31 +595,45 @@ var
         border_low := zqry1.FieldValues['Ubeg'];
         border_high := zqry1.FieldValues['Uend'];
         dead_value := zqry1.FieldValues['dead_time'];
-        step_value := zqry1.FieldValues['step'];
+        step_value := zqry1.FieldValues['Ustep'];
         step_len := zqry1.FieldValues['exposition'];
+
+    end;
+    procedure             writeSweepHeader;
+    var
+        tmpstr : string;
+    begin
+      tmpstr := Format('Region: %d, Sweep= %d, SweepMode= %s',[ zqry1.RecordCount, Stage, sweepmodes[dstep+2]])+#10;
+      WriteLog(DataDirName+IntToStr(stage),tmpstr);
+      WriteLog(DataDirName+IntToStr(stage),headerstr);
+      WriteLog(DataDirName+IntToStr(stage),#10);
 
     end;
 
     function SetNewRegion: boolean;
+    var
+     tmpstr : string;
     begin
+       tmpstr := 'Set range  mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo);
+       writetimelog(DataDirName + 'range.txt', tmpstr);
+
         if daq_mode = 1 then begin
             if dstep < 0 then
                 showerrorRange;
-            if round(newTarget) < border_low then
+            if round(Curtarget) < border_low then
                 showerrorRange;
         end;
 
         if (dstep > 0) then begin
-            if round(newTarget) < border_low then
+            if round(Curtarget) < border_low then
                 showerrorRange;
-            if round(newTarget) > border_high then begin
+            if round(Curtarget) > border_high then begin
                 zqry1.MoveBy(1);
                 setrangeparams;
                 if zqry1.Eof then begin
                     if daq_mode = 0 then begin
                         dstep := -1;
                         curTarget := zqry1.FieldValues['Uend'];
-
                     end
                     else begin
                         zqry1.MoveBy(-zqry1.RecNo);
@@ -628,13 +646,16 @@ var
                 end;
                 countPerVSeries.Clear;
                 Stage := Stage + 1;
+                writeSweepHeader;
                 exit;
             end;
         end;
         if (dstep < 0) then begin
-            if round(newTarget) > border_high then
+            if round(Curtarget) > border_high then begin
                 showerrorRange;
-            if newTarget < border_low then begin
+                exit;
+                end;
+            if Curtarget < border_low then begin
                 zqry1.MoveBy(-1);
                 setrangeparams;
 
@@ -647,6 +668,7 @@ var
                 countPerVSeries.Clear;
                 setrangeparams;
                 Stage := Stage + 1;
+                writeSweepHeader;
                 exit;
             end
         end;
@@ -670,13 +692,16 @@ begin
     CreateDataFileName;
 
     zqry1.MoveBy(-zqry1.RecNo);
-    tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %d', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
-    WriteTimeLog(DataFileName, tmpstr);
+    tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %s', [zqry1.RecordCount, seSweepCount.Value,sweepmodes[rgSweepMode.ItemIndex]]);
+    Writelog(DataFileName, tmpstr+#10);
+    Headerstr := '';
     while not (zqry1.Eof) do begin
-        tmpstr := format('Region %d:Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, channels= ', [zqry1.RecordCount, seSweepCount.Value, rgSweepMode.ItemIndex]);
-        WriteTimeLog(DataFileName, tmpstr);
+      headerstr := headerstr+ format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d ',
+        [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger,zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 10.0, zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger])+#10;
+      zqry1.Next;
     end;
-    WriteTimeLog(DataFileName, '');
+    WriteLog(DataFileName, headerstr+#10);
+
 
     ClearSeries();
 
@@ -716,7 +741,11 @@ begin
     curTarget := Border_low;
     GettingData := true;
     Startcycle.Caption := 'Stop measurement';
+    TabSheet1.SetFocus;
+    PageControl2.ActivePageIndex := 0;
+
     SetEnablingControl;
+    writeSweepHeader;
 //######################################################################################
 //#########################################            #################################
 //######################################### main cycle #################################
