@@ -119,7 +119,7 @@ object MainForm: TMainForm
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
-        Caption = 'Напряжение экспозиции'
+        Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080
         object Chart1: TChart
           Left = 0
           Top = 0
@@ -366,7 +366,7 @@ object MainForm: TMainForm
         end
       end
       object TabSheet5: TTabSheet
-        Caption = 'Спесктры'
+        Caption = #1057#1087#1077#1089#1082#1090#1088#1099
         ImageIndex = 1
         object Chart3: TChart
           Left = 0
@@ -376,7 +376,7 @@ object MainForm: TMainForm
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
-            'Спектр')
+            #1057#1087#1077#1082#1090#1088)
           BottomAxis.AxisValuesFormat = '#.#### ##0'
           BottomAxis.Title.Caption = 'Voltage'
           Legend.Visible = False
@@ -415,7 +415,7 @@ object MainForm: TMainForm
             SeriesColor = clYellow
             Pointer.InflateMargins = True
             Pointer.Style = psRectangle
-            Pointer.Visible = True
+            Pointer.Visible = False
             XValues.DateTime = False
             XValues.Name = 'X'
             XValues.Multiplier = 1.000000000000000000
@@ -424,7 +424,6 @@ object MainForm: TMainForm
             YValues.Name = 'Y'
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
-            Pointer.Visible = false
           end
           object CountperVSeries: TPointSeries
             Marks.ArrowLength = 0
@@ -450,7 +449,7 @@ object MainForm: TMainForm
         end
       end
       object ts1: TTabSheet
-        Caption = 'Диапазоны и настройка'
+        Caption = #1044#1080#1072#1087#1072#1079#1086#1085#1099' '#1080' '#1085#1072#1089#1090#1088#1086#1081#1082#1072
         ImageIndex = 3
         object pnl1: TPanel
           Left = 0
@@ -601,7 +600,7 @@ object MainForm: TMainForm
               Top = 13
               Width = 65
               Height = 18
-              Caption = 'Очистить'
+              Caption = #1054#1095#1080#1089#1090#1080#1090#1100
               OnClick = btn1Click
             end
             object Bottomspn: TSpinEdit
@@ -807,7 +806,7 @@ object MainForm: TMainForm
               Width = 70
               Height = 21
               Style = csDropDownList
-              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
               ItemIndex = 0
               TabOrder = 0
@@ -877,7 +876,7 @@ object MainForm: TMainForm
                 Height = 16
                 Align = alBottom
                 Alignment = taCenter
-                Caption = 'Описание'
+                Caption = #1054#1087#1080#1089#1072#1085#1080#1077
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -15
@@ -939,7 +938,7 @@ object MainForm: TMainForm
               Top = 54
               Width = 65
               Height = 21
-              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
               ItemIndex = 0
               TabOrder = 4
@@ -957,7 +956,7 @@ object MainForm: TMainForm
               Width = 40
               Height = 21
               Style = csDropDownList
-              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
               ItemIndex = 15
               TabOrder = 5
@@ -1000,7 +999,7 @@ object MainForm: TMainForm
               Top = 103
               Width = 377
               Height = 77
-              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               TabOrder = 6
               Visible = False
             end

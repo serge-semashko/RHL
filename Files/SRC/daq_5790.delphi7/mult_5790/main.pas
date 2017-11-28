@@ -746,7 +746,10 @@ begin
     Writelog(DataFileName + '.txt', tmpstr + #10);
     Headerstr := '';
     while not (zqry1.Eof) do begin
-        headerstr := headerstr + format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d ', [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger, zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 10.0, zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger]) + #10;
+        headerstr := headerstr + format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d, Channels= %d  ',
+             [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger, zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 1000.0,
+              zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger,
+              1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger ]) + #10;
         zqry1.Next;
     end;
     WriteLog(DataFileName + '.txt', headerstr + #10);
