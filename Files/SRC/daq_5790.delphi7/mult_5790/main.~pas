@@ -8,7 +8,7 @@ uses
     StdCtrls, gpib_user, Adgpib, ComCtrls, ExtCtrls, TeEngine, Series, TeeProcs,
     Chart, Spin, Buttons, mmsystem, strutils, HTTPSend, blcksock, winsock,
     Synautil, Grids, DB, ADODB, DBGrids, ZAbstractRODataset, ZAbstractDataset,
-    ZDataset, ZAbstractConnection, ZConnection, ZCompatibility;
+    ZDataset, ZAbstractConnection, ZConnection, ZCompatibility, filectrl;
 const
       sweepmodes : array[0..4] of string = ('UpDown','Up','Down','err','Up');
 
@@ -79,6 +79,9 @@ type
         Label2: TLabel;
         Label3: TLabel;
         Label4: TLabel;
+    DataDir: TLabeledEdit;
+    SpeedButton1: TSpeedButton;
+    OpenDialog1: TOpenDialog;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -95,6 +98,7 @@ type
     procedure edChChange(Sender: TObject);
     procedure cmbGPIBChange(Sender: TObject);
     procedure cmbInstChange(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
     private
     { Private declarations }
     public
@@ -114,6 +118,7 @@ type
     Varray = array of vrecord;
 
 var
+  SweepStartTime : double;
    headerstr :string;
     daq_counter: int64 = 0;
     CorrectionTime: double;
@@ -123,7 +128,8 @@ var
     meanVoltage: double = 0;
     mean3Voltage: double = 0;
     LastVoltage: array[0..10] of double = (-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1);
-    Stage: integer;
+    Sweep: integer;
+    OldSweepNumber: integer;
     counter_and_GPIB_ready: boolean = false;
     v_ref: double = 4.9742;
     PortNum: integer = 9090;
@@ -343,7 +349,7 @@ begin
                 writeprotocol('Err: Error reading counter.');
                 cntval := 131313;
             end
-            else begin
+            else begin                                                                                
                 if cntval > $FFFF then begin
                     cntval := 131313;
                     DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
@@ -433,7 +439,7 @@ begin
         writeprotocol('rdstr: ' + rdstr);
         CurVoltage := dacval;
         if GettingData then begin
-            writetimelog(DataDirName + IntToStr(stage), rdstr);
+            writetimelog(DataDirName + IntToStr(Sweep)+'.dat', rdstr);
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval
             else
@@ -599,17 +605,22 @@ var
         step_len := zqry1.FieldValues['exposition'];
 
     end;
-    procedure             writeSweepHeader;
+    procedure             BeginSweep;
     var
         tmpstr : string;
     begin
-      tmpstr := Format('Region: %d, Sweep= %d, SweepMode= %s',[ zqry1.RecordCount, Stage, sweepmodes[dstep+2]])+#10;
-      WriteLog(DataDirName+IntToStr(stage),tmpstr);
-      WriteLog(DataDirName+IntToStr(stage),headerstr);
-      WriteLog(DataDirName+IntToStr(stage),#10);
-
+      tmpstr := Format('Region: %d, Sweep= %d, SweepMode= %s',[ zqry1.RecordCount, Sweep, sweepmodes[dstep+3]])+#10;
+      WriteLog(DataDirName+IntToStr(Sweep)+'.txt',tmpstr);
+      WriteLog(DataDirName+IntToStr(Sweep)+'.txt',headerstr);
+      WriteLog(DataDirName+IntToStr(Sweep)+'.txt',#10);
+      WriteLog(DataFileName+'.txt', descmemo.Text);
+      countPerVSeries.Clear;
+      SweepStartTime := now;
     end;
+    Procedure FinishSweep;
 
+    begin
+    end;
     function SetNewRegion: boolean;
     var
      tmpstr : string;
@@ -634,20 +645,23 @@ var
                     if daq_mode = 0 then begin
                         dstep := -1;
                         curTarget := zqry1.FieldValues['Uend'];
+                        Sweep := Sweep + 1;
+                        exit;
+
                     end
                     else begin
                         zqry1.MoveBy(-zqry1.RecNo);
-                        setrangeparams;
                         curTarget := zqry1.FieldValues['Ubeg'];
+                        Sweep := Sweep + 1;
+                        exit;
+
                     end;
                 end
                 else begin
                     curTarget := zqry1.FieldValues['Ubeg'];
                 end;
-                countPerVSeries.Clear;
-                Stage := Stage + 1;
-                writeSweepHeader;
-                exit;
+                     setrangeparams;
+                    exit;
             end;
         end;
         if (dstep < 0) then begin
@@ -658,17 +672,14 @@ var
             if Curtarget < border_low then begin
                 zqry1.MoveBy(-1);
                 setrangeparams;
-
                 if zqry1.bof then begin
                     dstep := 1;
                     curTarget := zqry1.FieldValues['Ubeg'];
+                    Sweep := Sweep + 1;
+                    exit;
                 end
                 else
                     curTarget := zqry1.FieldValues['Uend'];
-                countPerVSeries.Clear;
-                setrangeparams;
-                Stage := Stage + 1;
-                writeSweepHeader;
                 exit;
             end
         end;
@@ -688,19 +699,21 @@ begin
     end;
 
     Startcycle.Enabled := false;
-    Stage := 1;
+    Sweep := 1;
     CreateDataFileName;
 
     zqry1.MoveBy(-zqry1.RecNo);
     tmpstr := format('Region number: %d, Sweep number: %d,  Sweep mode: %s', [zqry1.RecordCount, seSweepCount.Value,sweepmodes[rgSweepMode.ItemIndex]]);
-    Writelog(DataFileName, tmpstr+#10);
+    Writelog(DataFileName+'.txt', tmpstr+#10);
     Headerstr := '';
     while not (zqry1.Eof) do begin
       headerstr := headerstr+ format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d ',
         [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger,zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 10.0, zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger])+#10;
       zqry1.Next;
     end;
-    WriteLog(DataFileName, headerstr+#10);
+    WriteLog(DataFileName+'.txt', headerstr+#10);
+    WriteLog(DataFileName+'.txt', descmemo.Text);
+
 
 
     ClearSeries();
@@ -745,7 +758,7 @@ begin
     PageControl2.ActivePageIndex := 0;
 
     SetEnablingControl;
-    writeSweepHeader;
+    BeginSweep;
 //######################################################################################
 //#########################################            #################################
 //######################################### main cycle #################################
@@ -794,22 +807,32 @@ begin
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
-            writetimelog(DataFileName, Stepstr);
+            writetimelog(DataFileName+'.dat', Stepstr);
             memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Read ok = ' + rdstr);
     //   writetimelog(rdstr+#10);
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;
-            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 10.0, border_low * 1.0]);
+            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
 
-            newTarget := curTarget + dstep * step_Value / 10.0;
+            newTarget := curTarget + dstep * step_Value / 1000.0;
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
+                OldSweepNumber := Sweep;
                 SetNewRegion();
-                SetRegionBorder(curTarget);
-                if (seSweepCount.Value > 0) and (stage > seSweepCount.Value) then
+                if (seSweepCount.Value > 0) and (Sweep > seSweepCount.Value) then
+                begin
+                   FinishSweep;
+                   tmpstr := '';
                     break;
+                end;
+                if OldSweepNumber <> Sweep then begin
+                 FinishSweep;
+                 BeginSweep;
+                 SweepStartTime := now;
+                end;
+                SetRegionBorder(curTarget);
                 SetVoltage(curTarget);
             end
             else begin
@@ -820,7 +843,7 @@ begin
                     delay(300);
                 end;
             end;
-            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 10.0, border_low * 1.0]);
+            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
             GettingData := true;
             correctionTime := now;
@@ -847,6 +870,8 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
+ deadspn.Value := 5;
+ deadspn.Invalidate;
 
     if (not GPIB_Ready) then begin
         showmessage('GPIB(цифровой вольметр)недоступен');
@@ -1047,15 +1072,18 @@ begin
     r1 := 80;
     getcomputername(@charbuf, r1);
     compname := charbuf;
+
     s1 := extractfiledrive(application.exename);
     Info := FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + Bottomspn.Text + '-' + TopSpn.Text + ' exp-' + expspn.Text + ' dead-' + deadspn.Text;
     s2 := s1 + '\data\';
     CreateDirectory(pchar(s2), nil);
     s2 := s2 + FormatDateTime('DD_MMMM_YY-HH_NN_SS', now) + '\';
+    If DirectoryExists(DataDir.Text) then  s2:= DataDir.Text+'\';
     DataDirName := s2;
-    CreateDirectory(pchar(DataDirName), nil);
+    if not DirectoryExists(DataDirName)
+      then  CreateDirectory(pchar(DataDirName), nil);
     s2 := s2 + Info;
-    DataFileName := s2 + '.txt';
+    DataFileName := s2;
     LogFileName := s2 + ' full.txt';
 end;
 
@@ -1084,7 +1112,7 @@ begin
         showmessage('Error: Нижняя граница должна быть меньше верхней ');
         exit;
     end;
-    if ((Topspn.Value - Bottomspn.Value) * 10 mod stepspn.Value) <> 0 then begin
+    if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
         showmessage('Error: Ширина интекрвала не кратна шагу');
         exit;
     end;
@@ -1152,6 +1180,18 @@ end;
 procedure TMainForm.cmbInstChange(Sender: TObject);
 begin
  cf.WriteInteger('hardware','gpib_instrument',TComboBox(sender).ItemIndex);
+end;
+
+procedure TMainForm.SpeedButton1Click(Sender: TObject);
+var
+ rootdir, dir :string;
+
+begin
+  rootdir := extractfiledrive(application.ExeName)+'\';
+  if SelectDirectory(Dir, [sdAllowCreate, sdPerformCreate, sdPrompt],0) then
+    Label1.Caption := Dir;
+    datadir.Text := Dir;
+    DataDirName := Dir;
 end;
 
 end.
