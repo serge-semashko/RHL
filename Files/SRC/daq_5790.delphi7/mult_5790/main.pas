@@ -84,6 +84,7 @@ type
         OpenDialog1: TOpenDialog;
         memoRead: TMemo;
     btn2: TSpeedButton;
+    CurU: TLabeledEdit;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -212,7 +213,7 @@ begin
     result := 5.0 * d_cur / $FFFFF;
 end;
 
-function setdPotential(U: dword): string;
+function setdPotential(U: int64): string;
 var
     s1, url: string;
 begin
@@ -242,7 +243,11 @@ var
     tarcontrol: int64;
     startsetTime: double;
 begin
-    curControl := curControl + trunc((target * 1.0 - curVoltage * 10000) / (50000 / $FFFFF));
+   if (now - PrevMTime)*24*2600 >1 then begin
+     exit;
+   end;
+
+    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) / (50000 / $FFFFF));
     setDPotential(curControl);
 end;
 
@@ -254,14 +259,14 @@ var
     tmpstr: string;
 begin
     tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
-    writetimelog(DataDirName + 'range.txt', tmpstr);
+//    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
-    delay(1000);
+    delay(1500);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
     tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
-    writetimelog(DataDirName + 'range.txt', tmpstr);
-    if abs(diff) > 0.2 then
+//    writetimelog(DataDirName + 'range.txt', tmpstr);
+    if abs(diff) > 0.1 then
         result := false
     else
         result := true;
@@ -274,22 +279,22 @@ var
     Vdiff: double;
 begin
     startsetTime := now;
-    while (abs((target * 1.0 - meanVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+    while (abs((target * 1.0 - curVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
-        Vdiff := abs((target * 1.0 - meanVoltage * 10000));
-        delay(2000);
+        delay(1000);
+        Vdiff := abs((target * 1.0 - curVoltage * 10000));
     end;
-    if (target <200) and (meanVoltage<200) then begin
+    if (target <200) and (meanVoltage*10000<200) then begin
       Result := True;
       Exit;
     end;
-    while (abs((target * 1.0 - meanVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 40) do begin
         correctVoltage(target);
-        Vdiff := abs((target * 1.0 - meanVoltage * 10000));
         delay(1000);
+        Vdiff := abs((target * 1.0 - curVoltage * 10000));
     end;
 
-    if (target * 1.0 - meanVoltage * 10000) > 1 then begin
+    if (target * 1.0 - curVoltage * 10000) > 1 then begin
         result := false;
     end
     else
@@ -751,7 +756,7 @@ begin
         if I1 = 10 then begin
             showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
             Startcycle.Enabled := true;
-           Screen.Cursor := crDefault;
+            Screen.Cursor := crDefault;
             exit;
         end;
     end;
@@ -856,7 +861,9 @@ begin
                     SweepStartTime := now;
                 end;
                 SetRegionBorder(curTarget);
-                SetVoltage(curTarget);
+                while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                    setVoltage(curTarget);
+                end;
             end
             else begin
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
@@ -1083,7 +1090,14 @@ end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);
 begin
+     statusbar1.Panels[2].Text := formatDateTime('HH:NN:SS', now);
+
+ if (now - PrevMTime)*24*3600 >1 then
+     statusbar1.Panels[1].Text := formatDateTime('Nodata HH:NN:SS', now)
+     else begin
     statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
+    curU.Text := format('%8.3f', [ curVoltage*10000]);
+  end;
 end;
 
 procedure TMainForm.CreatedataFileName;

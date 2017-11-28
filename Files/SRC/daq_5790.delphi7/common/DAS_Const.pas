@@ -759,7 +759,7 @@ Initialization
   LnrDataFileName := cf.ReadString('general','LnrDataFileName','m:\lnrdata.dat');
   AMPDataFileName := cf.ReadString('general','AMPDataFileName','m:\AMPDATA.dat');
   str1:=tStringList.create;
-  writetimelog('Начало работы программы'+#10);
+//  writetimelog('Начало работы программы'+#10);
 
 finalization
  writetimelog('Завершение работы программы'+#10);
