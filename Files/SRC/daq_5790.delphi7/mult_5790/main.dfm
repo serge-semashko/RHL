@@ -115,7 +115,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1282
       Height = 646
-      ActivePage = ts1
+      ActivePage = TabSheet5
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -123,7 +123,7 @@ object MainForm: TMainForm
         object Chart1: TChart
           Left = 0
           Top = 0
-          Width = 1270
+          Width = 1274
           Height = 328
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
@@ -185,6 +185,7 @@ object MainForm: TMainForm
           RightAxis.Title.Font.Style = [fsBold]
           View3D = False
           Align = alTop
+          Color = clSilver
           TabOrder = 0
           OnDblClick = Chart1DblClick
           object ch1Voltseries: TLineSeries
@@ -248,7 +249,7 @@ object MainForm: TMainForm
         object Chart2: TChart
           Left = 0
           Top = 328
-          Width = 1270
+          Width = 1274
           Height = 290
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
@@ -296,6 +297,7 @@ object MainForm: TMainForm
           RightAxis.Title.Font.Style = []
           View3D = False
           Align = alClient
+          Color = clSilver
           TabOrder = 1
           OnDblClick = Chart2DblClick
           object CounterSeries: TLineSeries
@@ -369,8 +371,8 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1112
-          Height = 457
+          Width = 1274
+          Height = 618
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
@@ -385,14 +387,30 @@ object MainForm: TMainForm
           RightAxis.Maximum = 30.000000000000000000
           View3D = False
           Align = alClient
-          Color = clWhite
+          Color = clSilver
           TabOrder = 0
+          object psreserv: TPointSeries
+            Marks.ArrowLength = 0
+            Marks.Visible = False
+            SeriesColor = clYellow
+            Pointer.InflateMargins = True
+            Pointer.Style = psRectangle
+            Pointer.Visible = True
+            XValues.DateTime = False
+            XValues.Name = 'X'
+            XValues.Multiplier = 1.000000000000000000
+            XValues.Order = loAscending
+            YValues.DateTime = False
+            YValues.Name = 'Y'
+            YValues.Multiplier = 1.000000000000000000
+            YValues.Order = loNone
+          end
           object CountperVSeries: TPointSeries
             Marks.ArrowLength = 0
             Marks.Visible = False
             SeriesColor = clRed
-            Title = 'Counter'
-            Pointer.Brush.Color = clBlack
+            Title = 'Sweep spectre'
+            Pointer.Brush.Color = clRed
             Pointer.HorizSize = 2
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
@@ -408,17 +426,16 @@ object MainForm: TMainForm
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
           end
-          object Series1: TPointSeries
+          object psFullsp: TPointSeries
             Marks.ArrowLength = 0
             Marks.Visible = False
-            SeriesColor = clGreen
-            VertAxis = aRightAxis
-            Pointer.Brush.Color = 8388863
-            Pointer.HorizSize = 1
+            SeriesColor = clBlue
+            Title = 'Full cpectre'
+            Pointer.HorizSize = 2
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 1
+            Pointer.VertSize = 2
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'
@@ -590,7 +607,7 @@ object MainForm: TMainForm
               Left = 66
               Top = 17
               Width = 66
-              Height = 26
+              Height = 22
               MaxValue = 0
               MinValue = 0
               TabOrder = 0
@@ -600,7 +617,7 @@ object MainForm: TMainForm
               Left = 135
               Top = 17
               Width = 66
-              Height = 26
+              Height = 22
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
@@ -610,7 +627,7 @@ object MainForm: TMainForm
               Left = 200
               Top = 17
               Width = 66
-              Height = 26
+              Height = 22
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -620,7 +637,7 @@ object MainForm: TMainForm
               Left = 267
               Top = 17
               Width = 65
-              Height = 26
+              Height = 22
               MaxValue = 60
               MinValue = 5
               TabOrder = 3
@@ -630,7 +647,7 @@ object MainForm: TMainForm
               Left = 334
               Top = 17
               Width = 66
-              Height = 26
+              Height = 22
               MaxValue = 100000
               MinValue = 100
               TabOrder = 4
@@ -813,7 +830,7 @@ object MainForm: TMainForm
               Left = 190
               Top = 18
               Width = 40
-              Height = 26
+              Height = 22
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
@@ -824,7 +841,7 @@ object MainForm: TMainForm
               Left = 284
               Top = 18
               Width = 40
-              Height = 26
+              Height = 22
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -887,7 +904,7 @@ object MainForm: TMainForm
                 Left = 202
                 Top = 32
                 Width = 65
-                Height = 30
+                Height = 26
                 MaxValue = 0
                 MinValue = 0
                 TabOrder = 1
@@ -909,7 +926,7 @@ object MainForm: TMainForm
                 Left = 9
                 Top = 85
                 Width = 529
-                Height = 28
+                Height = 24
                 EditLabel.Width = 84
                 EditLabel.Height = 16
                 EditLabel.Caption = 'Data directory'

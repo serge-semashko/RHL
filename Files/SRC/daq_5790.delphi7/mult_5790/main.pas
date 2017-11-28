@@ -37,7 +37,6 @@ type
         TabSheet5: TTabSheet;
         Chart3: TChart;
         CountPerVSeries: TPointSeries;
-        Series1: TPointSeries;
         Timer1: TTimer;
         StatusBar1: TStatusBar;
         ts1: TTabSheet;
@@ -85,6 +84,8 @@ type
         memoRead: TMemo;
     btn2: TSpeedButton;
     CurU: TLabeledEdit;
+    psreserv: TPointSeries;
+    psFullsp: TPointSeries;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -258,13 +259,13 @@ var
     diff: double;
     tmpstr: string;
 begin
-    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
+//    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
     delay(1500);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
-    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
+//    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.1 then
         result := false
@@ -456,7 +457,7 @@ begin
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval
             else
-                vdata[vIndex + 1].data := -1;
+            vdata[vIndex + 1].data := -1;
             vdata[vindex + 1].counter := cntval;
             vdata[vindex + 1].time := now();
             vdata[vindex + 1].data := dacval;
@@ -581,7 +582,6 @@ var
     procedure ClearSeries;
     begin
         ch1StdSeries.clear;
-        series1.Clear;
         ch1VoltSeries.clear;
         CountPerVSeries.Clear;
         ch1VoltSeries.clear;
@@ -589,6 +589,8 @@ var
         MEANvOLTAGEseries.clear;
         STDvOLTAGEseries.clear;
         Counterseries.clear;
+        psFullsp.Clear;
+        psreserv.Clear;
 
     end;
 
@@ -634,6 +636,7 @@ var
         WriteLog(DataDirName + IntToStr(Sweep) + '.txt', #10);
         WriteLog(DatadirName + IntToStr(Sweep) + '.txt', descmemo.Text);
         countPerVSeries.Clear;
+        psFullsp.Assign(psreserv);
         SweepStartTime := now;
     end;
 
@@ -830,7 +833,7 @@ begin
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(mean, CounterStep);
-            series1.AddXY(mean, 1 + random);
+            psreserv.AddXy(mean, CounterStep);
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
