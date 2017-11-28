@@ -389,12 +389,11 @@ object MainForm: TMainForm
           Align = alClient
           Color = clSilver
           TabOrder = 0
-          object CountperVSeries: TPointSeries
+          object psFullsp: TPointSeries
             Marks.ArrowLength = 0
             Marks.Visible = False
-            SeriesColor = clRed
-            Title = 'Sweep spectre'
-            Pointer.Brush.Color = clRed
+            SeriesColor = clBlue
+            Title = 'Full cpectre'
             Pointer.HorizSize = 2
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
@@ -411,6 +410,7 @@ object MainForm: TMainForm
             YValues.Order = loNone
           end
           object psreserv: TPointSeries
+            Active = False
             Marks.ArrowLength = 0
             Marks.Visible = False
             SeriesColor = clYellow
@@ -426,11 +426,12 @@ object MainForm: TMainForm
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
           end
-          object psFullsp: TPointSeries
+          object CountperVSeries: TPointSeries
             Marks.ArrowLength = 0
             Marks.Visible = False
-            SeriesColor = clBlue
-            Title = 'Full cpectre'
+            SeriesColor = clRed
+            Title = 'Sweep spectre'
+            Pointer.Brush.Color = clRed
             Pointer.HorizSize = 2
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False

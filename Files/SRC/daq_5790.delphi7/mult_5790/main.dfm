@@ -119,7 +119,7 @@ object MainForm: TMainForm
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
-        Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080
+        Caption = 'Напряжение экспозиции'
         object Chart1: TChart
           Left = 0
           Top = 0
@@ -366,7 +366,7 @@ object MainForm: TMainForm
         end
       end
       object TabSheet5: TTabSheet
-        Caption = #1057#1087#1077#1089#1082#1090#1088#1099
+        Caption = 'Спесктры'
         ImageIndex = 1
         object Chart3: TChart
           Left = 0
@@ -376,7 +376,7 @@ object MainForm: TMainForm
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
-            #1057#1087#1077#1082#1090#1088)
+            'Спектр')
           BottomAxis.AxisValuesFormat = '#.#### ##0'
           BottomAxis.Title.Caption = 'Voltage'
           Legend.Visible = False
@@ -389,6 +389,26 @@ object MainForm: TMainForm
           Align = alClient
           Color = clSilver
           TabOrder = 0
+          object psFullsp: TPointSeries
+            Marks.ArrowLength = 0
+            Marks.Visible = False
+            SeriesColor = clBlue
+            Title = 'Full cpectre'
+            Pointer.HorizSize = 2
+            Pointer.InflateMargins = True
+            Pointer.Pen.Visible = False
+            Pointer.Style = psRectangle
+            Pointer.VertSize = 2
+            Pointer.Visible = True
+            XValues.DateTime = False
+            XValues.Name = 'X'
+            XValues.Multiplier = 1.000000000000000000
+            XValues.Order = loAscending
+            YValues.DateTime = False
+            YValues.Name = 'Y'
+            YValues.Multiplier = 1.000000000000000000
+            YValues.Order = loNone
+          end
           object psreserv: TPointSeries
             Marks.ArrowLength = 0
             Marks.Visible = False
@@ -404,6 +424,7 @@ object MainForm: TMainForm
             YValues.Name = 'Y'
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
+            Pointer.Visible = false
           end
           object CountperVSeries: TPointSeries
             Marks.ArrowLength = 0
@@ -426,30 +447,10 @@ object MainForm: TMainForm
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
           end
-          object psFullsp: TPointSeries
-            Marks.ArrowLength = 0
-            Marks.Visible = False
-            SeriesColor = clBlue
-            Title = 'Full cpectre'
-            Pointer.HorizSize = 2
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 2
-            Pointer.Visible = True
-            XValues.DateTime = False
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-          end
         end
       end
       object ts1: TTabSheet
-        Caption = #1044#1080#1072#1087#1072#1079#1086#1085#1099' '#1080' '#1085#1072#1089#1090#1088#1086#1081#1082#1072
+        Caption = 'Диапазоны и настройка'
         ImageIndex = 3
         object pnl1: TPanel
           Left = 0
@@ -600,7 +601,7 @@ object MainForm: TMainForm
               Top = 13
               Width = 65
               Height = 18
-              Caption = #1054#1095#1080#1089#1090#1080#1090#1100
+              Caption = 'Очистить'
               OnClick = btn1Click
             end
             object Bottomspn: TSpinEdit
@@ -806,7 +807,7 @@ object MainForm: TMainForm
               Width = 70
               Height = 21
               Style = csDropDownList
-              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
               ItemHeight = 13
               ItemIndex = 0
               TabOrder = 0
@@ -876,7 +877,7 @@ object MainForm: TMainForm
                 Height = 16
                 Align = alBottom
                 Alignment = taCenter
-                Caption = #1054#1087#1080#1089#1072#1085#1080#1077
+                Caption = 'Описание'
                 Font.Charset = DEFAULT_CHARSET
                 Font.Color = clWindowText
                 Font.Height = -15
@@ -938,7 +939,7 @@ object MainForm: TMainForm
               Top = 54
               Width = 65
               Height = 21
-              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
               ItemHeight = 13
               ItemIndex = 0
               TabOrder = 4
@@ -956,7 +957,7 @@ object MainForm: TMainForm
               Width = 40
               Height = 21
               Style = csDropDownList
-              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
               ItemHeight = 13
               ItemIndex = 15
               TabOrder = 5
@@ -999,7 +1000,7 @@ object MainForm: TMainForm
               Top = 103
               Width = 377
               Height = 77
-              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ImeName = '¤¤¤е (БcЕй) - ·sЄ`­µ'
               TabOrder = 6
               Visible = False
             end

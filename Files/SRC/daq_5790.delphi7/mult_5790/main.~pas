@@ -637,6 +637,17 @@ var
         WriteLog(DatadirName + IntToStr(Sweep) + '.txt', descmemo.Text);
         countPerVSeries.Clear;
         psFullsp.Assign(psreserv);
+
+        with psFullsp do begin
+            active := true;
+            Pointer.Brush.Color := clnavy;
+            Pointer.HorizSize := 2;
+            Pointer.InflateMargins := True;
+            Pointer.Pen.Visible := False;
+            Pointer.Style := psRectangle;
+            Pointer.VertSize := 2;
+            Pointer.Visible := True;
+        end;
         SweepStartTime := now;
     end;
 
