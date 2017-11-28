@@ -115,7 +115,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1282
       Height = 646
-      ActivePage = TabSheet5
+      ActivePage = ts1
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -848,7 +848,7 @@ object MainForm: TMainForm
               Value = 0
               OnChange = edChChange
             end
-            object Panel2: TPanel
+            object leconstVolt: TPanel
               Left = 1
               Top = 349
               Width = 609
@@ -931,6 +931,16 @@ object MainForm: TMainForm
                 EditLabel.Height = 16
                 EditLabel.Caption = 'Data directory'
                 TabOrder = 3
+              end
+              object ConstVolt: TLabeledEdit
+                Left = 319
+                Top = 32
+                Width = 241
+                Height = 24
+                EditLabel.Width = 110
+                EditLabel.Height = 16
+                EditLabel.Caption = 'Contant voltage(V)'
+                TabOrder = 4
               end
             end
             object cmbGPIB: TComboBox

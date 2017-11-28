@@ -65,7 +65,7 @@ type
         ComComboBox: TComboBox;
         address: TSpinEdit;
         edCh: TSpinEdit;
-        Panel2: TPanel;
+    leconstVolt: TPanel;
         dbgrd2: TDBGrid;
         btn1: TSpeedButton;
         StartCycle: TSpeedButton;
@@ -86,6 +86,7 @@ type
     CurU: TLabeledEdit;
     psreserv: TPointSeries;
     psFullsp: TPointSeries;
+    ConstVolt: TLabeledEdit;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -752,6 +753,7 @@ begin
               1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger ]) + #10;
         zqry1.Next;
     end;
+    headerstr := headerstr +'Constant voltage(V)= '+ConstVolt.Text+#10;
     WriteLog(DataFileName + '.txt', headerstr + #10);
     WriteLog(DataFileName + '.txt', descmemo.Text);
 
