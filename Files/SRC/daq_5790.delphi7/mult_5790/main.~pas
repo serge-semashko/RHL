@@ -83,6 +83,7 @@ type
         SpeedButton1: TSpeedButton;
         OpenDialog1: TOpenDialog;
         memoRead: TMemo;
+    btn2: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -100,6 +101,7 @@ type
         procedure cmbGPIBChange(Sender: TObject);
         procedure cmbInstChange(Sender: TObject);
         procedure SpeedButton1Click(Sender: TObject);
+    procedure btn2Click(Sender: TObject);
     private
     { Private declarations }
     public
@@ -276,6 +278,10 @@ begin
         correctVoltage(target);
         Vdiff := abs((target * 1.0 - meanVoltage * 10000));
         delay(2000);
+    end;
+    if target <200 and meanVoltage<200 then begin
+      Result := True;
+      Exit;
     end;
     while (abs((target * 1.0 - meanVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
@@ -701,6 +707,7 @@ var
     end;
 
 begin
+
     daq_mode := rgSweepmode.ItemIndex;
     if (Startcycle.Caption = 'Stop measurement') then begin
         Startcycle.Caption := 'Finishing ....';
@@ -710,6 +717,7 @@ begin
     if (Startcycle.Caption <> 'Start measurement') then begin
         exit;
     end;
+    Screen.Cursor := crHourGlass;
 
     Startcycle.Enabled := false;
     Sweep := 1;
@@ -733,6 +741,7 @@ begin
     if not SetRegionBorder(border_low) then begin
         showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
         Startcycle.Enabled := true;
+        Screen.Cursor := crDefault;
         exit;
     end;
 
@@ -742,6 +751,7 @@ begin
         if I1 = 10 then begin
             showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
             Startcycle.Enabled := true;
+           Screen.Cursor := crDefault;
             exit;
         end;
     end;
@@ -777,6 +787,7 @@ begin
 //######################################################################################
     Startcycle.Font.Color := clRed;
     Startcycle.Enabled := true;
+    Screen.Cursor := crDefault;
     while (Startcycle.Caption = 'Stop measurement') do begin
         mainform.Caption := IntToStr(cntval);
 
@@ -1204,6 +1215,16 @@ begin
         Label1.Caption := dir;
     datadir.Text := dir;
     DataDirName := dir;
+end;
+
+procedure TMainForm.btn2Click(Sender: TObject);
+begin
+  Screen.Cursor := crHourGlass;
+    if not SetRegionBorder(0) then begin
+        showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
+    end;
+  Screen.Cursor := crDefault;
+
 end;
 
 end.

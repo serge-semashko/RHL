@@ -279,6 +279,10 @@ begin
         Vdiff := abs((target * 1.0 - meanVoltage * 10000));
         delay(2000);
     end;
+    if (target <200) and (meanVoltage<200) then begin
+      Result := True;
+      Exit;
+    end;
     while (abs((target * 1.0 - meanVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
         Vdiff := abs((target * 1.0 - meanVoltage * 10000));
@@ -1216,7 +1220,7 @@ end;
 procedure TMainForm.btn2Click(Sender: TObject);
 begin
   Screen.Cursor := crHourGlass;
-    if not SetRegionBorder(border_low) then begin
+    if not SetRegionBorder(0) then begin
         showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
     end;
   Screen.Cursor := crDefault;

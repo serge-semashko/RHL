@@ -354,8 +354,8 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1492
-          Height = 761
+          Width = 1368
+          Height = 562
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
           Title.Text.Strings = (
@@ -753,6 +753,20 @@ object MainForm: TMainForm
               Width = 63
               Height = 16
               Caption = 'Instrument:'
+            end
+            object btn2: TSpeedButton
+              Left = 321
+              Top = 50
+              Width = 215
+              Height = 49
+              Caption = 'Down high voltage'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clNavy
+              Font.Height = -20
+              Font.Name = 'MS Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+              OnClick = btn2Click
             end
             object ComComboBox: TComboBox
               Left = 74
