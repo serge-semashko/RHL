@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = -26
-  Top = 77
-  Width = 1300
+  Left = 320
+  Top = 62
+  Width = 1280
   Height = 915
   Caption = 'Read/Write'
   Color = clBtnFace
@@ -19,7 +19,7 @@ object MainForm: TMainForm
   object Panel1: TPanel
     Left = 0
     Top = 815
-    Width = 1284
+    Width = 1264
     Height = 32
     Align = alBottom
     TabOrder = 0
@@ -27,7 +27,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1284
+    Width = 1264
     Height = 164
     ActivePage = TabSheet1
     Align = alTop
@@ -97,7 +97,7 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 164
-    Width = 1284
+    Width = 1264
     Height = 651
     Align = alClient
     Caption = 'Panel5'
@@ -105,7 +105,7 @@ object MainForm: TMainForm
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1282
+      Width = 1262
       Height = 3
       Cursor = crVSplit
       Align = alTop
@@ -113,7 +113,7 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 4
-      Width = 1282
+      Width = 1262
       Height = 646
       ActivePage = ts1
       Align = alClient
@@ -371,7 +371,7 @@ object MainForm: TMainForm
         object Chart3: TChart
           Left = 0
           Top = 0
-          Width = 1274
+          Width = 1254
           Height = 618
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
@@ -379,12 +379,13 @@ object MainForm: TMainForm
             #1057#1087#1077#1082#1090#1088)
           BottomAxis.AxisValuesFormat = '#.#### ##0'
           BottomAxis.Title.Caption = 'Voltage'
+          LeftAxis.Automatic = False
+          LeftAxis.AutomaticMinimum = False
+          LeftAxis.AxisValuesFormat = '#'
           Legend.Visible = False
           RightAxis.Automatic = False
-          RightAxis.AutomaticMaximum = False
           RightAxis.AutomaticMinimum = False
-          RightAxis.AxisValuesFormat = '#.#####0'
-          RightAxis.Maximum = 30.000000000000000000
+          RightAxis.AxisValuesFormat = '#'
           View3D = False
           Align = alClient
           Color = clSilver
@@ -430,6 +431,7 @@ object MainForm: TMainForm
             Marks.Visible = False
             SeriesColor = clRed
             Title = 'Sweep spectre'
+            VertAxis = aRightAxis
             Pointer.Brush.Color = clRed
             Pointer.HorizSize = 2
             Pointer.InflateMargins = True
@@ -723,12 +725,13 @@ object MainForm: TMainForm
             TitleFont.Height = -11
             TitleFont.Name = 'MS Sans Serif'
             TitleFont.Style = []
+            OnCellClick = dbgrd1CellClick
           end
         end
         object pnl2: TPanel
           Left = 657
           Top = 0
-          Width = 617
+          Width = 597
           Height = 618
           Align = alClient
           Caption = 'pnl2'
@@ -736,7 +739,7 @@ object MainForm: TMainForm
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 615
+            Width = 595
             Height = 616
             Align = alClient
             BorderStyle = bsSingle
@@ -851,7 +854,7 @@ object MainForm: TMainForm
             object leconstVolt: TPanel
               Left = 1
               Top = 349
-              Width = 609
+              Width = 589
               Height = 262
               Align = alBottom
               BorderStyle = bsSingle
@@ -872,7 +875,7 @@ object MainForm: TMainForm
               object Label4: TLabel
                 Left = 1
                 Top = 117
-                Width = 603
+                Width = 583
                 Height = 16
                 Align = alBottom
                 Alignment = taCenter
@@ -895,7 +898,7 @@ object MainForm: TMainForm
               object DescMemo: TMemo
                 Left = 1
                 Top = 133
-                Width = 603
+                Width = 583
                 Height = 124
                 Align = alBottom
                 TabOrder = 0
@@ -1021,7 +1024,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 847
-    Width = 1284
+    Width = 1264
     Height = 30
     Panels = <
       item

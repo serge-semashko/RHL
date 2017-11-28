@@ -105,6 +105,7 @@ type
         procedure cmbInstChange(Sender: TObject);
         procedure SpeedButton1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
+    procedure dbgrd1CellClick(Column: TColumn);
     private
     { Private declarations }
     public
@@ -290,7 +291,7 @@ begin
       Result := True;
       Exit;
     end;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 40) do begin
+    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -724,7 +725,8 @@ var
         showmessage('set range illegal sutiation');
         showerrorRange;
     end;
-
+var
+delta :double;
 begin
 
     daq_mode := rgSweepmode.ItemIndex;
@@ -848,7 +850,18 @@ begin
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(mean, CounterStep);
-            psreserv.AddXy(mean, CounterStep);
+            i1 := 0;
+            while i1 < psreserv.Count do begin
+             delta := abs(psreserv.XValue[i1] - mean);
+             if abs(psreserv.XValue[i1] - mean)*10000 < step_value /2000.0 then begin
+               psreserv.yValue[i1] := psreserv.yValue[i1] + CounterStep;
+               break;
+             end;
+             inc(i1);
+
+            end;
+            if i1 >=  psreserv.Count
+               then  psreserv.AddXy(curTarget/10000.0, CounterStep);
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
@@ -1257,6 +1270,20 @@ begin
     end;
   Screen.Cursor := crDefault;
 
+end;
+
+procedure TMainForm.dbgrd1CellClick(Column: TColumn);
+begin
+if trim( dbgrd1.Fields[0].AsString) <> '' then
+ bottomspn.Text := dbgrd1.Fields[0].AsString;
+if trim( dbgrd1.Fields[1].AsString) <> '' then
+ topspn.Text := dbgrd1.Fields[1].AsString;
+if trim( dbgrd1.Fields[2].AsString) <> '' then
+ expspn.Text := dbgrd1.Fields[2].AsString;
+if trim( dbgrd1.Fields[3].AsString) <> '' then
+ deadspn.Text := dbgrd1.Fields[3].AsString;
+if trim( dbgrd1.Fields[4].AsString) <> '' then
+ stepspn.Text := dbgrd1.Fields[4].AsString;
 end;
 
 end.
