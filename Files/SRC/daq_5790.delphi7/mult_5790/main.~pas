@@ -35,7 +35,7 @@ type
         PageControl2: TPageControl;
         TabSheet4: TTabSheet;
         TabSheet5: TTabSheet;
-        Chart3: TChart;
+    SpectreChart: TChart;
         CountPerVSeries: TPointSeries;
         Timer1: TTimer;
         StatusBar1: TStatusBar;
@@ -264,7 +264,7 @@ begin
 //    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
-    delay(1500);
+    delay(1000);
     diff := mean3Voltage * 10000;
     diff := target * 1.0 - mean3Voltage * 10000;
 //    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
@@ -291,7 +291,7 @@ begin
       Result := True;
       Exit;
     end;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 40) do begin
+    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -642,11 +642,11 @@ var
 
         with psFullsp do begin
             Pointer.Brush.Color := clnavy;
-            Pointer.HorizSize := 2;
+            Pointer.HorizSize := 3;
             Pointer.InflateMargins := True;
             Pointer.Pen.Visible := False;
             Pointer.Style := psRectangle;
-            Pointer.VertSize := 2;
+            Pointer.VertSize := 3;
             Pointer.Visible := True;
         end;
         SweepStartTime := now;
@@ -849,19 +849,24 @@ begin
             ch1stdSeries.AddXY(now, std);
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
-            countPerVSeries.AddXy(mean, CounterStep);
+            countPerVSeries.AddXy(curtarget, CounterStep);
+            if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.05;
             i1 := 0;
             while i1 < psreserv.Count do begin
              delta := abs(psreserv.XValue[i1] - mean);
-             if abs(psreserv.XValue[i1] - mean)*10000 < step_value /2000.0 then begin
+             if abs(psreserv.XValue[i1] - curtarget) < step_value /2000.0 then begin
                psreserv.yValue[i1] := psreserv.yValue[i1] + CounterStep;
+               writeTimelog(format('add spectre %d curtarget=%.1f x=%.1f  Cnt=%d Y=%.1f ',[i1, curtarget, psreserv.xValue[i1],CounterStep, psreserv.yValue[i1]] )+#10);
                break;
              end;
              inc(i1);
 
             end;
             if i1 >=  psreserv.Count
-               then  psreserv.AddXy(curTarget/10000.0, CounterStep);
+               then begin
+                psreserv.AddXy(curTarget, CounterStep);
+                writeTimelog(format('create spectre curtarget=%.1f Cnt=%d' ,[curtarget, CounterStep] )+#10);
+            end;
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
@@ -892,15 +897,20 @@ begin
                     SweepStartTime := now;
                 end;
                 SetRegionBorder(curTarget);
-                while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                Start_dead := now;
+                while (now - start_dead) * 24 * 3600 < dead_Value * 2 do begin
                     setVoltage(curTarget);
                 end;
             end
             else begin
+                writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                    writetimelog(IntToStr(now - start_dead) * 24 * 3600 )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
                     setVoltage(curTarget);
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                    writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+
                     delay(300);
                 end;
             end;
@@ -1103,7 +1113,7 @@ begin
     daqthread.Priority := tphigher;
     daqthread.Priority := tphighest;
     LastCounterTime := now;
-    daqthread.Priority := tpTimeCritical;
+//    daqthread.Priority := tpTimeCritical;
     GettingData := false;
     gpib_ready := true;
     daqthread.Resume;

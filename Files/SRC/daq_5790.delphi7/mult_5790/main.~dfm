@@ -115,7 +115,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1262
       Height = 646
-      ActivePage = ts1
+      ActivePage = TabSheet5
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -368,24 +368,33 @@ object MainForm: TMainForm
       object TabSheet5: TTabSheet
         Caption = #1057#1087#1077#1089#1082#1090#1088#1099
         ImageIndex = 1
-        object Chart3: TChart
+        object SpectreChart: TChart
           Left = 0
           Top = 0
           Width = 1254
           Height = 618
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
+          MarginLeft = 5
           Title.Text.Strings = (
             #1057#1087#1077#1082#1090#1088)
           BottomAxis.AxisValuesFormat = '#.#### ##0'
+          BottomAxis.StartPosition = 1.000000000000000000
+          BottomAxis.EndPosition = 99.000000000000000000
           BottomAxis.Title.Caption = 'Voltage'
           LeftAxis.Automatic = False
           LeftAxis.AutomaticMinimum = False
           LeftAxis.AxisValuesFormat = '#'
+          LeftAxis.StartPosition = 1.000000000000000000
+          LeftAxis.EndPosition = 99.000000000000000000
           Legend.Visible = False
           RightAxis.Automatic = False
+          RightAxis.AutomaticMaximum = False
           RightAxis.AutomaticMinimum = False
           RightAxis.AxisValuesFormat = '#'
+          RightAxis.Maximum = 1.000000000000000000
+          RightAxis.StartPosition = 1.000000000000000000
+          RightAxis.EndPosition = 99.000000000000000000
           View3D = False
           Align = alClient
           Color = clSilver
@@ -395,11 +404,11 @@ object MainForm: TMainForm
             Marks.Visible = False
             SeriesColor = clBlue
             Title = 'Full cpectre'
-            Pointer.HorizSize = 2
+            Pointer.HorizSize = 20
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 2
+            Pointer.VertSize = 20
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'
@@ -414,8 +423,11 @@ object MainForm: TMainForm
             Marks.ArrowLength = 0
             Marks.Visible = False
             SeriesColor = clYellow
+            Pointer.HorizSize = 20
             Pointer.InflateMargins = True
+            Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
+            Pointer.VertSize = 20
             Pointer.Visible = False
             XValues.DateTime = False
             XValues.Name = 'X'
