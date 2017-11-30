@@ -41,10 +41,10 @@ object MainForm: TMainForm
     object TabSheet1: TTabSheet
       Caption = 'Wavetek 1271'
       object StartCycle: TSpeedButton
-        Left = 814
-        Top = 8
-        Width = 176
-        Height = 40
+        Left = 807
+        Top = 2
+        Width = 168
+        Height = 45
         Caption = 'Start measurement'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clNavy
@@ -53,6 +53,24 @@ object MainForm: TMainForm
         Font.Style = [fsBold]
         ParentFont = False
         OnClick = StartCycleClick
+      end
+      object RangeGauge: TGauge
+        Left = 977
+        Top = 56
+        Width = 277
+        Height = 21
+        ForeColor = clBlue
+        MaxValue = 1000
+        Progress = 0
+      end
+      object StepGauge: TGauge
+        Left = 977
+        Top = 105
+        Width = 277
+        Height = 21
+        ForeColor = clBlue
+        MaxValue = 1000
+        Progress = 0
       end
       object dbgrd2: TDBGrid
         Left = 0
@@ -78,9 +96,9 @@ object MainForm: TMainForm
         TitleFont.Style = []
       end
       object CurU: TLabeledEdit
-        Left = 841
-        Top = 93
-        Width = 304
+        Left = 813
+        Top = 69
+        Width = 137
         Height = 28
         EditLabel.Width = 108
         EditLabel.Height = 20
@@ -91,6 +109,39 @@ object MainForm: TMainForm
         LabelSpacing = 2
         ReadOnly = True
         TabOrder = 1
+      end
+      object SweepLBL: TStaticText
+        Left = 977
+        Top = 3
+        Width = 277
+        Height = 23
+        Alignment = taCenter
+        AutoSize = False
+        BorderStyle = sbsSingle
+        Caption = 'Sweep'
+        TabOrder = 2
+      end
+      object Rangelbl: TStaticText
+        Left = 977
+        Top = 30
+        Width = 277
+        Height = 23
+        Alignment = taCenter
+        AutoSize = False
+        BorderStyle = sbsSingle
+        Caption = 'Rangelbl'
+        TabOrder = 3
+      end
+      object StepLBL: TStaticText
+        Left = 977
+        Top = 80
+        Width = 277
+        Height = 21
+        Alignment = taCenter
+        AutoSize = False
+        BorderStyle = sbsSingle
+        Caption = 'StepLBL'
+        TabOrder = 4
       end
     end
   end
@@ -1046,6 +1097,10 @@ object MainForm: TMainForm
         Width = 200
       end
       item
+        Width = 300
+      end
+      item
+        Text = '---'
         Width = 300
       end>
   end
