@@ -905,7 +905,7 @@ begin
             else begin
                 writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin
-                    writetimelog(IntToStr(now - start_dead) * 24 * 3600 )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                    writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
                     setVoltage(curTarget);
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value do begin

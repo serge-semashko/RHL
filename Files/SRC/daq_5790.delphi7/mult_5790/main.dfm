@@ -115,7 +115,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1262
       Height = 646
-      ActivePage = TabSheet5
+      ActivePage = TabSheet4
       Align = alClient
       TabOrder = 0
       object TabSheet4: TTabSheet
@@ -123,7 +123,7 @@ object MainForm: TMainForm
         object Chart1: TChart
           Left = 0
           Top = 0
-          Width = 1274
+          Width = 1254
           Height = 328
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
@@ -249,7 +249,7 @@ object MainForm: TMainForm
         object Chart2: TChart
           Left = 0
           Top = 328
-          Width = 1274
+          Width = 1254
           Height = 290
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
