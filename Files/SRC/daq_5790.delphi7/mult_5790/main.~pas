@@ -771,6 +771,10 @@ var
 var
 delta :double;
 begin
+ if (zqry1.RecordCount <1) then begin
+   showmessage('No measurung range');
+   exit;
+ end;
     spectreList.Clear;
     ClearSeries();
     Application.ProcessMessages;
@@ -914,9 +918,9 @@ begin
             if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.1;
 
            i1 := 0;
-           if (spectreList.Values[IntToStr(trunc(curtarget*1000))]) = '' then
-                spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(CounterStep)
-                else spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
+           if (spectreList.Values[IntToStr(round(curtarget*1000))]) = '' then
+                spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(CounterStep)
+                else spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);

@@ -528,7 +528,7 @@ end;
 procedure TDAQThread.execute;
 var
     i: integer;
-    Curtimel, PrevTimel: double;
+    meant, mean3t,  Curtimel, PrevTimel: double;
     CurMtimel, PrevMTimel: dword;
 begin
     while not terminated do begin
@@ -541,15 +541,15 @@ begin
                 else
                     LastVoltage[i] := LastVoltage[i + 1];
             LastVoltage[5] := curVoltage;
-            meanVoltage := LastVoltage[0];
-            mean3Voltage := LastVoltage[3];
+            meant := LastVoltage[0];
+            mean3te := LastVoltage[3];
             for i := 1 to 5 do begin
-                meanVoltage := meanVoltage + LastVoltage[i];
+                meant := meant + LastVoltage[i];
                 if i > 3 then
-                    mean3Voltage := mean3Voltage + LastVoltage[i];
+                    mean3t := mean3t + LastVoltage[i];
             end;
-            meanVoltage := meanVoltage / 6.0;
-            mean3Voltage := mean3Voltage / 3.0;
+            meanVoltage := meant / 6.0;
+            mean3Voltage := mean3t / 3.0;
         end;
         sleep(300)
     end;
@@ -918,9 +918,9 @@ begin
             if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.1;
 
            i1 := 0;
-           if (spectreList.Values[IntToStr(trunc(curtarget*1000))]) = '' then
-                spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(CounterStep)
-                else spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
+           if (spectreList.Values[IntToStr(round(curtarget*1000))]) = '' then
+                spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(CounterStep)
+                else spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
