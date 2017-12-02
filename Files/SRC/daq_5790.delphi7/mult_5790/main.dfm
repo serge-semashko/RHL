@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 320
-  Top = 62
+  Left = 250
+  Top = 85
   Width = 1528
   Height = 915
   Caption = 'Read/Write'
@@ -29,7 +29,6 @@ object MainForm: TMainForm
       Width = 1510
       Height = 25
       Align = alClient
-      Alignment = taCenter
       AutoSize = False
       BorderStyle = sbsSingle
       Caption = '###'
@@ -199,7 +198,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1510
       Height = 651
-      ActivePage = TabSheet4
+      ActivePage = TabSheet5
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -494,31 +493,12 @@ object MainForm: TMainForm
             Marks.Visible = False
             SeriesColor = clBlue
             Title = 'Full cpectre'
-            Pointer.HorizSize = 20
+            Pointer.HorizSize = 3
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 20
+            Pointer.VertSize = 3
             Pointer.Visible = True
-            XValues.DateTime = False
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-          end
-          object psreserv: TPointSeries
-            Marks.ArrowLength = 0
-            Marks.Visible = False
-            SeriesColor = clYellow
-            Pointer.HorizSize = 20
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 20
-            Pointer.Visible = False
             XValues.DateTime = False
             XValues.Name = 'X'
             XValues.Multiplier = 1.000000000000000000
@@ -565,7 +545,7 @@ object MainForm: TMainForm
           TabOrder = 0
           object pnl3: TPanel
             Left = 1
-            Top = 564
+            Top = 566
             Width = 655
             Height = 53
             Align = alBottom
@@ -711,7 +691,7 @@ object MainForm: TMainForm
               Left = 66
               Top = 17
               Width = 66
-              Height = 24
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 0
@@ -721,7 +701,7 @@ object MainForm: TMainForm
               Left = 135
               Top = 17
               Width = 66
-              Height = 24
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
@@ -731,7 +711,7 @@ object MainForm: TMainForm
               Left = 200
               Top = 17
               Width = 66
-              Height = 24
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -741,7 +721,7 @@ object MainForm: TMainForm
               Left = 267
               Top = 17
               Width = 65
-              Height = 24
+              Height = 26
               MaxValue = 60
               MinValue = 5
               TabOrder = 3
@@ -751,7 +731,7 @@ object MainForm: TMainForm
               Left = 334
               Top = 17
               Width = 66
-              Height = 24
+              Height = 26
               MaxValue = 100000
               MinValue = 100
               TabOrder = 4
@@ -816,7 +796,7 @@ object MainForm: TMainForm
             Left = 1
             Top = 1
             Width = 655
-            Height = 563
+            Height = 565
             Align = alClient
             DataSource = ds1
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -969,10 +949,10 @@ object MainForm: TMainForm
               TabOrder = 3
               object Label3: TLabel
                 Left = 202
-                Top = 11
-                Width = 90
+                Top = 14
+                Width = 176
                 Height = 16
-                Caption = 'Sweep number'
+                Caption = 'Sweep number (0 - untill stop) '
               end
               object Label4: TLabel
                 Left = 1
@@ -990,8 +970,8 @@ object MainForm: TMainForm
                 ParentFont = False
               end
               object SpeedButton1: TSpeedButton
-                Left = 545
-                Top = 88
+                Left = 544
+                Top = 91
                 Width = 23
                 Height = 22
                 Caption = '...'
@@ -1006,9 +986,9 @@ object MainForm: TMainForm
                 TabOrder = 0
               end
               object seSweepCount: TSpinEdit
-                Left = 202
-                Top = 32
-                Width = 65
+                Left = 381
+                Top = 11
+                Width = 77
                 Height = 26
                 MaxValue = 0
                 MinValue = 0
@@ -1017,9 +997,9 @@ object MainForm: TMainForm
               end
               object rgSweepMode: TRadioGroup
                 Left = 8
-                Top = 8
+                Top = 4
                 Width = 185
-                Height = 55
+                Height = 68
                 Caption = 'Sweep mode'
                 ItemIndex = 0
                 Items.Strings = (
@@ -1029,7 +1009,7 @@ object MainForm: TMainForm
               end
               object DataDir: TLabeledEdit
                 Left = 9
-                Top = 85
+                Top = 92
                 Width = 529
                 Height = 24
                 EditLabel.Width = 84
@@ -1038,13 +1018,14 @@ object MainForm: TMainForm
                 TabOrder = 3
               end
               object ConstVolt: TLabeledEdit
-                Left = 319
-                Top = 32
-                Width = 241
+                Left = 314
+                Top = 40
+                Width = 139
                 Height = 24
                 EditLabel.Width = 110
                 EditLabel.Height = 16
                 EditLabel.Caption = 'Contant voltage(V)'
+                LabelPosition = lpLeft
                 TabOrder = 4
               end
             end

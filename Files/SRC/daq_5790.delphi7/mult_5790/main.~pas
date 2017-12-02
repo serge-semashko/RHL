@@ -85,7 +85,6 @@ type
         memoRead: TMemo;
     btn2: TSpeedButton;
     CurU: TLabeledEdit;
-    psreserv: TPointSeries;
     psFullsp: TPointSeries;
     ConstVolt: TLabeledEdit;
     RangeGauge: TGauge;
@@ -201,7 +200,7 @@ var
     con2: TZConnection;
     zqry1: TZQuery;
     zexe: TZQuery;
-
+    SpectreList : tstringlist;
 implementation
 
 uses
@@ -263,7 +262,19 @@ begin
      exit;
    end;
 
-    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) * 20.98843441466855);
+//    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) * 20.98843441466855);
+    curControl := curControl + trunc((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+    setDPotential(curControl);
+end;
+function CorrectVoltageM(target: double): boolean;
+var
+    tarcontrol: int64;
+    startsetTime: double;
+begin
+   if (now - PrevMTime)*24*2600 >1 then begin
+     exit;
+   end;
+    curControl := curControl + trunc((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
     setDPotential(curControl);
 end;
 
@@ -352,12 +363,21 @@ begin
     std := sqrt(std / (len));
 
 end;
+//
+//  ## ##         ###          ## ##
+//  ##   ##      ## ##        ##   ##
+//  ##   ##     #######       ##   ##
+//  ##   ##    #########      ##   ##
+//  ##   ##   ##       ##     ##  ###
+//  ## ##    ##         ##     ## ###
+//                                  ##
 
 function DaqGetdata: boolean;
 var
     delta: real;
     wrtbuf, rdbuf: packed array[0..299] of char;
     rdstr: string;
+    dtc :double;
 begin
     curmtime := timegettime();
     writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
@@ -379,17 +399,20 @@ begin
                 cntval := 131313;
             end
             else begin
-                if cntval > $FFFF then begin
-                    cntval := 131313;
-                    DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
-                end else begin
-                   deltaCounterValue := cntval - lastCounterValue;
-                   if (LastCounterTime -now())*24*3600*1000 > 100
-                      then counter_per_sec := deltaCounterValue / ((LastCounterTime -now())*24*3600)
+                deltaCounterValue := cntval - lastCounterValue;
+                dtc := now;
+
+                dtc := (dtc - LastCounterTime )*24*3600*1000;
+                if  dtc > 100
+                      then counter_per_sec := deltaCounterValue* 1000 / dtc
                       else  counter_per_sec := 0;;
-;               end;
                 LastCounterValue := cntval;
                 LastCounterTime := now();
+                if cntval > $F00000 then begin
+                    LastCounterValue := 0;
+                    DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+                end
+
             end;
         end;
 
@@ -482,8 +505,11 @@ begin
             vdata[vindex + 1].data := dacval;
             inc(vIndex);
         end
-        else if counter_ready then
+
+        else if counter_ready then begin
             wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+            LastCounterValue := 0;
+        end;
 
     except
         on E: Exception do begin
@@ -507,7 +533,6 @@ var
 begin
     while not terminated do begin
         if (gpib_ready) then begin
-
             DaqGetData;
             inc(Daq_counter);
             for i := 0 to 4 do
@@ -608,7 +633,8 @@ var
         STDvOLTAGEseries.clear;
         Counterseries.clear;
         psFullsp.Clear;
-        psreserv.Clear;
+    spectrechart.RightAxis.Maximum := 100;
+    spectrechart.LeftAxis.Maximum := 100;
 
     end;
 
@@ -654,24 +680,25 @@ var
         WriteLog(DataDirName + IntToStr(Sweep) + '.txt', #10);
         WriteLog(DatadirName + IntToStr(Sweep) + '.txt', descmemo.Text);
         countPerVSeries.Clear;
-        psFullsp.Assign(psreserv);
-
-        with psFullsp do begin
-            Pointer.Brush.Color := clnavy;
-            Pointer.HorizSize := 3;
-            Pointer.InflateMargins := True;
-            Pointer.Pen.Visible := False;
-            Pointer.Style := psRectangle;
-            Pointer.VertSize := 3;
-            Pointer.Visible := True;
-        end;
         SweepStartTime := now;
     end;
 
     procedure FinishSweep;
     var
         tmpstr: string;
+        il1 : integer;
+        x, y : double;
+        s1 :string;
     begin
+        psFullsp.Clear;
+        for il1 := 0 to SpectreList. Count -1 do begin
+          x:=StrToInt(spectreList.Names[il1]) /1000.0;
+          s1 := spectreList.values[spectreList.Names[il1]];
+          y:=StrToInt(s1)  * 1.0;
+          if SpectreChart.LeftAxis.Maximum < y*1.1 then SpectreChart.LeftAxis.Maximum := y*1.1; 
+          psFullsp.AddXY(x,y);
+
+        end;
         tmpstr := 'Current date: ' + FormatDateTime('DD.MM.YYYY', now) + ', Begin time:' + FormatDateTime('HH.NN.SS', SweepStartTime) + ', End time:' + FormatDateTime('HH.NN.SS', now);
         WriteLog(DatadirName + IntToStr(OldSweepNumber) + '.txt', tmpstr);
     end;
@@ -744,7 +771,9 @@ var
 var
 delta :double;
 begin
-
+    spectreList.Clear;
+    ClearSeries();
+    Application.ProcessMessages;
     daq_mode := rgSweepmode.ItemIndex;
     if (Startcycle.Caption = 'Stop measurement') then begin
         Startcycle.Caption := 'Finishing ....';
@@ -767,19 +796,20 @@ begin
     sweep_Duration := 0;
     while not (zqry1.Eof) do begin
         sweep_Duration := sweep_Duration + (zqry1.FieldByName('dead_time').AsInteger+zqry1.FieldByName('exposition').AsInteger)*
-         (1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger );
+         (1+
+         (-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger
+         );
         headerstr := headerstr + format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d, Channels= %d  ',
              [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger, zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 1000.0,
               zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger,
               1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger ]) + #10;
         zqry1.Next;
     end;
-    Sweep_duration := Sweep_duration /(24*3600); 
+    Sweep_duration := Sweep_duration /(24*3600);
     headerstr := headerstr +'Constant voltage(V)= '+ConstVolt.Text+#10;
     WriteLog(DataFileName + '.txt', headerstr + #10);
     WriteLog(DataFileName + '.txt', descmemo.Text);
 
-    ClearSeries();
 
     zqry1.MoveBy(-zqry1.RecNo);
     setrangeparams;
@@ -830,9 +860,14 @@ begin
 
     BeginSweep;
 //######################################################################################
-//#########################################            #################################
-//######################################### main cycle #################################
-//#########################################            #################################
+//
+//  ##     ##     ###       ######  ###     ##
+//  ###   ###    ## ##        ##    ####    ##
+//  #### ####   #######       ##    #####   ##
+//  ## ### ##  #########      ##    ### ##  ##
+//  ##     ## ##       ##     ##    ###  #####
+//  ##     ####         ##  #####   ###    ###
+//
 //######################################################################################
     Startcycle.Font.Color := clRed;
     Startcycle.Enabled := true;
@@ -848,9 +883,9 @@ begin
             ch1VoltSeries.Delete(0);
         while ch1MeanSeries.Count > 6230 do
             ch1MeanSeries.Delete(0);
-        while MEANvOLTAGEseries.Count > 15300 do
+        while MEANvOLTAGEseries.Count > 65300 do
             MEANvOLTAGEseries.Delete(0);
-        while STDvOLTAGEseries.Count > 15300 do
+        while STDvOLTAGEseries.Count > 65300 do
             STDvOLTAGEseries.Delete(0);
         while Counterseries.Count > 5300 do
             Counterseries.Delete(0);
@@ -876,25 +911,12 @@ begin
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(curtarget, CounterStep);
-            if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.05;
-            i1 := 0;
-            while i1 < psreserv.Count do begin
-             delta := abs(psreserv.XValue[i1] - mean);
-             if abs(psreserv.XValue[i1] - curtarget) < step_value /2000.0 then begin
-               psreserv.yValue[i1] := psreserv.yValue[i1] + CounterStep;
-               if  spectrechart.leftAxis.Maximum < psreserv.yValue[i1]*1.05 then spectrechart.leftAxis.Maximum := psreserv.yValue[i1]*1.05;
+            if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.1;
 
-               writeTimelog(format('add spectre %d curtarget=%.1f x=%.1f  Cnt=%d Y=%.1f ',[i1, curtarget, psreserv.xValue[i1],CounterStep, psreserv.yValue[i1]] )+#10);
-               break;
-             end;
-             inc(i1);
-
-            end;
-            if i1 >=  psreserv.Count
-               then begin
-                psreserv.AddXy(curTarget, CounterStep);
-                writeTimelog(format('create spectre curtarget=%.1f Cnt=%d' ,[curtarget, CounterStep] )+#10);
-            end;
+           i1 := 0;
+           if (spectreList.Values[IntToStr(trunc(curtarget*1000))]) = '' then
+                spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(CounterStep)
+                else spectreList.Values[IntToStr(trunc(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
@@ -933,11 +955,11 @@ begin
             end
             else begin
                 writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                while (now - start_dead) * 24 * 3600 < dead_Value-2 do begin
                     writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
                     setVoltage(curTarget);
                 end;
-                while (now - start_dead) * 24 * 3600 < dead_Value do begin
+                while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
                     writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
 
                     delay(300);
@@ -1177,17 +1199,29 @@ begin
      else begin
         if GettingData then begin
           StatusBar1.Panels[3].Text:='';
-          SweepLBL.Caption := 'Sweep : '+IntToStr(Sweep)+' ( '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'% )';
+          SweepLBL.Caption := 'Sweep :'+IntToStr(Sweep)+' '+sweepmodes[dstep + 3]+' ( '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'% '+
+          format(' %.2dh:%.2dm:%.2ds',[Trunc(Sweep_duration*24), Trunc(Sweep_duration*24*60) mod (60), Trunc(Sweep_duration*24*60*60)  mod 60])+' )';
+
           dt := Trunc(Sweep_duration*24);
           dt := Trunc(Sweep_duration*24*60);
           dt := Trunc(Sweep_duration*24*60) mod (24*60);
           dt := Trunc(Sweep_duration*24*60*60) mod (24*60*60);
 
-          TimeInfolbl.Caption := 'Sweep '+IntToStr(Sweep)+
-          '   Length: '+format(' %.2d:%.2d:%.2d',[Trunc(Sweep_duration*24), Trunc(Sweep_duration*24*60) mod (24*60), Trunc(Sweep_duration*24*60*60)  mod 60])+
-          '       Start: '+FormatDateTime('DD/MM/YYYY HH:NN:SS',SweepStartTime)+
-          '   Estimate end: '+formatdatetime('DD/MM/YYYY HH:NN:SS',SweepStartTime+Sweep_duration)+
-          '   Progress: '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'%' ;
+//          TimeInfolbl.Caption := 'Sweep '+IntToStr(Sweep)+
+//          '   Length: '+format(' %.2d:%.2d:%.2d',[Trunc(Sweep_duration*24), Trunc(Sweep_duration*24*60) mod (24*60), Trunc(Sweep_duration*24*60*60)  mod 60])+
+//          '       Start: '+FormatDateTime('DD/MM/YYYY HH:NN:SS',SweepStartTime)+
+//          '   Estimate end: '+formatdatetime('DD/MM/YYYY HH:NN:SS',SweepStartTime+Sweep_duration)+
+//          '   Progress: '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'%' ;
+          TimeInfolbl.Caption := 'Start: '+FormatDateTime('DD/MM/YYYY HH:NN:SS',MeasuringStartTime)+ '   Sweep number:' ;
+          if seSweepCount.Value = 0
+             then begin
+                 TimeInfolbl.Caption :=TimeInfolbl.Caption+ ' unlimited,';
+             end else begin
+                TimeInfolbl.Caption :=TimeInfolbl.Caption+ seSweepCount.Text+
+             ',   Length:'+format(' %.2d:%.2d:%.2d',[Trunc(Sweep_duration*seSweepCount.value*24), Trunc(Sweep_duration*seSweepCount.value*24*60) mod (60), Trunc(Sweep_duration*seSweepCount.value*24*60*60)  mod 60]);
+              TimeInfolbl.Caption :=TimeInfolbl.Caption+',   Estimate end: '+formatdatetime('DD/MM/YYYY HH:NN:SS',SweepStartTime+Sweep_duration*seSweepCount.Value)+
+             ',   Progress: '+IntToStr(trunc((now-MeasuringStartTime)*100/(sweep_duration*seSweepCount.Value)))+'%' ;
+           end;  
 
           Rangelbl.Caption := format('Range %dv - %dv',[border_low,Border_High]);
           steplbl.Caption := format('Declared V. %.1fv',[curtarget]);
@@ -1204,7 +1238,7 @@ begin
         statusbar1.Panels[1].Text := '';
         statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
         curU.Text := format('%8.3f', [ curVoltage*10000]);
-        CurCount.Text := format('%.1f', [ Counter_per_sec]);
+        CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
 
@@ -1362,6 +1396,8 @@ if trim( dbgrd1.Fields[3].AsString) <> '' then
 if trim( dbgrd1.Fields[4].AsString) <> '' then
  stepspn.Text := dbgrd1.Fields[4].AsString;
 end;
+Initialization
+   SpectreList := tstringlist.Create;
 
 end.
 
