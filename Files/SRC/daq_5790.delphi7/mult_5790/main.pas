@@ -93,6 +93,8 @@ type
     Rangelbl: TStaticText;
     StepLBL: TStaticText;
     StepGauge: TGauge;
+    TimeInfolbl: TStaticText;
+    CurCount: TLabeledEdit;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -131,6 +133,7 @@ type
     Varray = array of vrecord;
 
 var
+    Counter_per_sec : double = 0;
     newTarget, curTarget: double;
     SweepStartTime: double;
     MeasuringStartTime: Double;
@@ -379,8 +382,12 @@ begin
                 if cntval > $FFFF then begin
                     cntval := 131313;
                     DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
-                    deltaCounterValue := cntval - lastCounterValue;
-                end;
+                end else begin
+                   deltaCounterValue := cntval - lastCounterValue;
+                   if (LastCounterTime -now())*24*3600*1000 > 100
+                      then counter_per_sec := deltaCounterValue / ((LastCounterTime -now())*24*3600)
+                      else  counter_per_sec := 0;;
+;               end;
                 LastCounterValue := cntval;
                 LastCounterTime := now();
             end;
@@ -1170,9 +1177,20 @@ begin
      else begin
         if GettingData then begin
           StatusBar1.Panels[3].Text:='';
-          SweepLBL.Caption := 'Sweep : '+IntToStr(Sweep)+' ( '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'% est. time= '+formatdatetime('HH:NN:SS',Sweep_duration)+' )';
-          Rangelbl.Caption := format('Range %d - %d',[border_low,Border_High]);
-          steplbl.Caption := format('Step %.1f',[curtarget]);
+          SweepLBL.Caption := 'Sweep : '+IntToStr(Sweep)+' ( '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'% )';
+          dt := Trunc(Sweep_duration*24);
+          dt := Trunc(Sweep_duration*24*60);
+          dt := Trunc(Sweep_duration*24*60) mod (24*60);
+          dt := Trunc(Sweep_duration*24*60*60) mod (24*60*60);
+
+          TimeInfolbl.Caption := 'Sweep '+IntToStr(Sweep)+
+          '   Length: '+format(' %.2d:%.2d:%.2d',[Trunc(Sweep_duration*24), Trunc(Sweep_duration*24*60) mod (24*60), Trunc(Sweep_duration*24*60*60)  mod 60])+
+          '       Start: '+FormatDateTime('DD/MM/YYYY HH:NN:SS',SweepStartTime)+
+          '   Estimate end: '+formatdatetime('DD/MM/YYYY HH:NN:SS',SweepStartTime+Sweep_duration)+
+          '   Progress: '+IntToStr(trunc((now-SweepStartTime)*100/sweep_duration))+'%' ;
+
+          Rangelbl.Caption := format('Range %dv - %dv',[border_low,Border_High]);
+          steplbl.Caption := format('Declared V. %.1fv',[curtarget]);
           dv := curtarget-Border_low;
           wv := Border_High-Border_low;
            RangeGauge.Progress := trunc(dv*1000/(wv));
@@ -1186,6 +1204,7 @@ begin
         statusbar1.Panels[1].Text := '';
         statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
         curU.Text := format('%8.3f', [ curVoltage*10000]);
+        CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
 
