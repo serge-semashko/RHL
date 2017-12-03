@@ -72,18 +72,18 @@ object MainForm: TMainForm
         OnClick = StartCycleClick
       end
       object RangeGauge: TGauge
-        Left = 977
+        Left = 956
         Top = 56
-        Width = 239
+        Width = 264
         Height = 21
         ForeColor = clBlue
         MaxValue = 1000
         Progress = 0
       end
       object StepGauge: TGauge
-        Left = 977
+        Left = 956
         Top = 105
-        Width = 239
+        Width = 264
         Height = 21
         ForeColor = clBlue
         MaxValue = 1000
@@ -128,9 +128,9 @@ object MainForm: TMainForm
         TabOrder = 1
       end
       object SweepLBL: TStaticText
-        Left = 977
+        Left = 956
         Top = 3
-        Width = 239
+        Width = 264
         Height = 23
         Alignment = taCenter
         AutoSize = False
@@ -139,9 +139,9 @@ object MainForm: TMainForm
         TabOrder = 2
       end
       object Rangelbl: TStaticText
-        Left = 977
+        Left = 956
         Top = 30
-        Width = 239
+        Width = 264
         Height = 23
         Alignment = taCenter
         AutoSize = False
@@ -150,9 +150,9 @@ object MainForm: TMainForm
         TabOrder = 3
       end
       object StepLBL: TStaticText
-        Left = 977
+        Left = 956
         Top = 80
-        Width = 239
+        Width = 264
         Height = 21
         Alignment = taCenter
         AutoSize = False

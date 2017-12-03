@@ -219,7 +219,7 @@ end;
 function V_Convert(v_cur: double): dword;
 begin
 //     result:=trunc(0.7090*10000*20.98843441466855);
-    result:=trunc(v_cur*10000*20.98843441466855);
+    result:=round(v_cur*10000*20.98843441466855);
 //    result := trunc(1048576.0 * (v_cur) / 5);
 end;
 
@@ -263,7 +263,7 @@ begin
    end;
 
 //    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) * 20.98843441466855);
-    curControl := curControl + trunc((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
     setDPotential(curControl);
 end;
 function CorrectVoltageM(target: double): boolean;
@@ -274,7 +274,7 @@ begin
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
-    curControl := curControl + trunc((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
     setDPotential(curControl);
 end;
 
@@ -528,7 +528,7 @@ end;
 procedure TDAQThread.execute;
 var
     i: integer;
-    Curtimel, PrevTimel: double;
+    meant, mean3t,  Curtimel, PrevTimel: double;
     CurMtimel, PrevMTimel: dword;
 begin
     while not terminated do begin
@@ -541,15 +541,15 @@ begin
                 else
                     LastVoltage[i] := LastVoltage[i + 1];
             LastVoltage[5] := curVoltage;
-            meanVoltage := LastVoltage[0];
-            mean3Voltage := LastVoltage[3];
+            meant := LastVoltage[0];
+            mean3t := LastVoltage[3];
             for i := 1 to 5 do begin
-                meanVoltage := meanVoltage + LastVoltage[i];
+                meant := meant + LastVoltage[i];
                 if i > 3 then
-                    mean3Voltage := mean3Voltage + LastVoltage[i];
+                    mean3t := mean3t + LastVoltage[i];
             end;
-            meanVoltage := meanVoltage / 6.0;
-            mean3Voltage := mean3Voltage / 3.0;
+            meanVoltage := meant / 6.0;
+            mean3Voltage := mean3t / 3.0;
         end;
         sleep(300)
     end;
@@ -615,6 +615,9 @@ var
     start_dead: double;
     tmpstr: string;
 var
+   cur_target_str : string;
+    old_counter, c1,c2,c3 : integer;
+    old_str : string;
     dt: double;
     prt: tthreadpriority;
     il1, il2, il3: integer;
@@ -918,9 +921,13 @@ begin
             if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.1;
 
            i1 := 0;
-           if (spectreList.Values[IntToStr(round(curtarget*1000))]) = '' then
-                spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(CounterStep)
-                else spectreList.Values[IntToStr(round(curtarget*1000))] := IntToStr(StrToInt(spectreList.Values[IntToStr(trunc(curtarget*1000))])+CounterStep);
+           cur_target_str := IntToStr(round(curtarget*1000));
+           if (spectreList.Values[cur_target_str]) = '' then
+                spectreList.Values[cur_target_str] := IntToStr(CounterStep)
+            else begin
+                Old_Counter := StrToInt(spectreList.Values[cur_target_str]);
+                spectreList.Values[cur_target_str] :=IntToStr(Old_counter +CounterStep);
+             end;
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
@@ -975,7 +982,7 @@ begin
             correctionTime := now;
             start_step := now;
         end
-        else if (now - CorrectionTime) * 24 * 3600 > 5 then begin
+        else if (now - CorrectionTime) * 24 * 3600 > 2 then begin
             CorrectVoltage(curTarget);
             correctionTime := now;
         end;
@@ -1230,7 +1237,11 @@ begin
           Rangelbl.Caption := format('Range %dv - %dv',[border_low,Border_High]);
           steplbl.Caption := format('Declared V. %.1fv',[curtarget]);
           dv := curtarget-Border_low;
-          wv := Border_High-Border_low;
+          if dstep<0
+             then dv := abs(curtarget-Border_high);
+             else dv := abs(curtarget-Border_low);
+
+          wv := abs(Border_High-Border_low);
            RangeGauge.Progress := trunc(dv*1000/(wv));
           dt := (now - start_step)*24*3600;
           if    (now - start_step)*24*3600>1
