@@ -36,8 +36,6 @@ type
         PageControl2: TPageControl;
         TabSheet4: TTabSheet;
         TabSheet5: TTabSheet;
-    SpectreChart: TChart;
-        CountPerVSeries: TPointSeries;
         Timer1: TTimer;
         StatusBar1: TStatusBar;
         ts1: TTabSheet;
@@ -85,7 +83,6 @@ type
         memoRead: TMemo;
     btn2: TSpeedButton;
     CurU: TLabeledEdit;
-    psFullsp: TPointSeries;
     ConstVolt: TLabeledEdit;
     RangeGauge: TGauge;
     SweepLBL: TStaticText;
@@ -94,6 +91,9 @@ type
     StepGauge: TGauge;
     TimeInfolbl: TStaticText;
     CurCount: TLabeledEdit;
+    SpectrumChart: TChart;
+    CountPerVSeries: TLineSeries;
+    psFullsp: TLineSeries;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -116,6 +116,9 @@ type
     private
     { Private declarations }
     public
+        function SetRegionBorder(target: double): boolean;
+        function SetVoltage(target: double): boolean;
+        function CorrectVoltage(target: double): boolean;
         function SetRVoltage(target: double): boolean;
         function delay(ms: integer): integer;
         function InitCounterAndGPIB: integer;
@@ -253,7 +256,7 @@ begin
     http := nil;
 end;
 
-function CorrectVoltage(target: double): boolean;
+function tmainform.CorrectVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
@@ -278,7 +281,7 @@ begin
     setDPotential(curControl);
 end;
 
-function SetVoltage(target: double): boolean;
+function tmainform.SetVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
@@ -299,7 +302,7 @@ begin
         result := true;
 end;
 
-function SetRegionBorder(target: double): boolean;
+function tmainform.SetRegionBorder(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
@@ -532,6 +535,7 @@ var
     CurMtimel, PrevMTimel: dword;
 begin
     while not terminated do begin
+     try
         if (gpib_ready) then begin
             DaqGetData;
             inc(Daq_counter);
@@ -551,6 +555,11 @@ begin
             meanVoltage := meant / 6.0;
             mean3Voltage := mean3t / 3.0;
         end;
+       except
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ GET DATA');
+            writetimelog( 'Exception on DAQ GET DATA');
+
+       end;
         sleep(300)
     end;
     mainform.Caption := 'terminated';
@@ -636,14 +645,14 @@ var
         STDvOLTAGEseries.clear;
         Counterseries.clear;
         psFullsp.Clear;
-    spectrechart.RightAxis.Maximum := 100;
-    spectrechart.LeftAxis.Maximum := 100;
+    spectrumchart.RightAxis.Maximum := 100;
+    spectrumchart.LeftAxis.Maximum := 100;
 
     end;
 
     procedure showerrorRange;
     begin
-        showmessage('Program error. mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo));
+        showmessage('Program error. mode: ' + IntToStr(daq_mode) + ' Direction:'+ IntToStr(dstep) + ' target: ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno: ' + intToStr(zqry1.RecNo));
         halt(1);
 
     end;
@@ -698,7 +707,7 @@ var
           x:=StrToInt(spectreList.Names[il1]) /1000.0;
           s1 := spectreList.values[spectreList.Names[il1]];
           y:=StrToInt(s1)  * 1.0;
-          if SpectreChart.LeftAxis.Maximum < y*1.1 then SpectreChart.LeftAxis.Maximum := y*1.1; 
+          if spectrumChart.LeftAxis.Maximum < y*1.1 then spectrumChart.LeftAxis.Maximum := y*1.1; 
           psFullsp.AddXY(x,y);
 
         end;
@@ -918,7 +927,7 @@ begin
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(curtarget, CounterStep);
-            if  spectrechart.RightAxis.Maximum < CounterStep*1.05 then spectrechart.RightAxis.Maximum := CounterStep*1.1;
+            if  spectrumchart.RightAxis.Maximum < CounterStep*1.05 then spectrumchart.RightAxis.Maximum := CounterStep*1.1;
 
            i1 := 0;
            cur_target_str := IntToStr(round(curtarget*1000));
@@ -1004,7 +1013,7 @@ end;
 
 procedure TMainForm.FormShow(Sender: TObject);
 begin
- Steplbl.Caption := 'Step';
+ Steplbl.Caption := 'Declared V.';
  Rangelbl.Caption := 'Range';
  StepGauge.Progress :=0;
  RangeGauge.Progress := 0;
@@ -1232,13 +1241,13 @@ begin
              ',   Length:'+format(' %.2d:%.2d:%.2d',[Trunc(Sweep_duration*seSweepCount.value*24), Trunc(Sweep_duration*seSweepCount.value*24*60) mod (60), Trunc(Sweep_duration*seSweepCount.value*24*60*60)  mod 60]);
               TimeInfolbl.Caption :=TimeInfolbl.Caption+',   Estimate end: '+formatdatetime('DD/MM/YYYY HH:NN:SS',SweepStartTime+Sweep_duration*seSweepCount.Value)+
              ',   Progress: '+IntToStr(trunc((now-MeasuringStartTime)*100/(sweep_duration*seSweepCount.Value)))+'%' ;
-           end;  
+           end;
 
           Rangelbl.Caption := format('Range %dv - %dv',[border_low,Border_High]);
-          steplbl.Caption := format('Declared V. %.1fv',[curtarget]);
+          steplbl.Caption := format('Declared V.: %.1fv Step:%d',[curtarget,step_value]);
           dv := curtarget-Border_low;
           if dstep<0
-             then dv := abs(curtarget-Border_high);
+             then dv := abs(curtarget-Border_high)
              else dv := abs(curtarget-Border_low);
 
           wv := abs(Border_High-Border_low);

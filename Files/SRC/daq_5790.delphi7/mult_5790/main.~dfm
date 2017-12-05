@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 250
-  Top = 85
+  Left = 238
+  Top = 125
   Width = 1528
   Height = 915
   Caption = 'Read/Write'
@@ -99,7 +99,7 @@ object MainForm: TMainForm
         Enabled = False
         Font.Charset = RUSSIAN_CHARSET
         Font.Color = clBlack
-        Font.Height = -15
+        Font.Height = -16
         Font.Name = 'Courier New'
         Font.Style = [fsBold]
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -457,47 +457,38 @@ object MainForm: TMainForm
       object TabSheet5: TTabSheet
         Caption = #1057#1087#1077#1089#1082#1090#1088#1099
         ImageIndex = 1
-        object SpectreChart: TChart
+        object SpectrumChart: TChart
           Left = 0
           Top = 0
           Width = 1502
           Height = 620
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
-          MarginLeft = 5
           Title.Text.Strings = (
-            #1057#1087#1077#1082#1090#1088)
-          BottomAxis.AxisValuesFormat = '#.#### ##0'
-          BottomAxis.StartPosition = 1.000000000000000000
-          BottomAxis.EndPosition = 99.000000000000000000
-          BottomAxis.Title.Caption = 'Voltage'
+            'TChart')
           LeftAxis.Automatic = False
+          LeftAxis.AutomaticMaximum = False
           LeftAxis.AutomaticMinimum = False
-          LeftAxis.AxisValuesFormat = '#'
-          LeftAxis.StartPosition = 1.000000000000000000
-          LeftAxis.EndPosition = 99.000000000000000000
+          LeftAxis.Maximum = 100.000000000000000000
           Legend.Visible = False
           RightAxis.Automatic = False
           RightAxis.AutomaticMaximum = False
           RightAxis.AutomaticMinimum = False
-          RightAxis.AxisValuesFormat = '#'
-          RightAxis.Maximum = 1.000000000000000000
-          RightAxis.StartPosition = 1.000000000000000000
-          RightAxis.EndPosition = 99.000000000000000000
+          RightAxis.Maximum = 100.000000000000000000
           View3D = False
           Align = alClient
-          Color = clSilver
+          Color = clGray
           TabOrder = 0
-          object psFullsp: TPointSeries
-            Marks.ArrowLength = 0
+          object CountPerVSeries: TLineSeries
+            Marks.ArrowLength = 8
             Marks.Visible = False
-            SeriesColor = clBlue
-            Title = 'Full cpectre'
-            Pointer.HorizSize = 3
+            SeriesColor = clRed
+            VertAxis = aRightAxis
+            Pointer.HorizSize = 2
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 3
+            Pointer.VertSize = 2
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'
@@ -508,18 +499,15 @@ object MainForm: TMainForm
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
           end
-          object CountperVSeries: TPointSeries
-            Marks.ArrowLength = 0
+          object psFullsp: TLineSeries
+            Marks.ArrowLength = 8
             Marks.Visible = False
-            SeriesColor = clRed
-            Title = 'Sweep spectre'
-            VertAxis = aRightAxis
-            Pointer.Brush.Color = clRed
-            Pointer.HorizSize = 2
+            SeriesColor = clBlue
+            Pointer.HorizSize = 3
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 2
+            Pointer.VertSize = 3
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'
