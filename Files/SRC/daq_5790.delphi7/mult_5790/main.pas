@@ -93,8 +93,9 @@ type
     CurCount: TLabeledEdit;
     SpectrumChart: TChart;
     CountPerVSeries: TPointSeries;
-    psFullsp: TLineSeries;
-    SelectedPoint: TStaticText;
+    psFullsp: TPointSeries;
+    SelPointCur: TStaticText;
+    SelPointSum: TStaticText;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -119,6 +120,8 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure CountPerVSeriesClickPointer(Sender: TCustomSeries;
       ValueIndex, X, Y: Integer);
+    procedure psFullspClickPointer(Sender: TCustomSeries; ValueIndex, X,
+      Y: Integer);
     private
     { Private declarations }
     public
@@ -1210,8 +1213,8 @@ begin
 
     curControl := v_convert(meanVoltage);
     oldControl := CurControl;
-    bottomspn.Value := trunc(meanVoltage * 10000);
-    topspn.Value := trunc(meanVoltage * 10000);
+//    bottomspn.Value := trunc(meanVoltage * 10000);
+//    topspn.Value := trunc(meanVoltage * 10000);
     StartCycle.Enabled := true;
 
 //***********finished configure ******************
@@ -1437,16 +1440,22 @@ procedure TMainForm.SpectrumChartClickSeries(Sender: TCustomChart;
   Series: TChartSeries; ValueIndex: Integer; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
-   selectedPoint.Caption := 'V: '+series.XValueToText(series.XValues.Value[ValueIndex])+'v  Counter: '+
-   series.YValueToText(series.YValues.Value[ValueIndex]);
-   SpectrumChart.Title.Text[0] := 'Spectrum.     Selected: '+SelectedPoint.Caption;
+//   SpectrumChart.Title.Text[0] := 'Spectrum.     Selected: '+SelectedPoint.Caption;
 end;
 
 procedure TMainForm.CountPerVSeriesClickPointer(Sender: TCustomSeries;
   ValueIndex, X, Y: Integer);
 begin
-//   selectedPoint.Caption := 'V: '+sender.XValueToText(sender.XValues.Value[ValueIndex])+'v  Counter: '+
-//   sender.YValueToText(sender.YValues.Value[ValueIndex]);
+   selPointCur.Caption := 'V: '+CountPerVseries.XValueToText(CountPerVseries.XValues.Value[ValueIndex])+'v  Counter: '+
+   CountPerVseries.YValueToText(CountPerVseries.YValues.Value[ValueIndex]);
+
+end;
+
+procedure TMainForm.psFullspClickPointer(Sender: TCustomSeries; ValueIndex,
+  X, Y: Integer);
+begin
+   selPointSum.Caption := 'V: '+psFullsp.XValueToText(psFullsp.XValues.Value[ValueIndex])+'v  Counter: '+
+   psFullsp.YValueToText(psFullsp.YValues.Value[ValueIndex]);
 
 end;
 
