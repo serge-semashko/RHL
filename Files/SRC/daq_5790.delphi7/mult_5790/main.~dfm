@@ -464,8 +464,14 @@ object MainForm: TMainForm
           Height = 620
           BackWall.Brush.Color = clWhite
           BackWall.Brush.Style = bsClear
+          Title.Font.Charset = DEFAULT_CHARSET
+          Title.Font.Color = clBlue
+          Title.Font.Height = -16
+          Title.Font.Name = 'Arial'
+          Title.Font.Style = [fsBold]
           Title.Text.Strings = (
-            'TChart')
+            'Spectrum')
+          OnClickSeries = SpectrumChartClickSeries
           LeftAxis.Automatic = False
           LeftAxis.AutomaticMaximum = False
           LeftAxis.AutomaticMinimum = False
@@ -479,16 +485,31 @@ object MainForm: TMainForm
           Align = alClient
           Color = clGray
           TabOrder = 0
-          object CountPerVSeries: TLineSeries
+          object SelectedPoint: TStaticText
+            Left = 897
+            Top = 18
+            Width = 265
+            Height = 26
+            AutoSize = False
+            BorderStyle = sbsSingle
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -16
+            Font.Name = 'MS Sans Serif'
+            Font.Style = [fsBold]
+            ParentFont = False
+            TabOrder = 0
+          end
+          object CountPerVSeries: TPointSeries
             Marks.ArrowLength = 8
             Marks.Visible = False
             SeriesColor = clRed
             VertAxis = aRightAxis
-            Pointer.HorizSize = 2
+            Pointer.HorizSize = 3
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 2
+            Pointer.VertSize = 3
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'
@@ -498,16 +519,15 @@ object MainForm: TMainForm
             YValues.Name = 'Y'
             YValues.Multiplier = 1.000000000000000000
             YValues.Order = loNone
+            OnClickPointer = CountPerVSeriesClickPointer
           end
           object psFullsp: TLineSeries
             Marks.ArrowLength = 8
             Marks.Visible = False
             SeriesColor = clBlue
-            Pointer.HorizSize = 3
             Pointer.InflateMargins = True
             Pointer.Pen.Visible = False
             Pointer.Style = psRectangle
-            Pointer.VertSize = 3
             Pointer.Visible = True
             XValues.DateTime = False
             XValues.Name = 'X'

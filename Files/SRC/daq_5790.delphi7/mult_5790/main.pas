@@ -92,8 +92,9 @@ type
     TimeInfolbl: TStaticText;
     CurCount: TLabeledEdit;
     SpectrumChart: TChart;
-    CountPerVSeries: TLineSeries;
+    CountPerVSeries: TPointSeries;
     psFullsp: TLineSeries;
+    SelectedPoint: TStaticText;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -113,6 +114,11 @@ type
         procedure SpeedButton1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
     procedure dbgrd1CellClick(Column: TColumn);
+    procedure SpectrumChartClickSeries(Sender: TCustomChart;
+      Series: TChartSeries; ValueIndex: Integer; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure CountPerVSeriesClickPointer(Sender: TCustomSeries;
+      ValueIndex, X, Y: Integer);
     private
     { Private declarations }
     public
@@ -789,6 +795,7 @@ begin
  end;
     spectreList.Clear;
     ClearSeries();
+
     Application.ProcessMessages;
     daq_mode := rgSweepmode.ItemIndex;
     if (Startcycle.Caption = 'Stop measurement') then begin
@@ -829,6 +836,7 @@ begin
 
     zqry1.MoveBy(-zqry1.RecNo);
     setrangeparams;
+
     if not SetRegionBorder(border_low) then begin
         showmessage('Ќе удаетс€ установить начальный уровень = ' + IntToStr(border_low));
         Startcycle.Enabled := true;
@@ -867,14 +875,19 @@ begin
     CorrectionTime := now;
     curTarget := Border_low;
     Startcycle.Caption := 'Stop measurement';
-    TabSheet1.SetFocus;
-    PageControl2.ActivePageIndex := 0;
+
 
     SetEnablingControl;
     MeasuringStartTime := Now;
     start_step := now;
 
     BeginSweep;
+    countPerVSeries.AddXy(Border_low-0.1, 0);
+    countPerVSeries.AddXy(Border_High+0.1, 0);
+    TabSheet1.SetFocus;
+    PageControl2.ActivePageIndex := 1;
+    for i1 := 1 to 10000 do application.ProcessMessages;
+
 //######################################################################################
 //
 //  ##     ##     ###       ######  ###     ##
@@ -1420,6 +1433,23 @@ if trim( dbgrd1.Fields[3].AsString) <> '' then
 if trim( dbgrd1.Fields[4].AsString) <> '' then
  stepspn.Text := dbgrd1.Fields[4].AsString;
 end;
+procedure TMainForm.SpectrumChartClickSeries(Sender: TCustomChart;
+  Series: TChartSeries; ValueIndex: Integer; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+   selectedPoint.Caption := 'V: '+series.XValueToText(series.XValues.Value[ValueIndex])+'v  Counter: '+
+   series.YValueToText(series.YValues.Value[ValueIndex]);
+   SpectrumChart.Title.Text[0] := 'Spectrum.     Selected: '+SelectedPoint.Caption;
+end;
+
+procedure TMainForm.CountPerVSeriesClickPointer(Sender: TCustomSeries;
+  ValueIndex, X, Y: Integer);
+begin
+//   selectedPoint.Caption := 'V: '+sender.XValueToText(sender.XValues.Value[ValueIndex])+'v  Counter: '+
+//   sender.YValueToText(sender.YValues.Value[ValueIndex]);
+
+end;
+
 Initialization
    SpectreList := tstringlist.Create;
 
