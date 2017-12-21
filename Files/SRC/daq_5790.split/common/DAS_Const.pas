@@ -362,6 +362,10 @@ Procedure WriteLog(Logname,LogData:String);
 var
   ff:TFileStream;
 begin
+if (length(LogData) = 0) then begin
+ ff := nil;
+ exit;
+end;
   try
     If FileExists(LogName)
        then ff := TFileStream.create(LogName,fmOpenWrite or  fmShareDenyNone)
@@ -411,7 +415,6 @@ var
   log1:string;
   tname :string;
 begin
-exit;
   try
     tname:='Protocol '+formatdatetime('yyyy-mm-dd',now)+'.dat';
     If FileExists(tName)

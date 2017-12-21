@@ -198,7 +198,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1510
       Height = 651
-      ActivePage = ts1
+      ActivePage = TabSheet4
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -209,356 +209,384 @@ object MainForm: TMainForm
       TabOrder = 0
       object TabSheet4: TTabSheet
         Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080
-        object Chart1: TChart
-          Left = 0
+        object Splitter2: TSplitter
+          Left = 700
           Top = 0
-          Width = 1502
-          Height = 328
-          BackWall.Brush.Color = clWhite
-          BackWall.Brush.Style = bsClear
-          MarginBottom = 0
-          MarginLeft = 0
-          MarginRight = 0
-          MarginTop = 0
-          Title.Font.Charset = DEFAULT_CHARSET
-          Title.Font.Color = clBlue
-          Title.Font.Height = -19
-          Title.Font.Name = 'Arial'
-          Title.Font.Style = []
-          Title.Text.Strings = (
-            'Voltage')
-          BottomAxis.DateTimeFormat = 'HH:MM:SS'
-          BottomAxis.LabelsAngle = 360
-          BottomAxis.LabelsFont.Charset = DEFAULT_CHARSET
-          BottomAxis.LabelsFont.Color = clBlack
-          BottomAxis.LabelsFont.Height = -16
-          BottomAxis.LabelsFont.Name = 'Arial'
-          BottomAxis.LabelsFont.Style = []
-          BottomAxis.LabelsSize = 18
-          BottomAxis.RoundFirstLabel = False
-          BottomAxis.TickInnerLength = 8
-          BottomAxis.TickLength = 7
-          BottomAxis.TicksInner.Width = 2
-          BottomAxis.Title.Caption = 'Date time'
-          BottomAxis.Title.Font.Charset = DEFAULT_CHARSET
-          BottomAxis.Title.Font.Color = clBlack
-          BottomAxis.Title.Font.Height = -16
-          BottomAxis.Title.Font.Name = 'Arial'
-          BottomAxis.Title.Font.Style = []
-          BottomAxis.TitleSize = 9
-          LeftAxis.AxisValuesFormat = '#0.#### ##0'
-          LeftAxis.LabelsFont.Charset = DEFAULT_CHARSET
-          LeftAxis.LabelsFont.Color = clBlack
-          LeftAxis.LabelsFont.Height = -16
-          LeftAxis.LabelsFont.Name = 'Arial'
-          LeftAxis.LabelsFont.Style = []
-          LeftAxis.Title.Caption = 'Voltage'
-          LeftAxis.Title.Font.Charset = DEFAULT_CHARSET
-          LeftAxis.Title.Font.Color = clBlack
-          LeftAxis.Title.Font.Height = -16
-          LeftAxis.Title.Font.Name = 'Arial'
-          LeftAxis.Title.Font.Style = [fsBold]
-          Legend.Alignment = laTop
-          RightAxis.AxisValuesFormat = '##.#### ##0'
-          RightAxis.LabelsFont.Charset = DEFAULT_CHARSET
-          RightAxis.LabelsFont.Color = clBlack
-          RightAxis.LabelsFont.Height = -15
-          RightAxis.LabelsFont.Name = 'Arial'
-          RightAxis.LabelsFont.Style = []
-          RightAxis.LabelStyle = talValue
-          RightAxis.Title.Caption = 'Standart deviation'
-          RightAxis.Title.Font.Charset = DEFAULT_CHARSET
-          RightAxis.Title.Font.Color = clBlack
-          RightAxis.Title.Font.Height = -16
-          RightAxis.Title.Font.Name = 'Arial'
-          RightAxis.Title.Font.Style = [fsBold]
-          View3D = False
-          Align = alTop
-          Color = clSilver
+          Width = 6
+          Height = 620
+        end
+        object Panel2: TPanel
+          Left = 706
+          Top = 0
+          Width = 796
+          Height = 620
+          Align = alClient
+          Caption = 'Panel2'
           TabOrder = 0
-          OnDblClick = Chart1DblClick
-          object ch1Voltseries: TLineSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clBlue
-            Title = 'Voltage'
-            Dark3D = False
-            Pointer.HorizSize = 2
-            Pointer.InflateMargins = False
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 2
-            Pointer.Visible = True
-            XValues.DateTime = True
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
+          object Chart1: TChart
+            Left = 1
+            Top = 1
+            Width = 794
+            Height = 328
+            BackWall.Brush.Color = clWhite
+            BackWall.Brush.Style = bsClear
+            MarginBottom = 0
+            MarginLeft = 0
+            MarginRight = 0
+            MarginTop = 0
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clBlue
+            Title.Font.Height = -19
+            Title.Font.Name = 'Arial'
+            Title.Font.Style = []
+            Title.Text.Strings = (
+              'Voltage')
+            BottomAxis.DateTimeFormat = 'HH:MM:SS'
+            BottomAxis.LabelsAngle = 360
+            BottomAxis.LabelsFont.Charset = DEFAULT_CHARSET
+            BottomAxis.LabelsFont.Color = clBlack
+            BottomAxis.LabelsFont.Height = -16
+            BottomAxis.LabelsFont.Name = 'Arial'
+            BottomAxis.LabelsFont.Style = []
+            BottomAxis.LabelsSize = 18
+            BottomAxis.RoundFirstLabel = False
+            BottomAxis.TickInnerLength = 8
+            BottomAxis.TickLength = 7
+            BottomAxis.TicksInner.Width = 2
+            BottomAxis.Title.Caption = 'Date time'
+            BottomAxis.Title.Font.Charset = DEFAULT_CHARSET
+            BottomAxis.Title.Font.Color = clBlack
+            BottomAxis.Title.Font.Height = -16
+            BottomAxis.Title.Font.Name = 'Arial'
+            BottomAxis.Title.Font.Style = []
+            BottomAxis.TitleSize = 9
+            LeftAxis.AxisValuesFormat = '#0.#### ##0'
+            LeftAxis.LabelsFont.Charset = DEFAULT_CHARSET
+            LeftAxis.LabelsFont.Color = clBlack
+            LeftAxis.LabelsFont.Height = -16
+            LeftAxis.LabelsFont.Name = 'Arial'
+            LeftAxis.LabelsFont.Style = []
+            LeftAxis.Title.Caption = 'Voltage'
+            LeftAxis.Title.Font.Charset = DEFAULT_CHARSET
+            LeftAxis.Title.Font.Color = clBlack
+            LeftAxis.Title.Font.Height = -16
+            LeftAxis.Title.Font.Name = 'Arial'
+            LeftAxis.Title.Font.Style = [fsBold]
+            Legend.Alignment = laTop
+            RightAxis.AxisValuesFormat = '##.#### ##0'
+            RightAxis.LabelsFont.Charset = DEFAULT_CHARSET
+            RightAxis.LabelsFont.Color = clBlack
+            RightAxis.LabelsFont.Height = -15
+            RightAxis.LabelsFont.Name = 'Arial'
+            RightAxis.LabelsFont.Style = []
+            RightAxis.LabelStyle = talValue
+            RightAxis.Title.Caption = 'Standart deviation'
+            RightAxis.Title.Font.Charset = DEFAULT_CHARSET
+            RightAxis.Title.Font.Color = clBlack
+            RightAxis.Title.Font.Height = -16
+            RightAxis.Title.Font.Name = 'Arial'
+            RightAxis.Title.Font.Style = [fsBold]
+            View3D = False
+            Align = alTop
+            Color = clSilver
+            TabOrder = 0
+            OnDblClick = Chart1DblClick
+            object ch1Voltseries: TLineSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clBlue
+              Title = 'Voltage'
+              Dark3D = False
+              Pointer.HorizSize = 2
+              Pointer.InflateMargins = False
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.VertSize = 2
+              Pointer.Visible = True
+              XValues.DateTime = True
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
+            object ch1StdSeries: TLineSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clRed
+              Title = 'Std'
+              ValueFormat = '#,##0.##########'
+              VertAxis = aRightAxis
+              Pointer.InflateMargins = True
+              Pointer.Style = psRectangle
+              Pointer.Visible = False
+              XValues.DateTime = True
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
+            object ch1MeanSeries: TLineSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clGreen
+              Title = 'mean'
+              Pointer.InflateMargins = True
+              Pointer.Style = psRectangle
+              Pointer.Visible = False
+              XValues.DateTime = True
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
           end
-          object ch1StdSeries: TLineSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clRed
-            Title = 'Std'
-            ValueFormat = '#,##0.##########'
-            VertAxis = aRightAxis
-            Pointer.InflateMargins = True
-            Pointer.Style = psRectangle
-            Pointer.Visible = False
-            XValues.DateTime = True
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-          end
-          object ch1MeanSeries: TLineSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clGreen
-            Title = 'mean'
-            Pointer.InflateMargins = True
-            Pointer.Style = psRectangle
-            Pointer.Visible = False
-            XValues.DateTime = True
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
+          object Chart2: TChart
+            Left = 1
+            Top = 329
+            Width = 794
+            Height = 290
+            BackWall.Brush.Color = clWhite
+            BackWall.Brush.Style = bsClear
+            MarginBottom = 0
+            MarginLeft = 0
+            MarginRight = 0
+            MarginTop = 0
+            Title.Text.Strings = (
+              '')
+            Title.Visible = False
+            BottomAxis.DateTimeFormat = 'HH:NN:SS'
+            LeftAxis.AxisValuesFormat = '##.#### ##0'
+            LeftAxis.LabelsFont.Charset = DEFAULT_CHARSET
+            LeftAxis.LabelsFont.Color = clBlack
+            LeftAxis.LabelsFont.Height = -16
+            LeftAxis.LabelsFont.Name = 'Arial'
+            LeftAxis.LabelsFont.Style = []
+            LeftAxis.Title.Caption = 'Voltage'
+            LeftAxis.Title.Font.Charset = DEFAULT_CHARSET
+            LeftAxis.Title.Font.Color = clGreen
+            LeftAxis.Title.Font.Height = -16
+            LeftAxis.Title.Font.Name = 'Arial'
+            LeftAxis.Title.Font.Style = [fsBold]
+            Legend.Alignment = laTop
+            Legend.ColorWidth = 25
+            Legend.DividingLines.Visible = True
+            Legend.Font.Charset = DEFAULT_CHARSET
+            Legend.Font.Color = clBlack
+            Legend.Font.Height = -16
+            Legend.Font.Name = 'Arial'
+            Legend.Font.Style = [fsBold]
+            Legend.LegendStyle = lsSeries
+            Legend.ShadowColor = 8355711
+            Legend.ShadowSize = 2
+            Legend.TextStyle = ltsPlain
+            Legend.VertMargin = 4
+            RightAxis.Automatic = False
+            RightAxis.AutomaticMinimum = False
+            RightAxis.AxisValuesFormat = '##.#### ##0'
+            RightAxis.Title.Caption = 'STD'
+            RightAxis.Title.Font.Charset = DEFAULT_CHARSET
+            RightAxis.Title.Font.Color = clRed
+            RightAxis.Title.Font.Height = -13
+            RightAxis.Title.Font.Name = 'Arial'
+            RightAxis.Title.Font.Style = []
+            View3D = False
+            Align = alClient
+            Color = clSilver
+            TabOrder = 1
+            OnDblClick = Chart2DblClick
+            object CounterSeries: TLineSeries
+              Active = False
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clRed
+              Title = 'Counter'
+              VertAxis = aRightAxis
+              Pointer.HorizSize = 2
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.VertSize = 2
+              Pointer.Visible = True
+              XValues.DateTime = True
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
+            object meanVoltageSeries: TLineSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clGreen
+              Title = 'Voltage. Mean'
+              Pointer.HorizSize = 2
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.VertSize = 2
+              Pointer.Visible = True
+              XValues.DateTime = True
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
+            object STDVoltageSeries: TLineSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clRed
+              Title = 'Voltage. Standard deviation'
+              VertAxis = aRightAxis
+              Pointer.HorizSize = 2
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.VertSize = 2
+              Pointer.Visible = True
+              XValues.DateTime = False
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+            end
           end
         end
-        object Chart2: TChart
+        object Panel4: TPanel
           Left = 0
-          Top = 328
-          Width = 1502
-          Height = 292
-          BackWall.Brush.Color = clWhite
-          BackWall.Brush.Style = bsClear
-          MarginBottom = 0
-          MarginLeft = 0
-          MarginRight = 0
-          MarginTop = 0
-          Title.Text.Strings = (
-            '')
-          Title.Visible = False
-          BottomAxis.DateTimeFormat = 'HH:NN:SS'
-          LeftAxis.AxisValuesFormat = '##.#### ##0'
-          LeftAxis.LabelsFont.Charset = DEFAULT_CHARSET
-          LeftAxis.LabelsFont.Color = clBlack
-          LeftAxis.LabelsFont.Height = -16
-          LeftAxis.LabelsFont.Name = 'Arial'
-          LeftAxis.LabelsFont.Style = []
-          LeftAxis.Title.Caption = 'Voltage'
-          LeftAxis.Title.Font.Charset = DEFAULT_CHARSET
-          LeftAxis.Title.Font.Color = clGreen
-          LeftAxis.Title.Font.Height = -16
-          LeftAxis.Title.Font.Name = 'Arial'
-          LeftAxis.Title.Font.Style = [fsBold]
-          Legend.Alignment = laTop
-          Legend.ColorWidth = 25
-          Legend.DividingLines.Visible = True
-          Legend.Font.Charset = DEFAULT_CHARSET
-          Legend.Font.Color = clBlack
-          Legend.Font.Height = -16
-          Legend.Font.Name = 'Arial'
-          Legend.Font.Style = [fsBold]
-          Legend.LegendStyle = lsSeries
-          Legend.ShadowColor = 8355711
-          Legend.ShadowSize = 2
-          Legend.TextStyle = ltsPlain
-          Legend.VertMargin = 4
-          RightAxis.Automatic = False
-          RightAxis.AutomaticMinimum = False
-          RightAxis.AxisValuesFormat = '##.#### ##0'
-          RightAxis.Title.Caption = 'STD'
-          RightAxis.Title.Font.Charset = DEFAULT_CHARSET
-          RightAxis.Title.Font.Color = clRed
-          RightAxis.Title.Font.Height = -13
-          RightAxis.Title.Font.Name = 'Arial'
-          RightAxis.Title.Font.Style = []
-          View3D = False
-          Align = alClient
-          Color = clSilver
+          Top = 0
+          Width = 700
+          Height = 620
+          Align = alLeft
+          Caption = 'Panel4'
           TabOrder = 1
-          OnDblClick = Chart2DblClick
-          object CounterSeries: TLineSeries
-            Active = False
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clRed
-            Title = 'Counter'
-            VertAxis = aRightAxis
-            Pointer.HorizSize = 2
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 2
-            Pointer.Visible = True
-            XValues.DateTime = True
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-          end
-          object meanVoltageSeries: TLineSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clGreen
-            Title = 'Voltage. Mean'
-            Pointer.HorizSize = 2
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 2
-            Pointer.Visible = True
-            XValues.DateTime = True
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-          end
-          object STDVoltageSeries: TLineSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clRed
-            Title = 'Voltage. Standard deviation'
-            VertAxis = aRightAxis
-            Pointer.HorizSize = 2
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 2
-            Pointer.Visible = True
-            XValues.DateTime = False
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
+          object SpectrumChart: TChart
+            Left = 1
+            Top = 1
+            Width = 698
+            Height = 618
+            BackWall.Brush.Color = clWhite
+            BackWall.Brush.Style = bsClear
+            Title.Font.Charset = DEFAULT_CHARSET
+            Title.Font.Color = clBlue
+            Title.Font.Height = -16
+            Title.Font.Name = 'Arial'
+            Title.Font.Style = [fsBold]
+            Title.Text.Strings = (
+              'Spectrum')
+            OnClickSeries = SpectrumChartClickSeries
+            LeftAxis.Automatic = False
+            LeftAxis.AutomaticMaximum = False
+            LeftAxis.AutomaticMinimum = False
+            LeftAxis.Maximum = 100.000000000000000000
+            Legend.Visible = False
+            RightAxis.Automatic = False
+            RightAxis.AutomaticMaximum = False
+            RightAxis.AutomaticMinimum = False
+            RightAxis.Maximum = 100.000000000000000000
+            View3D = False
+            Align = alClient
+            Color = clGray
+            TabOrder = 0
+            DesignSize = (
+              698
+              618)
+            object SelPointCur: TStaticText
+              Left = 5
+              Top = 6
+              Width = 265
+              Height = 26
+              AutoSize = False
+              BorderStyle = sbsSingle
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clRed
+              Font.Height = -16
+              Font.Name = 'MS Sans Serif'
+              Font.Style = [fsBold]
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 0
+            end
+            object SelPointSum: TStaticText
+              Left = 427
+              Top = 7
+              Width = 265
+              Height = 26
+              Anchors = [akLeft, akRight]
+              AutoSize = False
+              BorderStyle = sbsSingle
+              Color = clSilver
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlue
+              Font.Height = -16
+              Font.Name = 'MS Sans Serif'
+              Font.Style = [fsBold]
+              ParentColor = False
+              ParentFont = False
+              TabOrder = 1
+            end
+            object CountPerVSeries: TPointSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clRed
+              VertAxis = aRightAxis
+              Pointer.HorizSize = 3
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.VertSize = 3
+              Pointer.Visible = True
+              XValues.DateTime = False
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+              OnClickPointer = CountPerVSeriesClickPointer
+            end
+            object psFullsp: TPointSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clBlue
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psRectangle
+              Pointer.Visible = True
+              XValues.DateTime = False
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+              OnClickPointer = psFullspClickPointer
+            end
           end
         end
       end
       object TabSheet5: TTabSheet
         Caption = #1057#1087#1077#1089#1082#1090#1088#1099
         ImageIndex = 1
-        object SpectrumChart: TChart
-          Left = 0
-          Top = 0
-          Width = 1502
-          Height = 620
-          BackWall.Brush.Color = clWhite
-          BackWall.Brush.Style = bsClear
-          Title.Font.Charset = DEFAULT_CHARSET
-          Title.Font.Color = clBlue
-          Title.Font.Height = -16
-          Title.Font.Name = 'Arial'
-          Title.Font.Style = [fsBold]
-          Title.Text.Strings = (
-            'Spectrum')
-          OnClickSeries = SpectrumChartClickSeries
-          LeftAxis.Automatic = False
-          LeftAxis.AutomaticMaximum = False
-          LeftAxis.AutomaticMinimum = False
-          LeftAxis.Maximum = 100.000000000000000000
-          Legend.Visible = False
-          RightAxis.Automatic = False
-          RightAxis.AutomaticMaximum = False
-          RightAxis.AutomaticMinimum = False
-          RightAxis.Maximum = 100.000000000000000000
-          View3D = False
-          Align = alClient
-          Color = clGray
-          TabOrder = 0
-          object SelPointCur: TStaticText
-            Left = 17
-            Top = 14
-            Width = 265
-            Height = 26
-            AutoSize = False
-            BorderStyle = sbsSingle
-            Color = clSilver
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clRed
-            Font.Height = -16
-            Font.Name = 'MS Sans Serif'
-            Font.Style = [fsBold]
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 0
-          end
-          object SelPointSum: TStaticText
-            Left = 297
-            Top = 15
-            Width = 265
-            Height = 26
-            AutoSize = False
-            BorderStyle = sbsSingle
-            Color = clSilver
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clBlue
-            Font.Height = -16
-            Font.Name = 'MS Sans Serif'
-            Font.Style = [fsBold]
-            ParentColor = False
-            ParentFont = False
-            TabOrder = 1
-          end
-          object CountPerVSeries: TPointSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clRed
-            VertAxis = aRightAxis
-            Pointer.HorizSize = 3
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.VertSize = 3
-            Pointer.Visible = True
-            XValues.DateTime = False
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-            OnClickPointer = CountPerVSeriesClickPointer
-          end
-          object psFullsp: TPointSeries
-            Marks.ArrowLength = 8
-            Marks.Visible = False
-            SeriesColor = clBlue
-            Pointer.InflateMargins = True
-            Pointer.Pen.Visible = False
-            Pointer.Style = psRectangle
-            Pointer.Visible = True
-            XValues.DateTime = False
-            XValues.Name = 'X'
-            XValues.Multiplier = 1.000000000000000000
-            XValues.Order = loAscending
-            YValues.DateTime = False
-            YValues.Name = 'Y'
-            YValues.Multiplier = 1.000000000000000000
-            YValues.Order = loNone
-            OnClickPointer = psFullspClickPointer
-          end
-        end
       end
       object ts1: TTabSheet
         Caption = #1044#1080#1072#1087#1072#1079#1086#1085#1099' '#1080' '#1085#1072#1089#1090#1088#1086#1081#1082#1072
@@ -734,7 +762,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 0
               TabOrder = 0
-              Value = 300
+              Value = 0
             end
             object Topspn: TSpinEdit
               Left = 187
@@ -744,7 +772,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
-              Value = 500
+              Value = 0
             end
             object expspn: TSpinEdit
               Left = 300
@@ -803,7 +831,7 @@ object MainForm: TMainForm
             object StaticText4: TStaticText
               Left = 300
               Top = 3
-              Width = 98
+              Width = 82
               Height = 24
               BevelKind = bkTile
               BorderStyle = sbsSingle
@@ -813,8 +841,8 @@ object MainForm: TMainForm
             object StaticText5: TStaticText
               Left = 401
               Top = 1
-              Width = 92
-              Height = 28
+              Width = 86
+              Height = 24
               BevelKind = bkTile
               BorderStyle = sbsSingle
               Caption = 'Dead time'
@@ -823,8 +851,8 @@ object MainForm: TMainForm
             object StaticText6: TStaticText
               Left = 505
               Top = 1
-              Width = 88
-              Height = 28
+              Width = 80
+              Height = 24
               BevelKind = bkTile
               BorderStyle = sbsSingle
               Caption = 'Step(mV)'

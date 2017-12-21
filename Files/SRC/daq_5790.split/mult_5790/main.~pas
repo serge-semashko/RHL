@@ -96,6 +96,9 @@ type
     psFullsp: TPointSeries;
     SelPointCur: TStaticText;
     SelPointSum: TStaticText;
+    Panel2: TPanel;
+    Panel4: TPanel;
+    Splitter2: TSplitter;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -398,14 +401,14 @@ begin
         curtime := now();
         writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
         curmtime := timegettime();
-        writeprotocol('3 begin1 dttimer callback=');
+//        writeprotocol('3 begin1 dttimer callback=');
         cntval := 0;
 //   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
         if (counter_ready) then begin
 
-            WriteProtocol('Read counter');
+//            WriteProtocol('Read counter');
             wRet := DCON_Read_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200, @cntVal);
-            WriteProtocol('check Read counter = ' + IntToStr(cntval));
+//            WriteProtocol('check Read counter = ' + IntToStr(cntval));
             if wRet <> 0 then begin
                 writeprotocol('Err: Error reading counter.');
                 cntval := 131313;
@@ -429,12 +432,12 @@ begin
         end;
 
         curmtime := timegettime();
-        writeprotocol('counter ok = ' + IntToStr(cntval));
+//        writeprotocol('counter ok = ' + IntToStr(cntval));
 
         strcopy(wrtbuf, pchar('X?'));
-        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
+//        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
         ibwrta(dev, @wrtbuf, strlen(wrtbuf));
-        WriteProtocol('5 get globals');
+//        WriteProtocol('5 get globals');
 
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and ERR) <> 0 then begin
@@ -442,13 +445,13 @@ begin
             opError := true;
             exit;
         end;
-        writeprotocol('7 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
-        WriteProtocol('8 ibWait for the completion of asynchronous write operation');
+//        writeprotocol('7 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
+//        WriteProtocol('8 ibWait for the completion of asynchronous write operation');
         ibwait(dev, CMPL);
 
         curmtime := timegettime();
-        writeprotocol('9 wait ok = ' + IntToStr(CurMtime - PrevMTime));
-        WriteProtocol('10 get globals');
+//        writeprotocol('9 wait ok = ' + IntToStr(CurMtime - PrevMTime));
+//        WriteProtocol('10 get globals');
 
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and ERR) <> 0 then begin
@@ -458,21 +461,21 @@ begin
         end;
         writeprotocol('12 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 
-        WriteProtocol('13 //Read the response string from the GPIB instrument asynchronously using the ibrda() command');
-        WriteProtocol('14 ibrda');
+//        WriteProtocol('13 //Read the response string from the GPIB instrument asynchronously using the ibrda() command');
+//        WriteProtocol('14 ibrda');
         ibrda(dev, @rdbuf, 100);
-        WriteProtocol('15 get globals');
+//        WriteProtocol('15 get globals');
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and ERR) <> 0 then begin
             writeprotocol('16 Err: Error in reading the response string from the GPIB instrument.');
             opError := true;
             exit;
         end;
-        writeprotocol('17 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
+//        writeprotocol('17 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 
-        WriteProtocol('18 Wait for the completion of asynchronous read operation');
+//        WriteProtocol('18 Wait for the completion of asynchronous read operation');
         ibwait(dev, CMPL);
-        WriteProtocol('19 get globals');
+//        WriteProtocol('19 get globals');
     //Получение напряжения
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and ERR) <> 0 then begin
@@ -481,12 +484,12 @@ begin
             opError := true;
             exit;
         end;
-        writeprotocol('21 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
+//        writeprotocol('21 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 
         rdbuf[ibcnt - 1] := chr(0);
         rdstr := rdbuf;
         rdstr := rdstr + ' ';
-        writeprotocol('22 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt) + ' str=' + rdstr);
+//        writeprotocol('22 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt) + ' str=' + rdstr);
 
 //        if PrevVoltage = rdstr then exit; //У АЦП нет новых данных
         PrevVoltage := rdstr;
@@ -500,11 +503,11 @@ begin
             exit;
 
         end;
-        writeprotocol('24');
+//        writeprotocol('24');
         rdstr := rdstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
-        writeprotocol('14');
+//        writeprotocol('14');
         prevread := now();
-        writeprotocol('rdstr: ' + rdstr);
+//        writeprotocol('rdstr: ' + rdstr);
         CurVoltage := dacval;
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
@@ -699,7 +702,7 @@ var
         WriteLog(DataDirName + IntToStr(Sweep) + '.txt', tmpstr);
         WriteLog(DataDirName + IntToStr(Sweep) + '.txt', headerstr);
         WriteLog(DataDirName + IntToStr(Sweep) + '.txt', #10);
-        WriteLog(DatadirName + IntToStr(Sweep) + '.txt', descmemo.Text);
+        WriteLog(DatadirName + IntToStr(Sweep) + '.txt', descmemo.Text+#10);
         countPerVSeries.Clear;
         SweepStartTime := now;
     end;
@@ -834,7 +837,7 @@ begin
     Sweep_duration := Sweep_duration /(24*3600);
     headerstr := headerstr +'Constant voltage(V)= '+ConstVolt.Text+#10;
     WriteLog(DataFileName + '.txt', headerstr + #10);
-    WriteLog(DataFileName + '.txt', descmemo.Text);
+    WriteLog(DataFileName + '.txt', descmemo.Text+#10);
 
 
     zqry1.MoveBy(-zqry1.RecNo);
@@ -1213,8 +1216,8 @@ begin
 
     curControl := v_convert(meanVoltage);
     oldControl := CurControl;
-    bottomspn.Value := trunc(meanVoltage * 10000);
-    topspn.Value := trunc(meanVoltage * 10000);
+//    bottomspn.Value := trunc(meanVoltage * 10000);
+//    topspn.Value := trunc(meanVoltage * 10000);
     StartCycle.Enabled := true;
 
 //***********finished configure ******************
