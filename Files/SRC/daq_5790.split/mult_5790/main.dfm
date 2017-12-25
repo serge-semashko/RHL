@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 0
-  Top = 5
-  Width = 1280
-  Height = 915
+  Left = 113
+  Top = 39
+  Width = 1705
+  Height = 1001
   Caption = 'Read/Write'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,15 +18,15 @@ object MainForm: TMainForm
   TextHeight = 13
   object Panel1: TPanel
     Left = 0
-    Top = 820
-    Width = 1264
+    Top = 906
+    Width = 1689
     Height = 27
     Align = alBottom
     TabOrder = 0
     object TimeInfolbl: TStaticText
       Left = 1
       Top = 1
-      Width = 1262
+      Width = 1687
       Height = 25
       Align = alClient
       AutoSize = False
@@ -44,7 +44,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1264
+    Width = 1689
     Height = 164
     ActivePage = TabSheet1
     Align = alTop
@@ -180,15 +180,15 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 164
-    Width = 1264
-    Height = 656
+    Width = 1689
+    Height = 742
     Align = alClient
     Caption = 'Panel5'
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1262
+      Width = 1687
       Height = 3
       Cursor = crVSplit
       Align = alTop
@@ -196,9 +196,9 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 4
-      Width = 1262
-      Height = 651
-      ActivePage = TabSheet4
+      Width = 1687
+      Height = 737
+      ActivePage = ts1
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -208,25 +208,25 @@ object MainForm: TMainForm
       ParentFont = False
       TabOrder = 0
       object TabSheet4: TTabSheet
-        Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080
+        Caption = #1053#1072#1087#1088#1103#1078#1077#1085#1080#1077' '#1101#1082#1089#1087#1086#1079#1080#1094#1080#1080' '#1080' '#1057#1087#1077#1089#1082#1090#1088#1099
         object Splitter2: TSplitter
-          Left = 700
+          Left = 785
           Top = 0
           Width = 6
-          Height = 620
+          Height = 706
         end
         object Panel2: TPanel
-          Left = 706
+          Left = 791
           Top = 0
-          Width = 548
-          Height = 620
+          Width = 888
+          Height = 706
           Align = alClient
           Caption = 'Panel2'
           TabOrder = 0
           object Chart1: TChart
             Left = 1
             Top = 1
-            Width = 546
+            Width = 886
             Height = 328
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
@@ -352,8 +352,8 @@ object MainForm: TMainForm
           object Chart2: TChart
             Left = 1
             Top = 329
-            Width = 546
-            Height = 290
+            Width = 886
+            Height = 376
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             MarginBottom = 0
@@ -471,16 +471,16 @@ object MainForm: TMainForm
         object Panel4: TPanel
           Left = 0
           Top = 0
-          Width = 700
-          Height = 620
+          Width = 785
+          Height = 706
           Align = alLeft
           Caption = 'Panel4'
           TabOrder = 1
           object SpectrumChart: TChart
             Left = 1
             Top = 1
-            Width = 698
-            Height = 618
+            Width = 783
+            Height = 704
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             Title.Font.Charset = DEFAULT_CHARSET
@@ -505,8 +505,8 @@ object MainForm: TMainForm
             Color = clGray
             TabOrder = 0
             DesignSize = (
-              698
-              618)
+              783
+              704)
             object SelPointCur: TStaticText
               Left = 5
               Top = 6
@@ -526,8 +526,8 @@ object MainForm: TMainForm
             end
             object SelPointSum: TStaticText
               Left = 427
-              Top = 7
-              Width = 265
+              Top = 10
+              Width = 350
               Height = 26
               Anchors = [akLeft, akRight]
               AutoSize = False
@@ -542,34 +542,15 @@ object MainForm: TMainForm
               ParentFont = False
               TabOrder = 1
             end
-            object CountPerVSeries: TPointSeries
-              Marks.ArrowLength = 8
-              Marks.Visible = False
-              SeriesColor = clRed
-              VertAxis = aRightAxis
-              Pointer.HorizSize = 3
-              Pointer.InflateMargins = True
-              Pointer.Pen.Visible = False
-              Pointer.Style = psRectangle
-              Pointer.VertSize = 3
-              Pointer.Visible = True
-              XValues.DateTime = False
-              XValues.Name = 'X'
-              XValues.Multiplier = 1.000000000000000000
-              XValues.Order = loAscending
-              YValues.DateTime = False
-              YValues.Name = 'Y'
-              YValues.Multiplier = 1.000000000000000000
-              YValues.Order = loNone
-              OnClickPointer = CountPerVSeriesClickPointer
-            end
             object psFullsp: TPointSeries
               Marks.ArrowLength = 8
               Marks.Visible = False
               SeriesColor = clBlue
+              Pointer.HorizSize = 5
               Pointer.InflateMargins = True
               Pointer.Pen.Visible = False
-              Pointer.Style = psRectangle
+              Pointer.Style = psCircle
+              Pointer.VertSize = 5
               Pointer.Visible = True
               XValues.DateTime = False
               XValues.Name = 'X'
@@ -581,12 +562,27 @@ object MainForm: TMainForm
               YValues.Order = loNone
               OnClickPointer = psFullspClickPointer
             end
+            object CountPerVSeries: TPointSeries
+              Marks.ArrowLength = 8
+              Marks.Visible = False
+              SeriesColor = clRed
+              VertAxis = aRightAxis
+              Pointer.InflateMargins = True
+              Pointer.Pen.Visible = False
+              Pointer.Style = psCircle
+              Pointer.Visible = True
+              XValues.DateTime = False
+              XValues.Name = 'X'
+              XValues.Multiplier = 1.000000000000000000
+              XValues.Order = loAscending
+              YValues.DateTime = False
+              YValues.Name = 'Y'
+              YValues.Multiplier = 1.000000000000000000
+              YValues.Order = loNone
+              OnClickPointer = CountPerVSeriesClickPointer
+            end
           end
         end
-      end
-      object TabSheet5: TTabSheet
-        Caption = #1057#1087#1077#1089#1082#1090#1088#1099
-        ImageIndex = 1
       end
       object ts1: TTabSheet
         Caption = #1044#1080#1072#1087#1072#1079#1086#1085#1099' '#1080' '#1085#1072#1089#1090#1088#1086#1081#1082#1072
@@ -595,13 +591,13 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 753
-          Height = 620
+          Height = 706
           Align = alLeft
           Caption = 'pnl1'
           TabOrder = 0
           object pnl3: TPanel
             Left = 1
-            Top = 555
+            Top = 641
             Width = 751
             Height = 64
             Align = alBottom
@@ -759,7 +755,7 @@ object MainForm: TMainForm
               Top = 30
               Width = 105
               Height = 30
-              MaxValue = 0
+              MaxValue = 49000
               MinValue = 0
               TabOrder = 0
               Value = 0
@@ -769,7 +765,7 @@ object MainForm: TMainForm
               Top = 30
               Width = 107
               Height = 30
-              MaxValue = 0
+              MaxValue = 49000
               MinValue = 0
               TabOrder = 1
               Value = 0
@@ -782,14 +778,14 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
-              Value = 60
+              Value = 1
             end
             object deadspn: TSpinEdit
               Left = 401
               Top = 32
               Width = 96
               Height = 30
-              MaxValue = 60
+              MaxValue = 0
               MinValue = 5
               TabOrder = 3
               Value = 5
@@ -863,7 +859,7 @@ object MainForm: TMainForm
             Left = 1
             Top = 1
             Width = 751
-            Height = 554
+            Height = 640
             Align = alClient
             DataSource = ds1
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -880,16 +876,16 @@ object MainForm: TMainForm
         object pnl2: TPanel
           Left = 753
           Top = 0
-          Width = 501
-          Height = 620
+          Width = 926
+          Height = 706
           Align = alClient
           Caption = 'pnl2'
           TabOrder = 1
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 499
-            Height = 618
+            Width = 924
+            Height = 704
             Align = alClient
             BorderStyle = bsSingle
             Font.Charset = DEFAULT_CHARSET
@@ -1002,8 +998,8 @@ object MainForm: TMainForm
             end
             object leconstVolt: TPanel
               Left = 1
-              Top = 351
-              Width = 493
+              Top = 437
+              Width = 918
               Height = 262
               Align = alBottom
               BorderStyle = bsSingle
@@ -1024,7 +1020,7 @@ object MainForm: TMainForm
               object Label4: TLabel
                 Left = 1
                 Top = 117
-                Width = 487
+                Width = 912
                 Height = 16
                 Align = alBottom
                 Alignment = taCenter
@@ -1047,7 +1043,7 @@ object MainForm: TMainForm
               object DescMemo: TMemo
                 Left = 1
                 Top = 133
-                Width = 487
+                Width = 912
                 Height = 124
                 Align = alBottom
                 TabOrder = 0
@@ -1173,8 +1169,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 847
-    Width = 1264
+    Top = 933
+    Width = 1689
     Height = 30
     Panels = <
       item

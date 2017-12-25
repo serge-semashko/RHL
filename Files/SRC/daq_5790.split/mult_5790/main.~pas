@@ -35,7 +35,6 @@ type
         ch1MeanSeries: TLineSeries;
         PageControl2: TPageControl;
         TabSheet4: TTabSheet;
-        TabSheet5: TTabSheet;
         Timer1: TTimer;
         StatusBar1: TStatusBar;
         ts1: TTabSheet;
@@ -815,6 +814,8 @@ begin
     Screen.Cursor := crHourGlass;
 
     Startcycle.Enabled := false;
+    Startcycle.Caption :='Prepare measurement';
+
     Sweep := 1;
     CreateDataFileName;
 
@@ -891,7 +892,7 @@ begin
     countPerVSeries.AddXy(Border_low-0.1, 0);
     countPerVSeries.AddXy(Border_High+0.1, 0);
     TabSheet1.SetFocus;
-    PageControl2.ActivePageIndex := 1;
+    PageControl2.ActivePageIndex := 0;
     for i1 := 1 to 10000 do application.ProcessMessages;
 
 //######################################################################################
