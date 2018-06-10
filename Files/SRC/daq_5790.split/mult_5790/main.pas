@@ -605,7 +605,6 @@ begin
     end;
     ds1.DataSet := zqry1;
 //    dbgrd1.DataSource := ds
-    cmbGPIB.ItemIndex := 0;
     cmbInst.ItemIndex := 15;
     memoRead.Text := '';
     gcDataBit := Char(8);      // 8 data bit

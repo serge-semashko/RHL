@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 113
-  Top = 39
+  Left = 121
+  Top = 112
   Width = 1705
   Height = 1001
   Caption = 'Read/Write'
@@ -788,7 +788,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 5
+              Value = 0
             end
             object stepspn: TSpinEdit
               Left = 504
