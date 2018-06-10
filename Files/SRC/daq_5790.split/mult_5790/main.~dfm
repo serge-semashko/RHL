@@ -198,7 +198,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1687
       Height = 737
-      ActivePage = TabSheet4
+      ActivePage = ts1
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -776,9 +776,9 @@ object MainForm: TMainForm
               Width = 99
               Height = 30
               MaxValue = 0
-              MinValue = 1
+              MinValue = 0
               TabOrder = 2
-              Value = 0
+              Value = 1
             end
             object deadspn: TSpinEdit
               Left = 401
@@ -788,7 +788,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 0
+              Value = 5
             end
             object stepspn: TSpinEdit
               Left = 504
