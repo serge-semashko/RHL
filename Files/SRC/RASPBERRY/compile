@@ -1,0 +1,1 @@
+gcc dac8532_test.c -o dac8532_test -lbcm2835
