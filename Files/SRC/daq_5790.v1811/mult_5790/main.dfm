@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 87
-  Top = 2
+  Left = 76
+  Top = 40
   Width = 1705
   Height = 1001
   Caption = 'Read/Write'
@@ -737,10 +737,10 @@ object MainForm: TMainForm
               OnClick = rembtnClick
             end
             object btn1: TSpeedButton
-              Left = 613
-              Top = 8
+              Left = 602
+              Top = 15
               Width = 131
-              Height = 45
+              Height = 44
               Caption = #1059#1076#1072#1083#1080#1090#1100' '#1074#1089#1077
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clRed
@@ -778,15 +778,15 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
-              Value = 1
+              Value = 60
             end
             object deadspn: TSpinEdit
               Left = 401
               Top = 32
               Width = 96
               Height = 30
-              MaxValue = 0
-              MinValue = 5
+              MaxValue = 999999
+              MinValue = 0
               TabOrder = 3
               Value = 0
             end

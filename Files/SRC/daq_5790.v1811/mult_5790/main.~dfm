@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 87
-  Top = 2
+  Left = 76
+  Top = 40
   Width = 1705
   Height = 1001
   Caption = 'Read/Write'
@@ -785,8 +785,8 @@ object MainForm: TMainForm
               Top = 32
               Width = 96
               Height = 30
-              MaxValue = 0
-              MinValue = 5
+              MaxValue = 999999
+              MinValue = 0
               TabOrder = 3
               Value = 0
             end

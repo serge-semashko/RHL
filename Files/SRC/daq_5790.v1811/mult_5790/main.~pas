@@ -580,6 +580,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
+    caption := caption +' V3.0';
     deadspn.Value := 5;
     address.Value := cf.readInteger('hardware', 'counter_addr', 0);
     ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
@@ -1334,9 +1335,11 @@ begin
         showmessage('Error: Ќижн€€ граница должна быть меньше верхней ');
         exit;
     end;
-    if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
-        showmessage('Error: Ўирина интекрвала не кратна шагу');
-        exit;
+    if stepspn.Value>0 then begin
+      if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
+          showmessage('Error: Ўирина интекрвала не кратна шагу');
+          exit;
+      end;
     end;
     zqry1.Insert;
     zqry1.FieldByName('Ubeg').AsInteger := Bottomspn.Value;

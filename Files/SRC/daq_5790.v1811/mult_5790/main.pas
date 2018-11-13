@@ -580,6 +580,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
+    caption := caption +' V3.0';
     deadspn.Value := 5;
     address.Value := cf.readInteger('hardware', 'counter_addr', 0);
     ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
