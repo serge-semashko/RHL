@@ -826,12 +826,12 @@ begin
     while not (zqry1.Eof) do begin
         sweep_Duration := sweep_Duration + (zqry1.FieldByName('dead_time').AsInteger+zqry1.FieldByName('exposition').AsInteger)*
          (1+
-         (-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger
+         (-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div (zqry1.FieldByName('Ustep').AsInteger+1)
          );
         headerstr := headerstr + format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d, Channels= %d  ',
              [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger, zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 1000.0,
               zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger,
-              1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger ]) + #10;
+              1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div (zqry1.FieldByName('Ustep').AsInteger+1) ]) + #10;
         zqry1.Next;
     end;
     Sweep_duration := Sweep_duration /(24*3600);
@@ -1000,7 +1000,6 @@ begin
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
                     writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-
                     delay(300);
                 end;
             end;
@@ -1335,9 +1334,11 @@ begin
         showmessage('Error: Ќижн€€ граница должна быть меньше верхней ');
         exit;
     end;
-    if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
-        showmessage('Error: Ўирина интекрвала не кратна шагу');
-        exit;
+    if stepspn.Value>0 then begin
+      if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
+          showmessage('Error: Ўирина интекрвала не кратна шагу');
+          exit;
+      end;
     end;
     zqry1.Insert;
     zqry1.FieldByName('Ubeg').AsInteger := Bottomspn.Value;
