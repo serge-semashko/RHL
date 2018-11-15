@@ -737,10 +737,10 @@ object MainForm: TMainForm
               OnClick = rembtnClick
             end
             object btn1: TSpeedButton
-              Left = 613
-              Top = 8
+              Left = 602
+              Top = 15
               Width = 131
-              Height = 45
+              Height = 44
               Caption = #1059#1076#1072#1083#1080#1090#1100' '#1074#1089#1077
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clRed
@@ -778,7 +778,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
-              Value = 1
+              Value = 60
             end
             object deadspn: TSpinEdit
               Left = 401
@@ -1156,11 +1156,11 @@ object MainForm: TMainForm
             object memoRead: TMemo
               Left = 8
               Top = 103
-              Width = 377
-              Height = 77
+              Width = 833
+              Height = 306
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ScrollBars = ssBoth
               TabOrder = 6
-              Visible = False
             end
           end
         end

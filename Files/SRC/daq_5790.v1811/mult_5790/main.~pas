@@ -178,7 +178,7 @@ var
     VoltageChangeTime: double;
     TimerID: dword;
 
-  (*488.2 GPIB global status variables.*)
+  (*488.2 GPIB global status variables.*)                
     Vdata: array[0..10000000] of vrecord;
     PrevVindex, Vindex: integer;
     dacval: double;
@@ -1070,9 +1070,10 @@ end;
 
 function TMainForm.InitCounterAndGPIB: integer;
 var
+    wrtbuf : array[0..1000] of char;
     errmess: string;
     t1: double;
-    wrtbuf: array[0..2000] of char;
+    ibnum, devnum, i1 : integer;
 begin
 
     if counter_ready and GPIB_ready then
@@ -1104,6 +1105,25 @@ begin
     end;
     if (gpib_ready) then
         exit;
+    memoread.lines.Add('');
+    for ibnum:=0 to 0 do
+      for devnum := 21 to 22 do begin
+        dev := ibdev(0, devnum, ibnum, T1s, 1, 0);
+        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'write GPIB device.' + IntToStr(iberr) +' sta='+IntToStr(ibsta)));
+        i1 := iberr;
+        i1 := ibsta;
+        strcopy(wrtbuf, pchar('ID?'));
+//        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
+        ibwrta(dev, @wrtbuf, strlen(wrtbuf));
+        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+
+        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'write GPIB device.' + IntToStr(iberr) +' sta='+IntToStr(ibsta)));
+        ibrda(dev, @wrtbuf, strlen(wrtbuf));
+        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'read.' +wrtbuf+' '+ IntToStr(iberr) +' sta='+IntToStr(ibsta)));
+
+      end;
 
     dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
@@ -1112,7 +1132,6 @@ begin
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
         showmessage('Err: Error in init the GPIB device.');
         exit;
-
     end;
 
   //Open and intialize an GPIB instrument

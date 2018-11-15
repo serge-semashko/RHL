@@ -1156,11 +1156,11 @@ object MainForm: TMainForm
             object memoRead: TMemo
               Left = 8
               Top = 103
-              Width = 377
-              Height = 77
+              Width = 833
+              Height = 306
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ScrollBars = ssBoth
               TabOrder = 6
-              Visible = False
             end
           end
         end

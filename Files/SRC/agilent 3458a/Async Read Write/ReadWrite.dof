@@ -10,7 +10,7 @@ F=0
 G=1
 H=1
 I=1
-J=0
+J=1
 K=0
 L=1
 M=0
@@ -76,9 +76,9 @@ LocaleToUnicode=1
 ImagebaseMultiple=1
 SuspiciousTypecast=1
 PrivatePropAccessor=1
-UnsafeType=0
-UnsafeCode=0
-UnsafeCast=0
+UnsafeType=1
+UnsafeCode=1
+UnsafeCast=1
 [Linker]
 MapFile=0
 OutputObjs=0
@@ -107,7 +107,7 @@ UseLauncher=0
 DebugCWD=
 [Language]
 ActiveLang=
-ProjectLang=
+ProjectLang=$00000404
 RootDir=
 [Version Info]
 IncludeVerInfo=0
@@ -121,8 +121,8 @@ PreRelease=0
 Special=0
 Private=0
 DLL=0
-Locale=1049
-CodePage=1251
+Locale=1028
+CodePage=950
 [Version Info Keys]
 CompanyName=
 FileDescription=
