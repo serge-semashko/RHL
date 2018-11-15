@@ -99,30 +99,29 @@ begin
   strcopy(wrtbuf, pchar(editWrite.Text));
   //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
   exec488('PRESET NORM');
-  exec488('DCV 9');
-//  exec488('ARANGE ONCE');
+  exec488('MEM FIFO');
+  exec488('DCV 10, 1E-6');
   exec488(editwrite.text);
   decimalseparator := '.';
   resstr := rdbuf;
   i2 := pos(#13,resstr);
+  i2 := -1;
   if (i2>0) then begin
-  resstr := system.copy(resstr,1,i2-1);
+    resstr := system.copy(resstr,1,i2-1);
 
-  r1 := strtofloat(resstr)*10000;
+    r1 := strtofloat(resstr)*10000;
 
-  msg(format('  %2.9f',[r1]));
-  resstr := '123.22E-2';
+    msg(format('  %2.9f',[r1]));
+    resstr := '123.22E-2';
   end;
-
-
+    i1 := 10;
+    fillchar(rdbuf,100,0);
     ibrd(dev, @rdbuf, 100);
-  //  ibwait(dev, CMPL);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     rdbuf[ibcnt] := chr(0);
     resstr := rdbuf;
     msg(#13+#10+rdbuf);
     ibrd(dev, @rdbuf, 100);
-  //  ibwait(dev, CMPL);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     rdbuf[ibcnt] := chr(0);
     resstr := rdbuf;
