@@ -144,6 +144,7 @@ type
     end;
 
     Varray = array of vrecord;
+Procedure exec488(dev488:integer;cmd:string);
 
 var
     Counter_per_sec : double = 0;
@@ -392,6 +393,7 @@ var
     wrtbuf, rdbuf: packed array[0..299] of char;
     rdstr: string;
     dtc :double;
+    resstr : string;
 begin
     curmtime := timegettime();
     writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
@@ -431,79 +433,26 @@ begin
         end;
 
         curmtime := timegettime();
-//        writeprotocol('counter ok = ' + IntToStr(cntval));
-
-        strcopy(wrtbuf, pchar('X?'));
-//        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
-        ibwrta(dev, @wrtbuf, strlen(wrtbuf));
-//        WriteProtocol('5 get globals');
-
+        exec488(dev,'TARM SGL');
+        ibrd(dev, @rdbuf, 17);
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        if (ibsta and ERR) <> 0 then begin
-            writeprotocol('6 Err: Error in writing the string command to the GPIB instrument.');
-            opError := true;
-            exit;
-        end;
-//        writeprotocol('7 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
-//        WriteProtocol('8 ibWait for the completion of asynchronous write operation');
-        ibwait(dev, CMPL);
+        rdbuf[ibcnt] := chr(0);
+        resstr := rdbuf;
+        resstr := system.copy(resstr,1,length(resstr)-1);
+         decimalseparator := '.';
+         if not TextToFloat(PChar(resstr), dacval, fvExtended) then dacval := -1;
 
         curmtime := timegettime();
-//        writeprotocol('9 wait ok = ' + IntToStr(CurMtime - PrevMTime));
-//        WriteProtocol('10 get globals');
 
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        if (ibsta and ERR) <> 0 then begin
-            writeprotocol('11 Err: Writing the string command to the GPIB instrument timeout.');
-            opError := true;
-            exit;
-        end;
-        writeprotocol('12 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 
-//        WriteProtocol('13 //Read the response string from the GPIB instrument asynchronously using the ibrda() command');
-//        WriteProtocol('14 ibrda');
-        ibrda(dev, @rdbuf, 100);
-//        WriteProtocol('15 get globals');
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        if (ibsta and ERR) <> 0 then begin
-            writeprotocol('16 Err: Error in reading the response string from the GPIB instrument.');
-            opError := true;
-            exit;
-        end;
-//        writeprotocol('17 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
-
-//        WriteProtocol('18 Wait for the completion of asynchronous read operation');
-        ibwait(dev, CMPL);
-//        WriteProtocol('19 get globals');
-    //Получение напряжения
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        if (ibsta and ERR) <> 0 then begin
-            mainform.caption := FormatdateTime('DD/MM/YYYY HH:NN:SS', now) + 'Err: Reading the string command to the GPIB instrument timeout.';
-            writeprotocol('20 Err: Reading the string command to the GPIB instrument timeout.');
-            opError := true;
-            exit;
-        end;
-//        writeprotocol('21 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
-
-        rdbuf[ibcnt - 1] := chr(0);
-        rdstr := rdbuf;
-        rdstr := rdstr + ' ';
-//        writeprotocol('22 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt) + ' str=' + rdstr);
-
-//        if PrevVoltage = rdstr then exit; //У АЦП нет новых данных
-        PrevVoltage := rdstr;
-        rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
-        val(rdstr, dacval, resc);
-
-        if (dacval < 0.00000000001) or (pos('.', rdstr) = 0) then begin
+        if (dacval < 0) then begin
             PrevMTime := TimeGetTime();
             PrevTime := now;
-            writeProtocol('23 ####ZERO ' + rdstr + #10);
+            writeProtocol('Error read AGILENT ' + rdstr + #10);
             exit;
-
         end;
 //        writeprotocol('24');
-        rdstr := rdstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
+        resstr := resstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
 //        writeprotocol('14');
         prevread := now();
 //        writeprotocol('rdstr: ' + rdstr);
@@ -606,7 +555,6 @@ begin
     end;
     ds1.DataSet := zqry1;
 //    dbgrd1.DataSource := ds
-    cmbInst.ItemIndex := 15;
     memoRead.Text := '';
     gcDataBit := Char(8);      // 8 data bit
     gcParity := Char(0);      // Non Parity
@@ -1067,6 +1015,21 @@ begin
     while (now - st) * 24 * 3600 * 1000 < ms do
         application.ProcessMessages;
 end;
+Procedure exec488(dev488:integer;cmd:string);
+
+var
+
+ wrtbuf : array[0..1000] of char;
+ st : int64;
+  begin
+    st := timegetTime;
+    strcopy(wrtbuf, pchar(cmd));
+    //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
+    ibwrt(dev488, @wrtbuf, strlen(wrtbuf));
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+//    msg('CMD='+cmd);
+    //Read the response string from the GPIB instrument asynchronously using the ibrda() command
+  end;
 
 function TMainForm.InitCounterAndGPIB: integer;
 var
@@ -1106,25 +1069,6 @@ begin
     if (gpib_ready) then
         exit;
     memoread.lines.Add('');
-    for ibnum:=0 to 0 do
-      for devnum := 21 to 22 do begin
-        dev := ibdev(0, devnum, ibnum, T1s, 1, 0);
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'write GPIB device.' + IntToStr(iberr) +' sta='+IntToStr(ibsta)));
-        i1 := iberr;
-        i1 := ibsta;
-        strcopy(wrtbuf, pchar('ID?'));
-//        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
-        ibwrta(dev, @wrtbuf, strlen(wrtbuf));
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-
-        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'write GPIB device.' + IntToStr(iberr) +' sta='+IntToStr(ibsta)));
-        ibrda(dev, @wrtbuf, strlen(wrtbuf));
-        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        memoread.lines.Add((DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'read.' +wrtbuf+' '+ IntToStr(iberr) +' sta='+IntToStr(ibsta)));
-
-      end;
-
     dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
@@ -1134,93 +1078,16 @@ begin
         exit;
     end;
 
-  //Open and intialize an GPIB instrument
-    OpError := false;
-(*
-  while CycBox.Checked do begin
-
-    T1 := NOW;
-    while (now-t1)*24*3600<0.1 DO BEGIN
-      application.ProcessMessages;
-    END;
-*)
-    // process error  in prev operation
-    if opError then begin
-        t1 := NOW;
-        while (now - t1) * 24 * 3600 < 8 do begin
-            application.ProcessMessages;
-        end;
-      (*
-       winexec(pansichar(paramstr(0)+' continue'), sw_show);
-       CycBox.Checked := false;
-       application.terminate;
-       break;
-       *)
-    end;
-
-    opError := false;
-
-    //clear the specific GPIB instrument
     ibclr(dev);
+    exec488(dev,'PRESET NORM');
+    exec488(dev,'TARM HOLD');
+    exec488(dev,'MEM LIFO');
+    exec488(dev,'DCV 10, 1E-10');
+    exec488(dev,'aper.1');
+    exec488(dev,'TARM SGL');
+    ibrd(dev, @wrtbuf, 17);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        errmess := GpibError(iberr);
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in clearing the GPIB device.' + errmess + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in clearing the GPIB device.' + errmess + #10);
-        showmessage('Err: Error in clearing the GPIB device.');
-        exit;
-    end;
 
-//**************** clear queue and events*****************
-    strcopy(wrtbuf, pchar(#10 + '*cls' + #10));
-    //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
-    ibwrta(dev, @wrtbuf, strlen(wrtbuf));
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing *cls command to the GPIB instrument.' + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing *cls command to the GPIB instrument.' + #10);
-        showmessage('Err: Error in writing *cls command to the GPIB instrument.');
-        exit;
-    end;
-
-    //Wait for the completion of asynchronous write operation
-    ibwait(dev, CMPL);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Wait for the completion of asynchronous write operation. *cls ' + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err:  Wait for the completion of asynchronous write operation. *cls ' + #10);
-        opError := true;
-        showmessage('Err: Wait for the completion of asynchronous write operation. *cls ');
-        exit;
-    end;
-
-
-//***********finish configure ******************
-
-//**************** Configure  device 10V resolution 6*****************
-//    strcopy(wrtbuf, pchar('dcv 10,resl6'));
-//**************** Configure  deice 10V resolution 7*****************
-    strcopy(wrtbuf, pchar('dcv 10,resl6'));
-    //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
-    ibwrta(dev, @wrtbuf, strlen(wrtbuf));
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing the string command to the GPIB instrument.' + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing the string command to the GPIB instrument.' + #10);
-        showmessage('Err: Error in writing the string command to the GPIB instrument.');
-        exit;
-    end;
-
-    //Wait for the completion of asynchronous write operation
-    ibwait(dev, CMPL);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Writing the string command to the GPIB instrument timeout.' + #10);
-        writetimelog(DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Writing the string command to the GPIB instrument timeout.' + #10);
-        showmessage('Err: Writing the string command to the GPIB instrument timeout.');
-        opError := true;
-        exit;
-    end;
     prevread := now();
     GettingData := false;
     DaqThread := Tdaqthread.Create(true);

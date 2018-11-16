@@ -36,11 +36,32 @@ object Form1: TForm1
     Caption = 'Write:'
   end
   object Label4: TLabel
-    Left = 24
-    Top = 96
-    Width = 29
-    Height = 13
+    Left = 440
+    Top = 84
+    Width = 300
+    Height = 20
+    AutoSize = False
     Caption = 'Read:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Label5: TLabel
+    Left = 440
+    Top = 60
+    Width = 300
+    Height = 20
+    AutoSize = False
+    Caption = 'Read:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'MS Sans Serif'
+    Font.Style = [fsBold]
+    ParentFont = False
   end
   object cmbGPIB: TComboBox
     Left = 56
@@ -118,7 +139,7 @@ object Form1: TForm1
   end
   object memoRead: TMemo
     Left = 0
-    Top = 109
+    Top = 104
     Width = 841
     Height = 679
     Align = alBottom

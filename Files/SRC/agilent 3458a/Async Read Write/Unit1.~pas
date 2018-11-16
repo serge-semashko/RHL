@@ -24,6 +24,7 @@ type
     editWrite: TEdit;
     Label4: TLabel;
     memoRead: TMemo;
+    Label5: TLabel;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -55,8 +56,9 @@ var
   dev: integer;
   Procedure msg(mss:string);
   begin
-      memoRead.lines.add('ibsta='+IntToStr(ibsta)+' err='+IntToStr(iberr)+' ibcntl='+IntToStr(ibcntl)+' tgt='+IntToStr(timegettime-st));
-      memoRead.lines.add(mss);
+    caption :='ibsta='+IntToStr(ibsta)+' err='+IntToStr(iberr)+' ibcntl='+IntToStr(ibcntl)+' tgt='+IntToStr(timegettime-st);
+//      memoRead.lines.add('ibsta='+IntToStr(ibsta)+' err='+IntToStr(iberr)+' ibcntl='+IntToStr(ibcntl)+' tgt='+IntToStr(timegettime-st));
+//      memoRead.lines.add(mss);
   end;
   Procedure exec488(cmd:string);
   begin
@@ -70,7 +72,7 @@ var
   end;
   var
   i1, i2 : integer;
-  r1 : double;
+  r1 : extended;
 begin
   memoread.Clear;
   //Open and intialize an GPIB instrument
@@ -96,16 +98,29 @@ begin
   resstr := rdbuf;
   i2 := pos(#13,resstr);
   i2 := -1;
-  for i2 := 0 to 10 do begin
+  for i2 := 0 to 1000000 do begin
+//    sleep(10);
+    for i1 := 0 to 100 do application.ProcessMessages;
     st := timegettime;
+
     exec488('TARM SGL');
 
-    ibrd(dev, @rdbuf, 18);
+    ibrd(dev, @rdbuf, 17);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     rdbuf[ibcnt] := chr(0);
     resstr := rdbuf;
-    memoread.lines.add('READ');
-    msg(rdbuf);
+
+    resstr := system.copy(resstr,1,length(resstr)-1);
+//    resstr:= 'aaa';
+    r1:= 1;
+     if not TextToFloat(PChar(resstr), r1, fvExtended) then r1 := -1;
+
+//    msg(format('  %2.9f',[r1]));
+    label5.Caption:=resstr;
+    label4.Caption:=format('  %2.9f',[r1])+' time='+IntToStr(timegettime-st)+'ms';
+    if (timegettime-st)>400 then
+    memoread.lines.add(label4.Caption);
+//    msg(rdbuf);
 
   end;
 //  if (i2>0) then begin
