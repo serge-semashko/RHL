@@ -48,37 +48,25 @@ uses mmsystem;
 procedure TForm1.Button1Click(Sender: TObject);
 var
   //Declare variables
-  wrtbuf, rdbuf: packed array[0..99] of char  ;
+  wrtbuf, rdbuf: packed array[0..10299] of char  ;
   st : int64;
   resstr : string;
 
   dev: integer;
   Procedure msg(mss:string);
   begin
-      memoRead.lines.add('['+mss+'] ibsta='+IntToStr(ibsta)+' err='+IntToStr(iberr)+' ibcntl='+IntToStr(ibcntl)+' tgt='+IntToStr(timegettime-st));
+      memoRead.lines.add('ibsta='+IntToStr(ibsta)+' err='+IntToStr(iberr)+' ibcntl='+IntToStr(ibcntl)+' tgt='+IntToStr(timegettime-st));
+      memoRead.lines.add(mss);
   end;
   Procedure exec488(cmd:string);
   begin
-    memoread.lines.add(cmd);
+    st := timegetTime;
     strcopy(wrtbuf, pchar(cmd));
     //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
     ibwrt(dev, @wrtbuf, strlen(wrtbuf));
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    msg('wrt');
+    msg('CMD='+cmd);
     //Read the response string from the GPIB instrument asynchronously using the ibrda() command
-    ibrd(dev, @rdbuf, 100);
-  //  ibwait(dev, CMPL);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    rdbuf[ibcnt] := chr(0);
-    resstr := rdbuf;
-    msg(#13+#10+rdbuf);
-
-    ibrd(dev, @rdbuf, 100);
-  //  ibwait(dev, CMPL);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    rdbuf[ibcnt] := chr(0);
-    resstr := rdbuf;
-    msg(#13+#10+rdbuf);
   end;
   var
   i1, i2 : integer;
@@ -99,46 +87,44 @@ begin
   strcopy(wrtbuf, pchar(editWrite.Text));
   //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
   exec488('PRESET NORM');
-  exec488('MEM FIFO');
-  exec488('DCV 10, 1E-6');
+  exec488('TARM HOLD');
+  exec488('MEM LIFO');
+  exec488('DCV 10, 1E-10');
   exec488(editwrite.text);
+//  exec488('TARM AUTO');
   decimalseparator := '.';
   resstr := rdbuf;
   i2 := pos(#13,resstr);
   i2 := -1;
-  if (i2>0) then begin
-    resstr := system.copy(resstr,1,i2-1);
+  for i2 := 0 to 10 do begin
+    st := timegettime;
+    exec488('TARM SGL');
 
-    r1 := strtofloat(resstr)*10000;
+    ibrd(dev, @rdbuf, 17);
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+    rdbuf[ibcnt] := chr(0);
+    resstr := rdbuf;
+    memoread.lines.add('READ');
+    msg(rdbuf);
 
-    msg(format('  %2.9f',[r1]));
-    resstr := '123.22E-2';
   end;
+//  if (i2>0) then begin
+//    resstr := system.copy(resstr,1,i2-1);
+//
+//    r1 := strtofloat(resstr)*10000;
+//
+//    msg(format('  %2.9f',[r1]));
+//    resstr := '123.22E-2';
+//  end;
     i1 := 10;
     fillchar(rdbuf,100,0);
-    ibrd(dev, @rdbuf, 100);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    rdbuf[ibcnt] := chr(0);
-    resstr := rdbuf;
-    msg(#13+#10+rdbuf);
-    ibrd(dev, @rdbuf, 100);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    rdbuf[ibcnt] := chr(0);
-    resstr := rdbuf;
-    msg(#13+#10+rdbuf);
-    ibrd(dev, @rdbuf, 100);
-  //  ibwait(dev, CMPL);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    rdbuf[ibcnt] := chr(0);
-    resstr := rdbuf;
-    msg(#13+#10+rdbuf);
 
 
   //Offline the GPIB interface card
   ibonl(dev, 0);
   gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
   msg('onl');
-
+  memoread.Lines.SaveToFile('f:\home\hist1.txt');
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

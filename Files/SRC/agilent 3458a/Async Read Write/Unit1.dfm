@@ -1,8 +1,8 @@
 object Form1: TForm1
-  Left = 567
-  Top = 121
-  Width = 843
-  Height = 736
+  Left = 574
+  Top = 79
+  Width = 874
+  Height = 813
   Caption = 'Read/Write'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -114,13 +114,13 @@ object Form1: TForm1
     Height = 21
     ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
     TabOrder = 3
-    Text = 'aper.01'
+    Text = 'aper.1'
   end
   object memoRead: TMemo
     Left = 0
     Top = 109
-    Width = 810
-    Height = 602
+    Width = 841
+    Height = 679
     Align = alBottom
     ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
     Lines.Strings = (
