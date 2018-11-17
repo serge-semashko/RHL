@@ -98,6 +98,7 @@ type
     Panel2: TPanel;
     Panel4: TPanel;
     Splitter2: TSplitter;
+        Procedure Init_GPIB;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -143,8 +144,7 @@ type
         counter: int64;
     end;
 
-    Varray = array of vrecord;
-Procedure exec488(dev488:integer;cmd:string);
+Function  exec488(dev488:integer;cmd:string):boolean;
 
 var
     Counter_per_sec : double = 0;
@@ -182,7 +182,7 @@ var
   (*488.2 GPIB global status variables.*)                
     Vdata: array[0..10000000] of vrecord;
     PrevVindex, Vindex: integer;
-    dacval: double;
+    dacval: extended;
     ltageChangeIndex: INTEGER;
   (*488.2 GPIB global status variables.*)
     ibsta: Integer;
@@ -273,6 +273,10 @@ var
     tarcontrol: int64;
     startsetTime: double;
 begin
+   if curvoltage <0 then begin
+          result := false;
+          exit;
+    end;
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
@@ -322,6 +326,10 @@ var
 begin
     startsetTime := now;
     while (abs((target * 1.0 - curVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+        if curvoltage <0 then begin
+          result := false;
+          exit;
+        end;
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -331,6 +339,10 @@ begin
       Exit;
     end;
     while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
+        if curvoltage <0 then begin
+          result := false;
+          exit;
+        end;
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -436,11 +448,15 @@ begin
         exec488(dev,'TARM SGL');
         ibrd(dev, @rdbuf, 17);
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-        rdbuf[ibcnt] := chr(0);
-        resstr := rdbuf;
-        resstr := system.copy(resstr,1,length(resstr)-1);
-         decimalseparator := '.';
-         if not TextToFloat(PChar(resstr), dacval, fvExtended) then dacval := -1;
+        if (ibsta and $8000)<>0
+          then dacval := -1
+          else begin
+            rdbuf[ibcnt] := chr(0);
+            resstr := rdbuf;
+            resstr := system.copy(resstr,1,length(resstr)-1);
+            decimalseparator := '.';
+            if not TextToFloat(PChar(resstr), dacval, fvExtended) then dacval := -1;
+          end;
 
         curmtime := timegettime();
 
@@ -449,7 +465,7 @@ begin
             PrevMTime := TimeGetTime();
             PrevTime := now;
             writeProtocol('Error read AGILENT ' + rdstr + #10);
-            exit;
+            resstr :='AGILENT error';
         end;
 //        writeprotocol('24');
         resstr := resstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
@@ -468,7 +484,6 @@ begin
             vdata[vindex + 1].data := dacval;
             inc(vIndex);
         end
-
         else if counter_ready then begin
             wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
             LastCounterValue := 0;
@@ -1015,11 +1030,12 @@ begin
     while (now - st) * 24 * 3600 * 1000 < ms do
         application.ProcessMessages;
 end;
-Procedure exec488(dev488:integer;cmd:string);
+function exec488(dev488:integer;cmd:string):boolean;
 
 var
 
  wrtbuf : array[0..1000] of char;
+ rdbuf : array[0..1000] of char;
  st : int64;
   begin
     st := timegetTime;
@@ -1027,10 +1043,63 @@ var
     //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
     ibwrt(dev488, @wrtbuf, strlen(wrtbuf));
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-//    msg('CMD='+cmd);
-    //Read the response string from the GPIB instrument asynchronously using the ibrda() command
-  end;
+    result := true;
+    if (ibsta and $8000)<>0
+        then result := false
+end;
+Procedure TMainForm.Init_GPIB;
+var
+    wrtbuf : array[0..1000] of char;
+    errmess: string;
+    t1: double;
+    ibnum, devnum, i1 : integer;
+begin
+    gpib_ready := false;
+    StartCycle.Enabled := false;
+    memoread.lines.Add('');
+    dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+    if (ibsta and ERR) <> 0 then begin
+        errmess := GpibError(iberr);
+        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+        showmessage('Err: Error in init the GPIB device.');
+        exit;
+    end;
 
+    ibclr(dev);
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+
+    if not exec488(dev,'PRESET NORM') then begin
+        errmess := GpibError(iberr);
+        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+        showmessage('Err: Error in init the GPIB device.');
+        exit;
+    end;;
+    exec488(dev,'TARM HOLD');
+    exec488(dev,'MEM LIFO');
+    exec488(dev,'DCV 10, 1E-10');
+    exec488(dev,'aper.1');
+
+    prevread := now();
+    GettingData := false;
+    DaqThread := Tdaqthread.Create(true);
+    daqthread.Priority := tphigher;
+    daqthread.Priority := tphighest;
+    LastCounterTime := now;
+//    daqthread.Priority := tpTimeCritical;
+    GettingData := false;
+    gpib_ready := true;
+    daqthread.Resume;
+    delay(2000);
+
+    curControl := v_convert(meanVoltage);
+    oldControl := CurControl;
+//    bottomspn.Value := trunc(meanVoltage * 10000);
+//    topspn.Value := trunc(meanVoltage * 10000);
+    StartCycle.Enabled := true;
+
+//***********finished configure ******************
+end;
 function TMainForm.InitCounterAndGPIB: integer;
 var
     wrtbuf : array[0..1000] of char;
@@ -1066,47 +1135,7 @@ begin
             end;
         end;
     end;
-    if (gpib_ready) then
-        exit;
-    memoread.lines.Add('');
-    dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-    if (ibsta and ERR) <> 0 then begin
-        errmess := GpibError(iberr);
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
-        showmessage('Err: Error in init the GPIB device.');
-        exit;
-    end;
-
-    ibclr(dev);
-    exec488(dev,'PRESET NORM');
-    exec488(dev,'TARM HOLD');
-    exec488(dev,'MEM LIFO');
-    exec488(dev,'DCV 10, 1E-10');
-    exec488(dev,'aper.1');
-    exec488(dev,'TARM SGL');
-    ibrd(dev, @wrtbuf, 17);
-    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
-
-    prevread := now();
-    GettingData := false;
-    DaqThread := Tdaqthread.Create(true);
-    daqthread.Priority := tphigher;
-    daqthread.Priority := tphighest;
-    LastCounterTime := now;
-//    daqthread.Priority := tpTimeCritical;
-    GettingData := false;
-    gpib_ready := true;
-    daqthread.Resume;
-    delay(2000);
-
-    curControl := v_convert(meanVoltage);
-    oldControl := CurControl;
-//    bottomspn.Value := trunc(meanVoltage * 10000);
-//    topspn.Value := trunc(meanVoltage * 10000);
-    StartCycle.Enabled := true;
-
-//***********finished configure ******************
+    Init_GPIB;
 
 end;
 
@@ -1165,7 +1194,9 @@ begin
         end else begin
         end;
         statusbar1.Panels[1].Text := '';
-        statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
+
+        if CurVoltage<0 then statusbar1.Panels[0].Text := format('Ctrl=%.5d U= AGILENT RROR', [curControl, curVoltage])
+                        else statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
         curU.Text := format('%8.3f', [ curVoltage*10000]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
@@ -1285,12 +1316,14 @@ end;
 procedure TMainForm.cmbGPIBChange(Sender: TObject);
 begin
     cf.WriteInteger('hardware', 'gpib', TComboBox(Sender).ItemIndex);
+    Init_GPIB;
 
 end;
 
 procedure TMainForm.cmbInstChange(Sender: TObject);
 begin
     cf.WriteInteger('hardware', 'gpib_instrument', TComboBox(Sender).ItemIndex);
+    Init_GPIB;
 end;
 
 procedure TMainForm.SpeedButton1Click(Sender: TObject);
@@ -1349,6 +1382,7 @@ begin
    psFullsp.YValueToText(psFullsp.YValues.Value[ValueIndex]);
 
 end;
+
 
 Initialization
    SpectreList := tstringlist.Create;
