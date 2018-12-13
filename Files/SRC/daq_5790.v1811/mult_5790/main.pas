@@ -474,7 +474,7 @@ begin
 //        writeprotocol('rdstr: ' + rdstr);
         CurVoltage := dacval;
         if GettingData then begin
-            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', resstr);
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval
             else

@@ -474,7 +474,7 @@ begin
 //        writeprotocol('rdstr: ' + rdstr);
         CurVoltage := dacval;
         if GettingData then begin
-            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', resstr);
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval
             else
@@ -529,7 +529,7 @@ begin
             end;
             meanVoltage := meant / 6.0;
             mean3Voltage := mean3t / 3.0;
-        end;
+        end else CurVoltage := -1;;
        except
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ GET DATA');
             writetimelog( 'Exception on DAQ GET DATA');
