@@ -198,7 +198,7 @@ object MainForm: TMainForm
       Top = 4
       Width = 1687
       Height = 737
-      ActivePage = TabSheet4
+      ActivePage = ts1
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText

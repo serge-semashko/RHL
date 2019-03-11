@@ -529,7 +529,7 @@ begin
             end;
             meanVoltage := meant / 6.0;
             mean3Voltage := mean3t / 3.0;
-        end else CurVoltage := -1;;
+        end else CurVoltage := -1000;
        except
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ GET DATA');
             writetimelog( 'Exception on DAQ GET DATA');
@@ -1195,7 +1195,7 @@ begin
         end;
         statusbar1.Panels[1].Text := '';
 
-        if CurVoltage<0 then statusbar1.Panels[0].Text := format('Ctrl=%.5d U= AGILENT RROR', [curControl, curVoltage])
+        if CurVoltage<-100 then statusbar1.Panels[0].Text := format('Ctrl=%.5d U= AGILENT RROR', [curControl, curVoltage])
                         else statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
         curU.Text := format('%8.3f', [ curVoltage*10000]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
