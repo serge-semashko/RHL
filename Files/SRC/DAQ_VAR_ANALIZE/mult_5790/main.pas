@@ -69,8 +69,8 @@ type
         StartCycle: TSpeedButton;
         DescMemo: TMemo;
         Label1: TLabel;
-        cmbGPIB: TComboBox;
-        cmbInst: TComboBox;
+    cmbGPIB1271: TComboBox;
+    cmbInst1271: TComboBox;
         seSweepCount: TSpinEdit;
         rgSweepMode: TRadioGroup;
         Label2: TLabel;
@@ -98,6 +98,11 @@ type
     Panel2: TPanel;
     Panel4: TPanel;
     Splitter2: TSplitter;
+    Label7: TLabel;
+    cmbGPIB58: TComboBox;
+    Label8: TLabel;
+    cmbInst58: TComboBox;
+    SpeedButton2: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -112,8 +117,8 @@ type
         procedure addressChange(Sender: TObject);
         procedure ComComboBoxChange(Sender: TObject);
         procedure edChChange(Sender: TObject);
-        procedure cmbGPIBChange(Sender: TObject);
-        procedure cmbInstChange(Sender: TObject);
+        procedure cmbGPIB1271Change(Sender: TObject);
+        procedure cmbInst1271Change(Sender: TObject);
         procedure SpeedButton1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
     procedure dbgrd1CellClick(Column: TColumn);
@@ -132,7 +137,9 @@ type
         function CorrectVoltage(target: double): boolean;
         function SetRVoltage(target: double): boolean;
         function delay(ms: integer): integer;
-        function InitCounterAndGPIB: integer;
+        function InitCounter: integer;
+        function InitGPIB1271: integer;
+        function InitGPIB58: integer;
         procedure CreatedataFileName;
     { Public declarations }
     end;
@@ -144,6 +151,7 @@ type
     end;
 
     Varray = array of vrecord;
+function exec488(dev488:integer;cmd:string):boolean;
 
 var
     Counter_per_sec : double = 0;
@@ -154,7 +162,8 @@ var
     daq_counter: int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
-    GPIB_Ready: Boolean = false;
+    GPIB1271_Ready: Boolean = false;
+    GPIB58_Ready: Boolean = false;
     counter_ready: boolean = false;
     meanVoltage: double = 0;
     mean3Voltage: double = 0;
@@ -182,6 +191,8 @@ var
     Vdata: array[0..10000000] of vrecord;
     PrevVindex, Vindex: integer;
     dacval: double;
+    dacval1271: double;
+    dacval58: double;
     ltageChangeIndex: INTEGER;
   (*488.2 GPIB global status variables.*)
     ibsta: Integer;
@@ -240,6 +251,23 @@ end;
 function V_revert(d_cur: dword): double;
 begin
     result := d_cur/20.98843441466855;
+end;
+function exec488(dev488:integer;cmd:string):boolean;
+
+var
+
+ wrtbuf : array[0..1000] of char;
+ rdbuf : array[0..1000] of char;
+ st : int64;
+  begin
+    st := timegetTime;
+    strcopy(wrtbuf, pchar(cmd));
+    //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
+    ibwrt(dev488, @wrtbuf, strlen(wrtbuf));
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+    result := true;
+    if (ibsta and $8000)<>0
+        then result := false
 end;
 
 function setdPotential(U: int64): string;
@@ -385,24 +413,15 @@ end;
 //  ##   ##   ##       ##     ##  ###
 //  ## ##    ##         ##     ## ###
 //                                  ##
-
-function DaqGetdata: boolean;
+function DaqGetCounter: boolean;
 var
     delta: real;
     wrtbuf, rdbuf: packed array[0..299] of char;
     rdstr: string;
     dtc :double;
-begin
-    curmtime := timegettime();
-    writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
-    try
+    resstr : string;
 
-        curtime := now();
-        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
-        curmtime := timegettime();
-//        writeprotocol('3 begin1 dttimer callback=');
-        cntval := 0;
-//   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
+begin
         if (counter_ready) then begin
 
 //            WriteProtocol('Read counter');
@@ -429,6 +448,105 @@ begin
 
             end;
         end;
+
+end;
+
+function DaqGetdata58: boolean;
+var
+    delta: real;
+    wrtbuf, rdbuf: packed array[0..299] of char;
+    rdstr: string;
+    dtc :double;
+    resstr : string;
+begin
+    curmtime := timegettime();
+    writeProtocol('1 #################### DAQ58 start ##################### ' + IntToStr(vindex));
+    try
+
+        curtime := now();
+        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
+        curmtime := timegettime();
+//        writeprotocol('3 begin1 dttimer callback=');
+        cntval := 0;
+//   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
+
+        curmtime := timegettime();
+        exec488(dev,'TARM SGL');
+        ibrd(dev, @rdbuf, 17);
+        gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+        if (ibsta and $8000)<>0
+          then dacval58 := -1
+          else begin
+            rdbuf[ibcnt] := chr(0);
+            resstr := rdbuf;
+            resstr := system.copy(resstr,1,length(resstr)-1);
+            decimalseparator := '.';
+            if not TextToFloat(PChar(resstr), dacval58, fvExtended) then dacval58 := -1;
+          end;
+
+        curmtime := timegettime();
+
+
+        if (dacval58 < 0) then begin
+            PrevMTime := TimeGetTime();
+            PrevTime := now;
+            writeProtocol('Error read AGILENT ' + rdstr + #10);
+            resstr :='AGILENT error';
+        end;
+//        writeprotocol('24');
+        resstr := resstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
+//        writeprotocol('14');
+        prevread := now();
+//        writeprotocol('rdstr: ' + rdstr);
+        CurVoltage := dacval58;
+        if GettingData then begin
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', resstr);
+            if resc = 0 then
+                vdata[vIndex + 1].data := dacval58
+            else
+            vdata[vIndex + 1].data := -1;
+            vdata[vindex + 1].counter := cntval;
+            vdata[vindex + 1].time := now();
+            vdata[vindex + 1].data := dacval58;
+            inc(vIndex);
+        end
+        else if counter_ready then begin
+            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+            LastCounterValue := 0;
+        end;
+
+    except
+        on E: Exception do begin
+            writeprotocol('%%%%%%%%%%%%%%%%% Exceprton on read counter:' + E.Message);
+            mainform.Caption := 'exception!!!!!!!!!!!!!!!!!!!';
+        end;
+
+    end;
+
+    writeProtocol('26 #######D AQ end ' + IntToStr(vindex));
+
+    PrevMTime := TimeGetTime();
+    PrevTime := now;
+end;
+
+
+function DaqGetdata1271: boolean;
+var
+    delta: real;
+    wrtbuf, rdbuf: packed array[0..299] of char;
+    rdstr: string;
+    dtc :double;
+begin
+    curmtime := timegettime();
+    writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
+    try
+
+        curtime := now();
+        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
+        curmtime := timegettime();
+//        writeprotocol('3 begin1 dttimer callback=');
+        cntval := 0;
+//   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
 
         curmtime := timegettime();
 //        writeprotocol('counter ok = ' + IntToStr(cntval));
@@ -493,9 +611,9 @@ begin
 //        if PrevVoltage = rdstr then exit; //У АЦП нет новых данных
         PrevVoltage := rdstr;
         rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
-        val(rdstr, dacval, resc);
+        val(rdstr, dacval1271, resc);
 
-        if (dacval < 0.00000000001) or (pos('.', rdstr) = 0) then begin
+        if (dacval1271 < 0.00000000001) or (pos('.', rdstr) = 0) then begin
             PrevMTime := TimeGetTime();
             PrevTime := now;
             writeProtocol('23 ####ZERO ' + rdstr + #10);
@@ -507,16 +625,16 @@ begin
 //        writeprotocol('14');
         prevread := now();
 //        writeprotocol('rdstr: ' + rdstr);
-        CurVoltage := dacval;
+        CurVoltage := dacval1271;
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
             if resc = 0 then
-                vdata[vIndex + 1].data := dacval
+                vdata[vIndex + 1].data := dacval1271
             else
             vdata[vIndex + 1].data := -1;
             vdata[vindex + 1].counter := cntval;
             vdata[vindex + 1].time := now();
-            vdata[vindex + 1].data := dacval;
+            vdata[vindex + 1].data := dacval1271;
             inc(vIndex);
         end
 
@@ -547,8 +665,9 @@ var
 begin
     while not terminated do begin
      try
-        if (gpib_ready) then begin
-            DaqGetData;
+            DaqGetcounter;
+            DaqGetData1271;
+            DaqGetData58;
             inc(Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
@@ -565,7 +684,6 @@ begin
             end;
             meanVoltage := meant / 6.0;
             mean3Voltage := mean3t / 3.0;
-        end;
        except
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ GET DATA');
             writetimelog( 'Exception on DAQ GET DATA');
@@ -581,11 +699,13 @@ var
     i: int64;
 begin
     deadspn.Value := 5;
-    address.Value := cf.readInteger('hardware', 'counter_addr', 0);
-    ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
-    cmbGPIB.ItemIndex := cf.readInteger('hardware', 'gpib', 0);
-    cmbInst.ItemIndex := cf.readInteger('hardware', 'gpib_instrument', 0);
-    edch.Value := cf.readInteger('hardware', 'counter_channel', 0);
+    address.Value := cf.readInteger('instrument', 'counter_addr', 0);
+    ComComboBox.ItemIndex := cf.readInteger('instrument', 'counter_port', 0)-1;
+    cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib1271', 0);
+    cmbInst1271.ItemIndex := cf.readInteger('instrument', 'gpib_instrument1271', 0)-1;
+    cmbGPIB58.ItemIndex := cf.readInteger('instrument', 'gpib58', 0);
+    cmbInst58.ItemIndex := cf.readInteger('instrument', 'gpib_instrument58', 0)-1;
+    edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
     con2 := TZConnection.Create(self);
     with con2 do begin
         ControlsCodePage := cGET_ACP;
@@ -605,7 +725,6 @@ begin
     end;
     ds1.DataSet := zqry1;
 //    dbgrd1.DataSource := ds
-    cmbInst.ItemIndex := 15;
     memoRead.Text := '';
     gcDataBit := Char(8);      // 8 data bit
     gcParity := Char(0);      // Non Parity
@@ -614,15 +733,13 @@ begin
     bCfgChg := False;
     gszSend := StrAlloc(100);
     gszReceive := StrAlloc(100);
-    InitCounterAndGPIB;
+    InitCounter;
+    InitGPIB1271;
+    InitGPIB58;
     con2.Connect;
     zqry1.Open;
 end;
 
-procedure TimerProc(uTimerID, uMessage: UINT; dwUser, dw1, dw2: DWORD) stdcall;
-begin
-    Daqgetdata;
-end;
 
 procedure TMainForm.StartCycleClick(Sender: TObject);
 var
@@ -1039,8 +1156,13 @@ begin
     deadspn.Value := 5;
     deadspn.Invalidate;
 
-    if (not GPIB_Ready) then begin
-        showmessage('GPIB(цифровой вольметр)недоступен');
+    if (not GPIB1271_Ready) then begin
+        showmessage('GPIB(цифровой вольметр wavetek1271 )недоступен');
+//        close;
+//        application.terminate;
+    end;
+    if (not GPIB58_Ready) then begin
+        showmessage('GPIB(цифровой вольметр wavetek1271 )недоступен');
 //        close;
 //        application.terminate;
     end;
@@ -1068,44 +1190,17 @@ begin
         application.ProcessMessages;
 end;
 
-function TMainForm.InitCounterAndGPIB: integer;
+function TMainForm.InitGPIB1271: integer;
 var
     errmess: string;
     t1: double;
     wrtbuf: array[0..2000] of char;
 begin
 
-    if counter_ready and GPIB_ready then
-        exit;
-    if (not counter_ready) then begin
-
-        gcPort := Char(ComComboBox.ItemIndex + 1);      // Setting Com Port
-        gdwBaudRate := 9600;
-
-        iRet := Open_Com(gcPort, gdwBaudRate, gcDataBit, gcParity, gcStopBit);
-        if iRet > 0 then begin
-            Beep;
-            iConfirm := MessageDlg('OPEN_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13, mtConfirmation, [], 0);
-
-        end
-        else begin
-            ;
-            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + Address.Text), -1, StrToInt('$' + edCh.Text), 0, 200);
-            if wret <> 0 then begin
-                showmessage('Counter not found');
-                Close_Com(gcPort);
-            end
-            else begin
-                bComOpen := True;
-                bCfgChg := False;
-                counter_ready := true;
-            end;
-        end;
-    end;
-    if (gpib_ready) then
+    if (gpib1271_ready) then
         exit;
 
-    dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
+    dev := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
@@ -1210,7 +1305,7 @@ begin
     LastCounterTime := now;
 //    daqthread.Priority := tpTimeCritical;
     GettingData := false;
-    gpib_ready := true;
+    gpib1271_ready := true;
     daqthread.Resume;
     delay(2000);
 
@@ -1221,6 +1316,42 @@ begin
     StartCycle.Enabled := true;
 
 //***********finished configure ******************
+
+end;
+function TMainForm.InitCounter: integer;
+var
+    errmess: string;
+    t1: double;
+    wrtbuf: array[0..2000] of char;
+begin
+
+    if counter_ready then
+        exit;
+    if (not counter_ready) then begin
+
+        gcPort := Char(ComComboBox.ItemIndex + 1);      // Setting Com Port
+        gdwBaudRate := 9600;
+
+        iRet := Open_Com(gcPort, gdwBaudRate, gcDataBit, gcParity, gcStopBit);
+        if iRet > 0 then begin
+            Beep;
+            iConfirm := MessageDlg('OPEN_COM Error Code:' + IntToStr(iRet) + #13 + IGetErrorString(iRet) + #13, mtConfirmation, [], 0);
+
+        end
+        else begin
+            ;
+            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + Address.Text), -1, StrToInt('$' + edCh.Text), 0, 200);
+            if wret <> 0 then begin
+                showmessage('Counter not found');
+                Close_Com(gcPort);
+            end
+            else begin
+                bComOpen := True;
+                bCfgChg := False;
+                counter_ready := true;
+            end;
+        end;
+    end;
 
 end;
 
@@ -1279,8 +1410,8 @@ begin
         end else begin
         end;
         statusbar1.Panels[1].Text := '';
-        statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
-        curU.Text := format('%8.3f', [ curVoltage*10000]);
+        statusbar1.Panels[4].Text := format('%.5f %.5f', [ dacval1271, dacval58]);
+        curU.Text := format('%.5f %.5f', [ dacval1271, dacval58]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
@@ -1394,13 +1525,13 @@ begin
     cf.WriteInteger('hardware', 'counter_channel', tspinedit(Sender).Value);
 end;
 
-procedure TMainForm.cmbGPIBChange(Sender: TObject);
+procedure TMainForm.cmbGPIB1271Change(Sender: TObject);
 begin
     cf.WriteInteger('hardware', 'gpib', TComboBox(Sender).ItemIndex);
-    Init_GPIB;
+    InitGPIB58;
 end;
 
-procedure TMainForm.cmbInstChange(Sender: TObject);
+procedure TMainForm.cmbInst1271Change(Sender: TObject);
 begin
     cf.WriteInteger('hardware', 'gpib_instrument', TComboBox(Sender).ItemIndex);
 end;
@@ -1460,6 +1591,60 @@ begin
    selPointSum.Caption := 'V: '+psFullsp.XValueToText(psFullsp.XValues.Value[ValueIndex])+'v  Counter: '+
    psFullsp.YValueToText(psFullsp.YValues.Value[ValueIndex]);
 
+end;
+
+Function TMainForm.InitGPIB58;
+var
+    wrtbuf : array[0..1000] of char;
+    errmess: string;
+    t1: double;
+    ibnum, devnum, i1 : integer;
+begin
+    gpib58_ready := false;
+    StartCycle.Enabled := false;
+    memoread.lines.Add('');
+    dev := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex + 1, 0, T1s, 1, 0);
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+    if (ibsta and ERR) <> 0 then begin
+        errmess := GpibError(iberr);
+        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+        showmessage('Err: Error in init the GPIB device.');
+        exit;
+    end;
+
+    ibclr(dev);
+    gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
+
+    if not exec488(dev,'PRESET NORM') then begin
+        errmess := GpibError(iberr);
+        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+        showmessage('Err: Error in init the GPIB device.');
+        exit;
+    end;;
+    exec488(dev,'TARM HOLD');
+    exec488(dev,'MEM LIFO');
+    exec488(dev,'DCV 10, 1E-10');
+    exec488(dev,'aper.1');
+
+    prevread := now();
+    GettingData := false;
+    DaqThread := Tdaqthread.Create(true);
+    daqthread.Priority := tphigher;
+    daqthread.Priority := tphighest;
+    LastCounterTime := now;
+//    daqthread.Priority := tpTimeCritical;
+    GettingData := false;
+    gpib58_ready := true;
+    daqthread.Resume;
+    delay(2000);
+
+    curControl := v_convert(meanVoltage);
+    oldControl := CurControl;
+//    bottomspn.Value := trunc(meanVoltage * 10000);
+//    topspn.Value := trunc(meanVoltage * 10000);
+    StartCycle.Enabled := true;
+
+//***********finished configure ******************
 end;
 
 Initialization

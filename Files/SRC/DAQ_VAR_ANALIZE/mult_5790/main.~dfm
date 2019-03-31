@@ -919,24 +919,54 @@ object MainForm: TMainForm
               Caption = 'Channel'
             end
             object Label1: TLabel
-              Left = 11
-              Top = 54
-              Width = 45
+              Left = 28
+              Top = 57
+              Width = 85
               Height = 13
               Alignment = taRightJustify
               AutoSize = False
-              Caption = 'GPIB:'
+              Caption = 'Wavetek GPIB:'
             end
             object Label2: TLabel
-              Left = 130
+              Left = 188
               Top = 54
               Width = 52
               Height = 13
               Caption = 'Instrument:'
             end
             object btn2: TSpeedButton
-              Left = 261
+              Left = 319
               Top = 41
+              Width = 175
+              Height = 39
+              Caption = 'Down high voltage'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clNavy
+              Font.Height = -16
+              Font.Name = 'MS Sans Serif'
+              Font.Style = [fsBold]
+              ParentFont = False
+              OnClick = btn2Click
+            end
+            object Label7: TLabel
+              Left = 28
+              Top = 105
+              Width = 85
+              Height = 13
+              Alignment = taRightJustify
+              AutoSize = False
+              Caption = 'Agilent GPIB:'
+            end
+            object Label8: TLabel
+              Left = 188
+              Top = 102
+              Width = 52
+              Height = 13
+              Caption = 'Instrument:'
+            end
+            object SpeedButton2: TSpeedButton
+              Left = 319
+              Top = 89
               Width = 175
               Height = 39
               Caption = 'Down high voltage'
@@ -1092,8 +1122,8 @@ object MainForm: TMainForm
                 TabOrder = 4
               end
             end
-            object cmbGPIB: TComboBox
-              Left = 60
+            object cmbGPIB1271: TComboBox
+              Left = 118
               Top = 54
               Width = 65
               Height = 21
@@ -1102,15 +1132,15 @@ object MainForm: TMainForm
               ItemIndex = 0
               TabOrder = 4
               Text = 'GPIB0'
-              OnChange = cmbGPIBChange
+              OnChange = cmbGPIB1271Change
               Items.Strings = (
                 'GPIB0'
                 'GPIB1'
                 'GPIB2'
                 'GPIB3')
             end
-            object cmbInst: TComboBox
-              Left = 190
+            object cmbInst1271: TComboBox
+              Left = 248
               Top = 54
               Width = 40
               Height = 21
@@ -1120,7 +1150,7 @@ object MainForm: TMainForm
               ItemIndex = 15
               TabOrder = 5
               Text = '16'
-              OnChange = cmbInstChange
+              OnChange = cmbInst1271Change
               Items.Strings = (
                 '1'
                 '2'
@@ -1154,13 +1184,74 @@ object MainForm: TMainForm
                 '30')
             end
             object memoRead: TMemo
-              Left = 8
-              Top = 103
+              Left = 0
+              Top = 263
               Width = 377
               Height = 77
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               TabOrder = 6
               Visible = False
+            end
+            object cmbGPIB58: TComboBox
+              Left = 118
+              Top = 102
+              Width = 65
+              Height = 21
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ItemHeight = 13
+              ItemIndex = 0
+              TabOrder = 7
+              Text = 'GPIB0'
+              OnChange = cmbGPIB1271Change
+              Items.Strings = (
+                'GPIB0'
+                'GPIB1'
+                'GPIB2'
+                'GPIB3')
+            end
+            object cmbInst58: TComboBox
+              Left = 248
+              Top = 102
+              Width = 40
+              Height = 21
+              Style = csDropDownList
+              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
+              ItemHeight = 13
+              ItemIndex = 15
+              TabOrder = 8
+              Text = '16'
+              OnChange = cmbInst1271Change
+              Items.Strings = (
+                '1'
+                '2'
+                '3'
+                '4'
+                '5'
+                '6'
+                '7'
+                '8'
+                '9'
+                '10'
+                '11'
+                '12'
+                '13'
+                '14'
+                '15'
+                '16'
+                '17'
+                '18'
+                '19'
+                '20'
+                '21'
+                '22'
+                '23'
+                '24'
+                '25'
+                '26'
+                '27'
+                '28'
+                '29'
+                '30')
             end
           end
         end
@@ -1185,6 +1276,9 @@ object MainForm: TMainForm
       item
         Text = '---'
         Width = 300
+      end
+      item
+        Width = 333
       end>
   end
   object Timer1: TTimer
