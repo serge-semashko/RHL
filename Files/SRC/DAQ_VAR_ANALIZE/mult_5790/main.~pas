@@ -117,7 +117,7 @@ type
         procedure addressChange(Sender: TObject);
         procedure ComComboBoxChange(Sender: TObject);
         procedure edChChange(Sender: TObject);
-        procedure cmbGPIB1271Change(Sender: TObject);
+        procedure cmbGPIB_agilentChange(Sender: TObject);
         procedure cmbInst1271Change(Sender: TObject);
         procedure SpeedButton1Click(Sender: TObject);
     procedure btn2Click(Sender: TObject);
@@ -139,7 +139,7 @@ type
         function delay(ms: integer): integer;
         function InitCounter: integer;
         function InitGPIB1271: integer;
-        function InitGPIB58: integer;
+        function InitGPIB_agilent: integer;
         procedure CreatedataFileName;
     { Public declarations }
     end;
@@ -151,6 +151,9 @@ type
     end;
 
     Varray = array of vrecord;
+     function get_WAVETEK_data:boolean;
+        function get_agilent_data:boolean;
+
 function exec488(dev488:integer;cmd:string):boolean;
 
 var
@@ -162,8 +165,8 @@ var
     daq_counter: int64 = 0;
     CorrectionTime: double;
     daq_mode: integer = 0;
-    GPIB1271_Ready: Boolean = false;
-    GPIB58_Ready: Boolean = false;
+    GPIB_1271_Ready: Boolean = false;
+    GPIB_agilent_Ready: Boolean = false;
     counter_ready: boolean = false;
     meanVoltage: double = 0;
     mean3Voltage: double = 0;
@@ -213,7 +216,8 @@ var
     cntVal: DWord;
     DeltaCounterValue: int64;
     PrevVoltageChange: double;
-    dev, resc: integer;
+    dev1271, resc: integer;
+    dev58a: integer;
     Interval_low: double = 0.1000;
     interval_high: double = 0.1090;
     abs_step: double = 0.0001;
@@ -471,8 +475,8 @@ begin
 //   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
 
         curmtime := timegettime();
-        exec488(dev,'TARM SGL');
-        ibrd(dev, @rdbuf, 17);
+        exec488(dev58a,'TARM SGL');
+        ibrd(dev58a, @rdbuf, 17);
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and $8000)<>0
           then dacval58 := -1
@@ -553,7 +557,7 @@ begin
 
         strcopy(wrtbuf, pchar('X?'));
 //        WriteProtocol('4 ibwrta Write a string command to a GPIB instrument asynchronously using the ibwrta() command');
-        ibwrta(dev, @wrtbuf, strlen(wrtbuf));
+        ibwrta(dev1271, @wrtbuf, strlen(wrtbuf));
 //        WriteProtocol('5 get globals');
 
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
@@ -564,7 +568,7 @@ begin
         end;
 //        writeprotocol('7 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 //        WriteProtocol('8 ibWait for the completion of asynchronous write operation');
-        ibwait(dev, CMPL);
+        ibwait(dev1271, CMPL);
 
         curmtime := timegettime();
 //        writeprotocol('9 wait ok = ' + IntToStr(CurMtime - PrevMTime));
@@ -580,7 +584,7 @@ begin
 
 //        WriteProtocol('13 //Read the response string from the GPIB instrument asynchronously using the ibrda() command');
 //        WriteProtocol('14 ibrda');
-        ibrda(dev, @rdbuf, 100);
+        ibrda(dev1271, @rdbuf, 100);
 //        WriteProtocol('15 get globals');
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
         if (ibsta and ERR) <> 0 then begin
@@ -591,7 +595,7 @@ begin
 //        writeprotocol('17 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
 
 //        WriteProtocol('18 Wait for the completion of asynchronous read operation');
-        ibwait(dev, CMPL);
+        ibwait(dev1271, CMPL);
 //        WriteProtocol('19 get globals');
     //Получение напряжения
         gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
@@ -613,7 +617,8 @@ begin
         rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
         val(rdstr, dacval1271, resc);
 
-        if (dacval1271 < 0.00000000001) or (pos('.', rdstr) = 0) then begin
+        if  pos('.', rdstr) = 0  then begin
+            dacval1271 := -131313;
             PrevMTime := TimeGetTime();
             PrevTime := now;
             writeProtocol('23 ####ZERO ' + rdstr + #10);
@@ -666,8 +671,8 @@ begin
     while not terminated do begin
      try
             DaqGetcounter;
-            DaqGetData1271;
-            DaqGetData58;
+            if gpib_1271_ready then DaqGetData1271;
+            if gpib_agilent_ready then DaqGetData58;
             inc(Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
@@ -735,7 +740,7 @@ begin
     gszReceive := StrAlloc(100);
     InitCounter;
     InitGPIB1271;
-    InitGPIB58;
+    InitGPIB_agilent;
     con2.Connect;
     zqry1.Open;
 end;
@@ -1156,13 +1161,13 @@ begin
     deadspn.Value := 5;
     deadspn.Invalidate;
 
-    if (not GPIB1271_Ready) then begin
-        showmessage('GPIB(цифровой вольметр wavetek1271 )недоступен');
+    if (not GPIB_1271_Ready) then begin
+        showmessage('GPIB(цифровой вольметр WAVETEK1271 )недоступен');
 //        close;
 //        application.terminate;
     end;
-    if (not GPIB58_Ready) then begin
-        showmessage('GPIB(цифровой вольметр wavetek1271 )недоступен');
+    if (not GPIB_agilent_Ready) then begin
+        showmessage('GPIB(цифровой вольметр AGILENT )недоступен');
 //        close;
 //        application.terminate;
     end;
@@ -1197,10 +1202,10 @@ var
     wrtbuf: array[0..2000] of char;
 begin
 
-    if (gpib1271_ready) then
+    if (gpib_1271_ready) then
         exit;
 
-    dev := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex + 1, 0, T1s, 1, 0);
+    dev1271 := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
@@ -1212,32 +1217,18 @@ begin
 
   //Open and intialize an GPIB instrument
     OpError := false;
-(*
-  while CycBox.Checked do begin
-
-    T1 := NOW;
-    while (now-t1)*24*3600<0.1 DO BEGIN
-      application.ProcessMessages;
-    END;
-*)
     // process error  in prev operation
     if opError then begin
         t1 := NOW;
         while (now - t1) * 24 * 3600 < 8 do begin
             application.ProcessMessages;
         end;
-      (*
-       winexec(pansichar(paramstr(0)+' continue'), sw_show);
-       CycBox.Checked := false;
-       application.terminate;
-       break;
-       *)
     end;
 
     opError := false;
 
     //clear the specific GPIB instrument
-    ibclr(dev);
+    ibclr(dev1271);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
@@ -1250,7 +1241,7 @@ begin
 //**************** clear queue and events*****************
     strcopy(wrtbuf, pchar(#10 + '*cls' + #10));
     //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
-    ibwrta(dev, @wrtbuf, strlen(wrtbuf));
+    ibwrta(dev1271, @wrtbuf, strlen(wrtbuf));
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing *cls command to the GPIB instrument.' + #10);
@@ -1260,7 +1251,7 @@ begin
     end;
 
     //Wait for the completion of asynchronous write operation
-    ibwait(dev, CMPL);
+    ibwait(dev1271, CMPL);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Wait for the completion of asynchronous write operation. *cls ' + #10);
@@ -1272,13 +1263,10 @@ begin
 
 
 //***********finish configure ******************
-
-//**************** Configure  device 10V resolution 6*****************
-//    strcopy(wrtbuf, pchar('dcv 10,resl6'));
-//**************** Configure  deice 10V resolution 7*****************
-    strcopy(wrtbuf, pchar('dcv 10,resl6'));
+//**************** Configure  deice 10V resolution 6*****************
+    strcopy(wrtbuf, pchar('dcv 1000,resl6'));
     //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
-    ibwrta(dev, @wrtbuf, strlen(wrtbuf));
+    ibwrta(dev1271, @wrtbuf, strlen(wrtbuf));
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in writing the string command to the GPIB instrument.' + #10);
@@ -1288,7 +1276,7 @@ begin
     end;
 
     //Wait for the completion of asynchronous write operation
-    ibwait(dev, CMPL);
+    ibwait(dev1271, CMPL);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Writing the string command to the GPIB instrument timeout.' + #10);
@@ -1305,7 +1293,7 @@ begin
     LastCounterTime := now;
 //    daqthread.Priority := tpTimeCritical;
     GettingData := false;
-    gpib1271_ready := true;
+    gpib_1271_ready := true;
     daqthread.Resume;
     delay(2000);
 
@@ -1410,7 +1398,14 @@ begin
         end else begin
         end;
         statusbar1.Panels[1].Text := '';
-        statusbar1.Panels[4].Text := format('%.5f %.5f', [ dacval1271, dacval58]);
+        if GPIB_1271_Ready
+            then statusbar1.Panels[4].Text := format('Wavetek= %.5f ', [ dacval1271, dacval58])
+            else statusbar1.Panels[4].Text := format('Wavetek=NaN', [ dacval1271]);
+        if GPIB_agilent_Ready
+            then statusbar1.Panels[5].Text := format('Agilent=%.5f', [ dacval58])
+            else statusbar1.Panels[5].Text := format('Agilent=NaN', [  dacval58]);
+
+        statusbar1.Panels[4].Text := format('Wavetek= %.5f Agilent=%.5f', [ dacval1271, dacval58]);
         curU.Text := format('%.5f %.5f', [ dacval1271, dacval58]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
@@ -1525,10 +1520,10 @@ begin
     cf.WriteInteger('hardware', 'counter_channel', tspinedit(Sender).Value);
 end;
 
-procedure TMainForm.cmbGPIB1271Change(Sender: TObject);
+procedure TMainForm.cmbGPIB_agilentChange(Sender: TObject);
 begin
     cf.WriteInteger('hardware', 'gpib', TComboBox(Sender).ItemIndex);
-    InitGPIB58;
+    InitGPIB_agilent;
 end;
 
 procedure TMainForm.cmbInst1271Change(Sender: TObject);
@@ -1593,17 +1588,17 @@ begin
 
 end;
 
-Function TMainForm.InitGPIB58;
+Function TMainForm.InitGPIB_agilent;
 var
     wrtbuf : array[0..1000] of char;
     errmess: string;
     t1: double;
     ibnum, devnum, i1 : integer;
 begin
-    gpib58_ready := false;
+    gpib_agilent_ready := false;
     StartCycle.Enabled := false;
     memoread.lines.Add('');
-    dev := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex + 1, 0, T1s, 1, 0);
+    dev58a := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
@@ -1612,19 +1607,19 @@ begin
         exit;
     end;
 
-    ibclr(dev);
+    ibclr(dev58a);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
 
-    if not exec488(dev,'PRESET NORM') then begin
+    if not exec488(dev58a,'PRESET NORM') then begin
         errmess := GpibError(iberr);
         memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
         showmessage('Err: Error in init the GPIB device.');
         exit;
     end;;
-    exec488(dev,'TARM HOLD');
-    exec488(dev,'MEM LIFO');
-    exec488(dev,'DCV 10, 1E-10');
-    exec488(dev,'aper.1');
+    exec488(dev58a,'TARM HOLD');
+    exec488(dev58a,'MEM LIFO');
+    exec488(dev58a,'DCV 10, 1E-10');
+    exec488(dev58a,'aper.1');
 
     prevread := now();
     GettingData := false;
@@ -1634,7 +1629,7 @@ begin
     LastCounterTime := now;
 //    daqthread.Priority := tpTimeCritical;
     GettingData := false;
-    gpib58_ready := true;
+    gpib_agilent_ready := true;
     daqthread.Resume;
     delay(2000);
 
@@ -1645,6 +1640,16 @@ begin
     StartCycle.Enabled := true;
 
 //***********finished configure ******************
+end;
+
+function get_agilent_data: boolean;
+begin
+
+end;
+
+function get_WAVETEK_data: boolean;
+begin
+
 end;
 
 Initialization

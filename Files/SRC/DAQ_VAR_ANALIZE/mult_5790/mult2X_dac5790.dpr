@@ -1,4 +1,4 @@
-program mult5790;
+program mult2X_dac5790;
 
 uses
   Forms,
