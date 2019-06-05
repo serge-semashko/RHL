@@ -98,6 +98,10 @@ type
     Panel2: TPanel;
     Panel4: TPanel;
     Splitter2: TSplitter;
+    SpeedButton2: TSpeedButton;
+    Splitter3: TSplitter;
+    SeLowVoltagebtn: TSpeedButton;
+    TargetVEdt: TEdit;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -124,6 +128,8 @@ type
       ValueIndex, X, Y: Integer);
     procedure psFullspClickPointer(Sender: TCustomSeries; ValueIndex, X,
       Y: Integer);
+    procedure SpeedButton2Click(Sender: TObject);
+    procedure SeLowVoltagebtnClick(Sender: TObject);
     private
     { Private declarations }
     public
@@ -146,6 +152,9 @@ type
     Varray = array of vrecord;
 
 var
+    lowurl : string = 'http://192.168.0.10:8282/';
+    volt_cost : double = 1043960/1000.0;
+    Volt_scale : integer = 1000;
     Counter_per_sec : double = 0;
     newTarget, curTarget: double;
     SweepStartTime: double;
@@ -232,15 +241,13 @@ end;
 
 function V_Convert(v_cur: double): dword;
 begin
-//     result:=trunc(0.7090*10000*20.98843441466855);
-    result:=round(v_cur*10000*20.98843441466855);
-//    result := trunc(1048576.0 * (v_cur) / 5);
+    result:=trunc(curvoltage*1000*volt_cost);
 end;
 
-function V_revert(d_cur: dword): double;
-begin
-    result := d_cur/20.98843441466855;
-end;
+//function V_revert(d_cur: dword): double;
+//begin
+//    result := d_cur/20.98843441466855;
+//end;
 
 function setdPotential(U: int64): string;
 var
@@ -248,7 +255,7 @@ var
 begin
     curControl := U;
     if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
-        curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (U - oldcontrol) / abs(oldControl - U));
+        curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 1) * (U - oldcontrol) / abs(oldControl - U));
     if curControl < 0 then
         curcontrol := 0;
     oldControl := CurControl;
@@ -260,7 +267,7 @@ begin
     HTTP := THTTPSend.Create;
     s1 := format('%d', [curControl]);
     s1 := ansiReplaceStr(s1, ',', '.');
-    url := 'http://192.168.0.10:8282/setabs=' + s1;
+    url := lowurl+'setabs=' + s1;
 
     HTTP.HTTPMethod('GET', url);
     http.Free;
@@ -271,13 +278,18 @@ function tmainform.CorrectVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
+    curv :double;
+    delta :double;
 begin
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
 
 //    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) * 20.98843441466855);
-    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+    curv := CurVoltage * Volt_scale;
+
+    delta :=  ((target * 1.0 - curvoltage*Volt_scale) * volt_cost);
+    curControl := curControl+round(delta);
     setDPotential(curControl);
 end;
 function CorrectVoltageM(target: double): boolean;
@@ -288,7 +300,7 @@ begin
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
-    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+    curControl := curControl + round((target * 1.0 - CurVoltage * Volt_scale) * volt_cost);
     setDPotential(curControl);
 end;
 
@@ -302,9 +314,9 @@ begin
 //    tmpstr := format('setvoltage 1 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  ', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
-    delay(1200);
-    diff := mean3Voltage * 10000;
-    diff := target * 1.0 - mean3Voltage * 10000;
+    delay(1000);
+    diff := mean3Voltage * Volt_scale;
+    diff := target * 1.0 - mean3Voltage * Volt_scale;
 //    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.1 then
@@ -320,22 +332,22 @@ var
     Vdiff: double;
 begin
     startsetTime := now;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+    while (abs((target * 1.0 - curVoltage * Volt_scale)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
         delay(1000);
-        Vdiff := abs((target * 1.0 - curVoltage * 10000));
+        Vdiff := abs((target * 1.0 - curVoltage * Volt_scale));
     end;
-    if (target <200) and (meanVoltage*10000<200) then begin
+    if (target <200) and (meanVoltage*Volt_scale<200) then begin
       Result := True;
       Exit;
     end;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
+    while (abs((target * 1.0 - curVoltage * Volt_scale)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
         correctVoltage(target);
         delay(1000);
-        Vdiff := abs((target * 1.0 - curVoltage * 10000));
+        Vdiff := abs((target * 1.0 - curVoltage * Volt_scale));
     end;
 
-    if (target * 1.0 - curVoltage * 10000) > 1 then begin
+    if (target * 1.0 - curVoltage * Volt_scale) > 1 then begin
         result := false;
     end
     else
@@ -355,24 +367,24 @@ begin
     if (cur - len + 1) < 0 then
         exit;
     for i := cur - (len - 1) to cur do begin
-        mean := mean + vdata[i].data;
+        mean := mean + vdata[i].data*Volt_scale;
     end;
     mean := mean / len;
     for i := cur - (len - 1) to cur do begin
-        delta := abs(vdata[i].data - mean);
+        delta := abs(vdata[i].data*Volt_scale - mean);
         if delta > 0.0002 then
-            vdata[i].data := mean;
+            vdata[i].data := mean/Volt_scale;
     end;
     mean := 0;
     std := 0;
 
     for i := cur - (len - 1) to cur do begin
-        mean := mean + vdata[i].data;
+        mean := mean + vdata[i].data*Volt_scale;
     end;
     mean := mean / len;
 
     for i := cur - (len - 1) to cur do begin
-        std := std + (mean - vdata[i].data) * (mean - vdata[i].data);
+        std := std + (mean - vdata[i].data*Volt_scale) * (mean - vdata[i].data*Volt_scale);
     end;
     std := sqrt(std / (len));
 
@@ -394,11 +406,11 @@ var
     dtc :double;
 begin
     curmtime := timegettime();
-    writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
+//    writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
     try
 
         curtime := now();
-        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
+//        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
         curmtime := timegettime();
 //        writeprotocol('3 begin1 dttimer callback=');
         cntval := 0;
@@ -458,8 +470,8 @@ begin
             opError := true;
             exit;
         end;
-        writeprotocol('12 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
-
+//        writeprotocol('12 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt));
+        fillchar(rdbuf,100,0);
 //        WriteProtocol('13 //Read the response string from the GPIB instrument asynchronously using the ibrda() command');
 //        WriteProtocol('14 ibrda');
         ibrda(dev, @rdbuf, 100);
@@ -488,20 +500,22 @@ begin
         rdbuf[ibcnt - 1] := chr(0);
         rdstr := rdbuf;
         rdstr := rdstr + ' ';
-//        writeprotocol('22 Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt) + ' str=' + rdstr);
 
 //        if PrevVoltage = rdstr then exit; //У АЦП нет новых данных
         PrevVoltage := rdstr;
         rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
         val(rdstr, dacval, resc);
+        dacval := abs(dacval);
+        writeprotocol('Answer ok from the GPIB instrument ok. ibcnt = ' + IntToStr(ibcnt) + ' '+format('%.5f',[dacval])+' str=' + rdstr);
 
-        if (dacval < 0.00000000001) or (pos('.', rdstr) = 0) then begin
+        if (pos('.', rdstr) = 0) then begin
             PrevMTime := TimeGetTime();
             PrevTime := now;
             writeProtocol('23 ####ZERO ' + rdstr + #10);
             exit;
 
         end;
+        dacval:=dacval/1000.0;
 //        writeprotocol('24');
         rdstr := rdstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
 //        writeprotocol('14');
@@ -533,7 +547,7 @@ begin
 
     end;
 
-    writeProtocol('26 #######D AQ end ' + IntToStr(vindex));
+//    writeProtocol('26 #######D AQ end ' + IntToStr(vindex));
 
     PrevMTime := TimeGetTime();
     PrevTime := now;
@@ -731,6 +745,8 @@ var
     begin
         tmpstr := 'Set range  mode = ' + IntToStr(daq_mode) + ' step = ' + IntToStr(dstep) + ' target= ' + floatToStr(curTarget) + ' Ubeg= ' + intToStr(border_low) + ' Uend= ' + intToStr(border_high) + ' recno= ' + intToStr(zqry1.RecNo);
         writetimelog(DataDirName + 'range.txt', tmpstr);
+        writetimelog(' set region ='+tmpstr+#10);
+
 
         if daq_mode = 1 then begin
             if dstep < 0 then
@@ -747,13 +763,16 @@ var
                 setrangeparams;
                 if zqry1.Eof then begin
                     if daq_mode = 0 then begin
+                        zqry1.Last;
+                        setrangeparams;
                         dstep := -1;
                         curTarget := zqry1.FieldValues['Uend'];
                         Sweep := Sweep + 1;
                         exit;
-
                     end
                     else begin
+                        zqry1.first;
+                        setrangeparams;
                         zqry1.MoveBy(-zqry1.RecNo);
                         curTarget := zqry1.FieldValues['Ubeg'];
                         Sweep := Sweep + 1;
@@ -777,6 +796,8 @@ var
                 zqry1.MoveBy(-1);
                 setrangeparams;
                 if zqry1.bof then begin
+                    zqry1.first;
+                    setrangeparams;
                     dstep := 1;
                     curTarget := zqry1.FieldValues['Ubeg'];
                     Sweep := Sweep + 1;
@@ -791,7 +812,9 @@ var
         showerrorRange;
     end;
 var
-delta :double;
+tmpr,delta :Extended;
+Index_in_step : integer;
+sum, sumx2 : double;
 begin
  if (zqry1.RecordCount <1) then begin
    showmessage('No measurung range');
@@ -826,12 +849,12 @@ begin
     while not (zqry1.Eof) do begin
         sweep_Duration := sweep_Duration + (zqry1.FieldByName('dead_time').AsInteger+zqry1.FieldByName('exposition').AsInteger)*
          (1+
-         (-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger
+         (-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div (zqry1.FieldByName('Ustep').AsInteger+1)
          );
         headerstr := headerstr + format('Region %d: Ubeg(V)= %d, Uend(V)= %d, Ustep(V)= %.1f, Exposition(s)= %d, Dead(s)= %d, Channels= %d  ',
              [zqry1.RecNo, zqry1.FieldByName('Ubeg').AsInteger, zqry1.FieldByName('Uend').AsInteger, zqry1.FieldByName('Ustep').AsInteger / 1000.0,
               zqry1.FieldByName('exposition').AsInteger, zqry1.FieldByName('dead_time').AsInteger,
-              1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div zqry1.FieldByName('Ustep').AsInteger ]) + #10;
+              1+(-zqry1.FieldByName('Ubeg').AsInteger + zqry1.FieldByName('Uend').AsInteger) * 1000  div (zqry1.FieldByName('Ustep').AsInteger+1) ]) + #10;
         zqry1.Next;
     end;
     Sweep_duration := Sweep_duration /(24*3600);
@@ -859,6 +882,7 @@ begin
             break;
         if I1 = 10 then begin
             showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
+            Startcycle.Caption := 'Start measurement';
             Startcycle.Enabled := true;
             Screen.Cursor := crDefault;
             exit;
@@ -885,7 +909,6 @@ begin
 
     SetEnablingControl;
     MeasuringStartTime := Now;
-    start_step := now;
 
     BeginSweep;
     countPerVSeries.AddXy(Border_low-0.1, 0);
@@ -909,16 +932,18 @@ begin
     Screen.Cursor := crDefault;
     dstep := 1;
     GettingData := true;
+    Index_in_step := 0;
+    start_step := now;
+
     while (Startcycle.Caption = 'Stop measurement') do begin
         mainform.Caption := IntToStr(cntval);
 
-        while ch1StdSeries.Count > 6230 do
-            ch1StdSeries.Delete(0);
-        while ch1VoltSeries.Count > 6230 do
+        while ch1VoltSeries.Count > 16230 do
             ch1VoltSeries.Delete(0);
+        i1 := ch1VoltSeries.Count;
         while ch1MeanSeries.Count > 6230 do
             ch1MeanSeries.Delete(0);
-        while MEANvOLTAGEseries.Count > 65300 do
+        while MEANvOLTAGEseries.Count > 6563530300 do
             MEANvOLTAGEseries.Delete(0);
         while STDvOLTAGEseries.Count > 65300 do
             STDvOLTAGEseries.Delete(0);
@@ -926,9 +951,13 @@ begin
             Counterseries.Delete(0);
         if prevGrIndex = vindex + 1 then
             continue;
+        inc(index_in_step);
         for il1 := prevGrIndex to vindex do begin
-            ch1VoltSeries.AddXY(vdata[il1].time, vdata[il1].data);
+            ch1VoltSeries.AddXY(vdata[il1].time, vdata[il1].data*Volt_scale);
         end;
+        IF (ch1VoltSeries.Count>0) AND  (ch1STDSeries.Count>0) THEN  while ch1StdSeries.XValues[0]< ch1VoltSeries.XValues[0]  do         ch1StdSeries.Delete(0);
+
+
 
         prevGrIndex := vindex + 1;
 
@@ -941,8 +970,10 @@ begin
             CounterStep := vdata[vindex].counter;
             dt := (now() - lastCounterTime) * 24 * 3600;
             CalcStdAndMean(Vindex, vindex - StepStartIndex); // vIndex-PrevVindex);
-            ch1MeanSeries.AddXY(now, mean);
-            ch1stdSeries.AddXY(now, std);
+
+
+//            ch1MeanSeries.AddXY(now, mean);
+//            ch1stdSeries.AddXY(now, std);
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(curtarget, CounterStep);
@@ -959,67 +990,105 @@ begin
             Stepstr := format('%8.6f %8.6f ', [mean, std]);
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
-            writetimelog(DataFileName + '.dat', Stepstr);
+            writetimelog(DataFileName + '.dat', Stepstr+#10);
             memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Read ok = ' + rdstr);
     //   writetimelog(rdstr+#10);
+
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;
-            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
-            writetimelog(DataDirName + 'range.txt', tmpstr);
+            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * Volt_scale, mean3Voltage * Volt_scale, dstep * step_Value / 1000.0, border_low * 1.0]);
+            writetimelog(DataDirName + 'range.txt', tmpstr+#10);
 
             newTarget := curTarget + dstep * step_Value / 1000.0;
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 OldSweepNumber := Sweep;
-                SetNewRegion();
+                if dstep > 0 then
+                     SetNewRegion()
+                else
+                     SetNewRegion();
                 if (seSweepCount.Value > 0) and (Sweep > seSweepCount.Value) then begin
                     FinishSweep;
                     Writelog(DataFileName + '.txt', tmpstr + #10);
                     tmpstr := 'Current date: ' + FormatDateTime('DD.MM.YYYY', now) + ', Begin time:' + FormatDateTime('HH.NN.SS', MeasuringStartTime) + ', End time:' + FormatDateTime('HH.NN.SS', now);
-                    WriteLog(DatafileName+'.txt', tmpstr);
-                  break;
+                    WriteLog(DatafileName+'.txt', tmpstr+#10);
+                    break;
                 end;
+                {
+                IF THEN ELSE}
                 if OldSweepNumber <> Sweep then begin
                     FinishSweep;
                     BeginSweep;
                     SweepStartTime := now;
                 end;
+                if dstep=1 then curTarget := border_low else curTarget := Border_High;
                 SetRegionBorder(curTarget);
-                for I1 := 0 to 10 do SetVoltage(border_low);
-                Start_dead := now;
+                for I1 := 0 to 10 do SetVoltage(curtarget);
                 while (now - start_dead) * 24 * 3600 < dead_Value * 2 do begin
                     setVoltage(curTarget);
                 end;
+                Start_dead := now;
+                Index_in_step := 0;
             end
             else begin
-                writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                while (now - start_dead) * 24 * 3600 < dead_Value-2 do begin
-                    writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                    setVoltage(curTarget);
+                start_dead:=now;
+                writetimelog(format('===Begin   cur= %.4f  Step Mean3= %.4f  Target= %.4f ctrl=%d',[curVoltage*Volt_scale, mean3Voltage*Volt_scale, curTarget,curControl])+#10);
+                while (now - start_dead) * 24 * 3600 < dead_Value-1 do begin
+                    delta :=  ((curtarget * 1.0 - curvoltage*Volt_scale) * volt_cost);
+                    curControl := curControl+round(delta);
+                    writetimelog('dead='+ IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Correct cur= %.4f Target= %.4f Ctrl=%d Delta=%f',[curVoltage*Volt_scale, curTarget, curcontrol,delta])+#10);
+                    setDPotential(curControl);
+                    delay(1200);
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
-                    writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-
+                    writetimelog(format('wait Step begin= cur= %.2f Target= %.2f',[curVoltage*Volt_scale,  curTarget])+#10);
                     delay(300);
                 end;
             end;
-            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
-            writetimelog(DataDirName + 'range.txt', tmpstr);
+            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * Volt_scale, meanVoltage * Volt_scale, mean3Voltage * Volt_scale, dstep * step_Value / 1000.0, border_low * 1.0]);
+            writetimelog(DataDirName + 'range.txt', tmpstr+#10);
             GettingData := true;
             correctionTime := now;
             start_step := now;
-        end
-        else if (now - CorrectionTime) * 24 * 3600 > 2 then begin
-            CorrectVoltage(curTarget);
-            correctionTime := now;
-        end;
-        T1 := now;
-        while (now - T1) * 24 * 3600 < 1 do begin
-            application.ProcessMessages;
-            sleep(100);
-        end;
+            Index_in_step := 0;
+        end else begin
+          if (index_in_step>2)then begin
+            if ((index_in_step>10)) then begin
+                sum :=0;
+                sumx2 :=0;
+                for i1 := ch1Voltseries.Count-10 to  ch1Voltseries.Count-1 do begin
+                     tmpr :=  ch1Voltseries.YValues[i1];
+                     sum:=sum+tmpr;
+                     sumx2 := sumx2++tmpr*+tmpr;
+                end;
 
+                mean := sum/10;
+                std :=sumx2/10-mean*mean+0.00000001;
+                if abs(std)<0.0000000000001 then std := 0.00000001;
+                if std<0 then
+                  ch1stdSeries.AddXY(now, std);
+
+                std := sqrt(std);
+                ch1stdSeries.AddXY(now, std);
+            end;
+            sum :=0;
+            for i1 := ch1Voltseries.Count-2 to  ch1Voltseries.Count-2 do begin
+                 sum:=sum+ch1Voltseries.YValues[i1];
+                 sumx2 := sumx2+ch1Voltseries.YValues[i1]*ch1Voltseries.YValues[i1];
+            end;
+
+              mean := sum/1;
+
+
+             delta :=  ((curtarget * 1.0 - curvoltage*Volt_scale) * volt_cost);
+             writetimelog(format(' StepCorr cur= %.4f Target= %.4f Ctrl=%d Delta=%f',[curVoltage*Volt_scale, curTarget, curcontrol,delta])+#10);
+
+             curcontrol := curcontrol +trunc(delta);
+             setdPotential(curcontrol)
+          end;
+          delay(1000);
+        end;
     end;
     GettingData := false;
     StartCycle.Enabled := true;
@@ -1181,7 +1250,7 @@ begin
 //**************** Configure  device 10V resolution 6*****************
 //    strcopy(wrtbuf, pchar('dcv 10,resl6'));
 //**************** Configure  deice 10V resolution 7*****************
-    strcopy(wrtbuf, pchar('dcv 10,resl6'));
+    strcopy(wrtbuf, pchar('dcv 1000,resl6'));
     //Write a string command to a GPIB instrument asynchronously using the ibwrta() command
     ibwrta(dev, @wrtbuf, strlen(wrtbuf));
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
@@ -1279,8 +1348,8 @@ begin
         end else begin
         end;
         statusbar1.Panels[1].Text := '';
-        statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%8.6f', [curControl, curVoltage]);
-        curU.Text := format('%8.3f', [ curVoltage*10000]);
+        statusbar1.Panels[0].Text := format('Ctrl=%.5d U=%.6f', [curControl, curVoltage]);
+        curU.Text := format('%8.3f', [ curVoltage*Volt_scale]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
@@ -1317,12 +1386,12 @@ var
 begin
     tarcontrol := V_Convert(target);
     startsetTime := now;
-    while ((Bottomspn.Value * 1.0 - meanVoltage * 10000) > 0.2) and ((now - startsetTime) * 24 * 3600 < 5) do begin
-        curControl := curControl + trunc((Bottomspn.Value * 1.0 - meanVoltage * 10000) / (50000 / $FFFFF));
+    while ((Bottomspn.Value * 1.0 - meanVoltage * Volt_scale) > 0.2) and ((now - startsetTime) * 24 * 3600 < 5) do begin
+        curControl := curControl + trunc((Bottomspn.Value * 1.0 - meanVoltage * Volt_scale) / (50000 / $FFFFF));
         setDPotential(curControl);
         delay(1000);
     end;
-    if (Bottomspn.Value * 1.0 - meanVoltage * 10000) > 0.2 then
+    if (Bottomspn.Value * 1.0 - meanVoltage * Volt_scale) > 0.2 then
         result := false
     else
         result := true;
@@ -1331,13 +1400,20 @@ end;
 
 procedure TMainForm.pnl3Click(Sender: TObject);
 begin
+{
+IF THERHEN 
+
+
+}
     if (Bottomspn.Value >= Topspn.Value) then begin
         showmessage('Error: Нижняя граница должна быть меньше верхней ');
         exit;
     end;
-    if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
-        showmessage('Error: Ширина интекрвала не кратна шагу');
-        exit;
+    if  stepspn.Value<>0 then begin
+      if ((Topspn.Value - Bottomspn.Value) * 1000 mod stepspn.Value) <> 0 then begin
+          showmessage('Error: Ширина интекрвала не кратна шагу');
+          exit;
+       end;
     end;
     zqry1.Insert;
     zqry1.FieldByName('Ubeg').AsInteger := Bottomspn.Value;
@@ -1459,6 +1535,155 @@ procedure TMainForm.psFullspClickPointer(Sender: TCustomSeries; ValueIndex,
 begin
    selPointSum.Caption := 'V: '+psFullsp.XValueToText(psFullsp.XValues.Value[ValueIndex])+'v  Counter: '+
    psFullsp.YValueToText(psFullsp.YValues.Value[ValueIndex]);
+
+end;
+
+procedure TMainForm.SpeedButton2Click(Sender: TObject);
+var
+ ctrl1 : integer;
+ s1,url:string;
+ rstart, rend,mult :integer;
+ hist : array[0..100] of double;
+begin
+mult := 1000;
+rstart := 0; rend := 1043960;
+ch1Voltseries.Clear;
+      HTTP := THTTPSend.Create;
+      curcontrol := rstart;
+      s1 := format('%d', [curcontrol]);
+      s1 := ansiReplaceStr(s1, ',', '.');
+      url := lowurl+'setabs=' + s1;
+      HTTP.HTTPMethod('GET', url);
+      http.Free;
+      http := nil;
+      delay(5000);
+
+//    for ctrl1 :=310000 div mult to 670000 div mult  do  begin
+    for ctrl1 :=rstart div mult to rend div mult  do  begin
+      HTTP := THTTPSend.Create;
+      curcontrol := ctrl1*mult;
+      s1 := format('%d', [curControl]);
+      s1 := ansiReplaceStr(s1, ',', '.');
+      url := lowurl+'setabs=' + s1;
+      HTTP.HTTPMethod('GET', url);
+      http.Free;
+      http := nil;
+      delay(1000);
+       writetimelog(DataDirName + 'testadc.dat', IntToStr(CurControl)+' '+format('%.9f',[CurVoltage])+#10);
+       ch1VoltSeries.AddXY( CurControl,CurVoltage);
+
+ end;
+
+end;
+
+procedure TMainForm.SeLowVoltagebtnClick(Sender: TObject);
+var
+  i1,i2,i3 : integer;
+  sum, sumx2 :double;
+  std,mean,tmp :double;
+ ctrl1 : integer;
+ str1,s1,url:string;
+ rstart, rend,mult :integer;
+ hist : array[0..100] of double;
+ targetV : double;
+ delta : double;
+ mnum : int64;
+begin
+  if TSpeedButton(sender).Caption = 'Stop' then begin
+       TSpeedButton(sender).Caption := 'Set Voltage';
+       exit;
+  end;
+    PageControl2.ActivePageIndex := 0;
+      delay(1000);
+mult := 1000;
+rstart := 0; rend := 1043960;
+      ch1Voltseries.Clear;
+      meanVoltageSeries.clear;
+      STDVoltageSeries.Clear;
+      ch1StdSeries.Clear;
+      HTTP := THTTPSend.Create;
+      targetV := strToFloat(TargetVEdt.Text);
+      if targetv>0 then targetV:=-targetV;
+      curcontrol := trunc(-volt_cost*targetV);
+      s1 := format('%d', [curcontrol]);
+      s1 := ansiReplaceStr(s1, ',', '.');
+      url := lowurl+'setabs=' + s1;
+      HTTP.HTTPMethod('GET', url);
+      http.Free;
+      http := nil;
+      delay(2000);
+   for i3:=0 to  30 do   begin
+      if (ch1Voltseries.Count mod 12)=10 then  begin
+        sum :=0;
+        sumx2 :=0;
+        for i1 := ch1Voltseries.Count-10 to  ch1Voltseries.Count-1 do begin
+             sum:=sum+ch1Voltseries.YValues[i1];
+             sumx2 := sumx2+ch1Voltseries.YValues[i1]*ch1Voltseries.YValues[i1];
+        end;
+        mean := sum/10;
+        std := sqrt(sumx2/10-mean*mean);
+        ch1StdSeries.AddXY(ch1Voltseries.Count ,std);
+        delta := (-targetV-mean);
+        curcontrol := curcontrol +trunc(delta*volt_cost);
+        HTTP := THTTPSend.Create;
+        s1 := format('%d', [curControl]);
+        s1 := ansiReplaceStr(s1, ',', '.');
+        url := lowurl+'setabs=' + s1;
+        HTTP.HTTPMethod('GET', url);
+        http.Free;
+        http := nil;
+       end;
+        delay(550);
+       ch1VoltSeries.AddXY(ch1VoltSeries.Count ,-CurVoltage);
+     end;
+
+
+
+      ch1Voltseries.Clear;
+      ch1StdSeries.Clear;
+
+
+     mnum :=0;
+     TSpeedButton(sender).Caption := 'Stop';
+    while (TSpeedButton(sender).Caption = 'Stop') do  begin
+      while ch1Voltseries.Count>900 do ch1Voltseries.delete(0);
+      while ch1StdSeries.Count>90 do ch1StdSeries.delete(0);
+      inc(mnum);
+      str1 :='';
+      if (mnum >6) and  ((mnum mod 3)=2) then  begin
+        sum :=0;
+        sumx2 :=0;
+        for i1 := ch1Voltseries.Count-5 to  ch1Voltseries.Count-1 do begin
+             sum:=sum+ch1Voltseries.YValues[i1];
+             sumx2 := sumx2+ch1Voltseries.YValues[i1]*ch1Voltseries.YValues[i1];
+             str1:= str1+format('%.5f ',[ch1Voltseries.YValues[i1]]);
+        end;
+        mean := sum/5;
+        str1:= str1+format('%.5f %.5f %.5f ',[mean*mean,sumx2,sumx2/5-mean*mean]);
+       writetimelog(DataDirName + 'testadc.dat', str1);
+         tmp :=sumx2/5-mean*mean+0.0000000001;
+        std := sqrt(tmp);
+        ch1StdSeries.AddXY(mnum ,std);
+        delta := (-targetV-mean);
+        curcontrol := curcontrol +trunc(delta*volt_cost);
+        HTTP := THTTPSend.Create;
+        s1 := format('%d', [curControl]);
+        s1 := ansiReplaceStr(s1, ',', '.');
+        url := lowurl+'setabs=' + s1;
+        HTTP.HTTPMethod('GET', url);
+        http.Free;
+        http := nil;
+      end;
+      if (mnum  mod 21)=20 then  begin
+        meanVoltageSeries.addxy(now,mean);
+        STDVoltageSeries.addxy(now,std);
+      end;
+        delay(400);
+       writetimelog(DataDirName + 'testadc.dat', IntToStr(CurControl)+' '+format('%.9f',[CurVoltage]));
+       ch1VoltSeries.AddXY(mnum ,-CurVoltage);
+//       ch1VoltSeries.AddXY(mnum ,-111.00200000);
+   end;
+  TSpeedButton(sender).Caption := 'Set Voltage';
 
 end;
 

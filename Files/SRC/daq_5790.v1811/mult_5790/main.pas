@@ -231,10 +231,11 @@ begin
         application.ProcessMessages;
 end;
 
-function V_Convert(v_cur: double): dword;
+function V_Convert(v_cur: double): int64;
 begin
 //     result:=trunc(0.7090*10000*20.98843441466855);
     result:=round(v_cur*10000*20.98843441466855);
+    if result<0 then result :=0;
 //    result := trunc(1048576.0 * (v_cur) / 5);
 end;
 
@@ -273,10 +274,10 @@ var
     tarcontrol: int64;
     startsetTime: double;
 begin
-   if curvoltage <0 then begin
-          result := false;
-          exit;
-    end;
+//   if curvoltage <0 then begin
+//          result := false;
+//          exit;
+//    end;
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
@@ -326,10 +327,10 @@ var
 begin
     startsetTime := now;
     while (abs((target * 1.0 - curVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
-        if curvoltage <0 then begin
-          result := false;
-          exit;
-        end;
+//        if curvoltage <0 then begin
+//          result := false;
+//          exit;
+//        end;
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -339,10 +340,10 @@ begin
       Exit;
     end;
     while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
-        if curvoltage <0 then begin
-          result := false;
-          exit;
-        end;
+//        if curvoltage <0 then begin
+//          result := false;
+//          exit;
+//        end;
         correctVoltage(target);
         delay(1000);
         Vdiff := abs((target * 1.0 - curVoltage * 10000));
@@ -408,41 +409,41 @@ var
     resstr : string;
 begin
     curmtime := timegettime();
-    writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
+//  writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
     try
 
         curtime := now();
-        writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
+//      writeprotocol('2 dstimer callback=' + format('%15.13f', [(Curtime - PrevTime) * 24 * 3600 * 1000]));
         curmtime := timegettime();
 //        writeprotocol('3 begin1 dttimer callback=');
         cntval := 0;
 //   mainform.Caption:=IntToStr(CurMtime-PrevMTime);
-        if (counter_ready) then begin
-
+//      if (counter_ready) then begin
+//
 //            WriteProtocol('Read counter');
-            wRet := DCON_Read_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200, @cntVal);
+//          wRet := DCON_Read_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200, @cntVal);
 //            WriteProtocol('check Read counter = ' + IntToStr(cntval));
-            if wRet <> 0 then begin
-                writeprotocol('Err: Error reading counter.');
-                cntval := 131313;
-            end
-            else begin
-                deltaCounterValue := cntval - lastCounterValue;
-                dtc := now;
-
-                dtc := (dtc - LastCounterTime )*24*3600*1000;
-                if  dtc > 100
-                      then counter_per_sec := deltaCounterValue* 1000 / dtc
-                      else  counter_per_sec := 0;;
-                LastCounterValue := cntval;
-                LastCounterTime := now();
-                if cntval > $F00000 then begin
-                    LastCounterValue := 0;
-                    DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
-                end
-
-            end;
-        end;
+//          if wRet <> 0 then begin
+//              writeprotocol('Err: Error reading counter.');
+//              cntval := 131313;
+//          end
+//          else begin
+//              deltaCounterValue := cntval - lastCounterValue;
+//              dtc := now;
+//
+//              dtc := (dtc - LastCounterTime )*24*3600*1000;
+//              if  dtc > 100
+//                    then counter_per_sec := deltaCounterValue* 1000 / dtc
+//                    else  counter_per_sec := 0;;
+//              LastCounterValue := cntval;
+//              LastCounterTime := now();
+//              if cntval > $F00000 then begin
+//                  LastCounterValue := 0;
+//                  DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+//              end
+//
+//          end;
+//      end;
 
         curmtime := timegettime();
         exec488(dev,'TARM SGL');
@@ -469,7 +470,7 @@ begin
         end;
 //        writeprotocol('24');
         resstr := resstr + ' ' + format(' %.4d %.6d %.1d %.8d %.8d %.3d', [cntval, curControl, dstep, vindex + 1, stepStartIndex, deltaCounterValue]) + ' ' + intToStr(trunc((timegettime - prevMtime))) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
-//        writeprotocol('14');
+        writeprotocol(resstr);
         prevread := now();
 //        writeprotocol('rdstr: ' + rdstr);
         CurVoltage := dacval;
@@ -485,7 +486,7 @@ begin
             inc(vIndex);
         end
         else if counter_ready then begin
-            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+  //        wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
             LastCounterValue := 0;
         end;
 
@@ -497,7 +498,7 @@ begin
 
     end;
 
-    writeProtocol('26 #######D AQ end ' + IntToStr(vindex));
+//  writeProtocol('26 #######D AQ end ' + IntToStr(vindex));
 
     PrevMTime := TimeGetTime();
     PrevTime := now;
@@ -535,7 +536,7 @@ begin
             writetimelog( 'Exception on DAQ GET DATA');
 
        end;
-        sleep(300)
+        sleep(3)
     end;
     mainform.Caption := 'terminated';
 end;
@@ -931,9 +932,10 @@ begin
             StepStartIndex := vindex + 1;
             tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
-
-            newTarget := curTarget + dstep * step_Value / 1000.0;
-            curTarget := newTarget;
+            if (dstep<>0) then begin
+              newTarget := curTarget + dstep * step_Value / 1000.0;
+              curTarget := newTarget;
+            end;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 OldSweepNumber := Sweep;
                 SetNewRegion();
@@ -958,13 +960,15 @@ begin
             end
             else begin
                 writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                while (now - start_dead) * 24 * 3600 < dead_Value-2 do begin
-                    writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                    setVoltage(curTarget);
-                end;
-                while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
-                    writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
-                    delay(300);
+                if (dstep<>0) then begin
+                  while (now - start_dead) * 24 * 3600 < dead_Value-2 do begin
+                      writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                      setVoltage(curTarget);
+                  end;
+                  while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
+                      writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                      delay(300);
+                  end;
                 end;
             end;
             tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);

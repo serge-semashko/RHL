@@ -1,0 +1,17 @@
+[Unit]
+Description=dac5790 control service
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=sudo /home/pi/dac1115 init
+
+
+User=pi
+Group=pi
+UMask=0007
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

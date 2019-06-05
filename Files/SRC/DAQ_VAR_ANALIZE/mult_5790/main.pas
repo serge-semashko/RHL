@@ -19,7 +19,7 @@ type
         procedure execute; override;
     end;
 
-    TMainForm = class(TForm)
+    TMainForm = class(TForm  )
         Panel1: TPanel;
         PageControl1: TPageControl;
         TabSheet1: TTabSheet;
@@ -705,12 +705,15 @@ var
 begin
     deadspn.Value := 5;
     address.Value := cf.readInteger('instrument', 'counter_addr', 0);
-    ComComboBox.ItemIndex := cf.readInteger('instrument', 'counter_port', 0)-1;
-    cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib1271', 0);
+    ComComboBox.ItemIndex := cf.readInteger('instrument', 'counter_port', 0);
+    edch.Value := cf.readInteger('instrument', 'counter_channel', 0);
+    cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib1271', 0)-1;
     cmbInst1271.ItemIndex := cf.readInteger('instrument', 'gpib_instrument1271', 0)-1;
-    cmbGPIB58.ItemIndex := cf.readInteger('instrument', 'gpib58', 0);
+    cmbGPIB58.ItemIndex := cf.readInteger('instrument', 'gpib58', 0)-1;
     cmbInst58.ItemIndex := cf.readInteger('instrument', 'gpib_instrument58', 0)-1;
-    edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
+
+    //edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
+    //edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
     con2 := TZConnection.Create(self);
     with con2 do begin
         ControlsCodePage := cGET_ACP;
@@ -1521,13 +1524,15 @@ end;
 
 procedure TMainForm.cmbGPIB_agilentChange(Sender: TObject);
 begin
-    cf.WriteInteger('hardware', 'gpib', TComboBox(Sender).ItemIndex);
+    cf.WriteInteger('hardware', 'gpib_agilent', TComboBox(Sender).ItemIndex);
     InitGPIB_agilent;
 end;
 
 procedure TMainForm.cmbInst1271Change(Sender: TObject);
 begin
-    cf.WriteInteger('hardware', 'gpib_instrument', TComboBox(Sender).ItemIndex);
+    cf.WriteInteger('hardware', 'gpib1271', TComboBox(Sender).ItemIndex);
+    InitGPIB_agilent;
+
 end;
 
 procedure TMainForm.SpeedButton1Click(Sender: TObject);
