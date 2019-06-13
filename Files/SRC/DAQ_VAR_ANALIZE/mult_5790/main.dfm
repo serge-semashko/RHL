@@ -1,7 +1,7 @@
 object MainForm: TMainForm
-  Left = 0
-  Top = 9
-  Width = 1680
+  Left = 29
+  Top = 37
+  Width = 1681
   Height = 1001
   Caption = 'Read/Write'
   Color = clBtnFace
@@ -19,14 +19,14 @@ object MainForm: TMainForm
   object Panel1: TPanel
     Left = 0
     Top = 906
-    Width = 1664
+    Width = 1665
     Height = 27
     Align = alBottom
     TabOrder = 0
     object TimeInfolbl: TStaticText
       Left = 1
       Top = 1
-      Width = 1662
+      Width = 1663
       Height = 25
       Align = alClient
       AutoSize = False
@@ -44,7 +44,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1664
+    Width = 1665
     Height = 164
     ActivePage = TabSheet1
     Align = alTop
@@ -180,7 +180,7 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 164
-    Width = 1664
+    Width = 1665
     Height = 742
     Align = alClient
     Caption = 'Panel5'
@@ -188,7 +188,7 @@ object MainForm: TMainForm
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1662
+      Width = 1663
       Height = 3
       Cursor = crVSplit
       Align = alTop
@@ -196,7 +196,7 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 4
-      Width = 1662
+      Width = 1663
       Height = 737
       ActivePage = ts1
       Align = alClient
@@ -218,7 +218,7 @@ object MainForm: TMainForm
         object Panel2: TPanel
           Left = 791
           Top = 0
-          Width = 863
+          Width = 864
           Height = 706
           Align = alClient
           Caption = 'Panel2'
@@ -788,7 +788,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 5
+              Value = 0
             end
             object stepspn: TSpinEdit
               Left = 504
@@ -876,7 +876,7 @@ object MainForm: TMainForm
         object pnl2: TPanel
           Left = 753
           Top = 0
-          Width = 901
+          Width = 902
           Height = 706
           Align = alClient
           Caption = 'pnl2'
@@ -884,7 +884,7 @@ object MainForm: TMainForm
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 899
+            Width = 900
             Height = 704
             Align = alClient
             BorderStyle = bsSingle
@@ -1029,7 +1029,7 @@ object MainForm: TMainForm
             object leconstVolt: TPanel
               Left = 1
               Top = 437
-              Width = 893
+              Width = 894
               Height = 262
               Align = alBottom
               BorderStyle = bsSingle
@@ -1050,7 +1050,7 @@ object MainForm: TMainForm
               object Label4: TLabel
                 Left = 1
                 Top = 117
-                Width = 887
+                Width = 888
                 Height = 16
                 Align = alBottom
                 Alignment = taCenter
@@ -1073,7 +1073,7 @@ object MainForm: TMainForm
               object DescMemo: TMemo
                 Left = 1
                 Top = 133
-                Width = 887
+                Width = 888
                 Height = 124
                 Align = alBottom
                 TabOrder = 0
@@ -1147,11 +1147,10 @@ object MainForm: TMainForm
               Style = csDropDownList
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
-              ItemIndex = 15
               TabOrder = 5
-              Text = '16'
               OnChange = cmbInst1271Change
               Items.Strings = (
+                '0'
                 '1'
                 '2'
                 '3'
@@ -1216,11 +1215,10 @@ object MainForm: TMainForm
               Style = csDropDownList
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
-              ItemIndex = 15
               TabOrder = 8
-              Text = '16'
               OnChange = cmbGPIB_agilentChange
               Items.Strings = (
+                '0'
                 '1'
                 '2'
                 '3'
@@ -1260,7 +1258,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 933
-    Width = 1664
+    Width = 1665
     Height = 30
     Panels = <
       item

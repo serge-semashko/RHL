@@ -704,13 +704,13 @@ var
     i: int64;
 begin
     deadspn.Value := 5;
-    address.Value := cf.readInteger('instrument', 'counter_addr', 0);
-    ComComboBox.ItemIndex := cf.readInteger('instrument', 'counter_port', 0);
-    edch.Value := cf.readInteger('instrument', 'counter_channel', 0);
-    cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib1271', 0)-1;
-    cmbInst1271.ItemIndex := cf.readInteger('instrument', 'gpib_instrument1271', 0)-1;
-    cmbGPIB58.ItemIndex := cf.readInteger('instrument', 'gpib58', 0)-1;
-    cmbInst58.ItemIndex := cf.readInteger('instrument', 'gpib_instrument58', 0)-1;
+    address.Value := cf.readInteger('hardware', 'counter_addr', 0);
+    ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
+    edch.Value := cf.readInteger('hardware', 'counter_channel', 0);
+    cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib_1271', 0);
+    cmbInst1271.ItemIndex := cf.readInteger('instrument', 'mult_1271', 0);
+    cmbGPIB58.ItemIndex   := cf.readInteger('instrument', 'gpib_58', 0);
+    cmbInst58.ItemIndex   := cf.readInteger('instrument', 'mult_58', 0);
 
     //edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
     //edch.Value := cf.readInteger('instrument', 'counter_channel', 0)-1;
@@ -1208,7 +1208,7 @@ begin
     if (gpib_1271_ready) then
         exit;
 
-    dev1271 := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex + 1, 0, T1s, 1, 0);
+    dev1271 := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex , 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
@@ -1524,13 +1524,15 @@ end;
 
 procedure TMainForm.cmbGPIB_agilentChange(Sender: TObject);
 begin
-    cf.WriteInteger('hardware', 'gpib_agilent', TComboBox(Sender).ItemIndex);
+    cf.WriteInteger('instrument', 'mult_58', cmbInst58.ItemIndex);
+    cf.WriteInteger('instrument', 'gpib_58', cmbgpib58.ItemIndex);
     InitGPIB_agilent;
 end;
 
 procedure TMainForm.cmbInst1271Change(Sender: TObject);
 begin
-    cf.WriteInteger('hardware', 'gpib1271', TComboBox(Sender).ItemIndex);
+    cf.WriteInteger('instrument', 'mult_1271', cmbInst1271.ItemIndex);
+    cf.WriteInteger('instrument', 'gpib_1271', cmbgpib1271.ItemIndex);
     InitGPIB_agilent;
 
 end;
@@ -1602,7 +1604,7 @@ begin
     gpib_agilent_ready := false;
     StartCycle.Enabled := false;
     memoread.lines.Add('');
-    dev58a := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex + 1, 0, T1s, 1, 0);
+    dev58a := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex , 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
