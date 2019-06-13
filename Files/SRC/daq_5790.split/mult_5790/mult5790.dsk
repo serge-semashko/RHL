@@ -43,25 +43,25 @@ Left=0
 Top=109
 Width=1680
 Height=904
-MaxLeft=0
-MaxTop=105
-MaxWidth=1680
-MaxHeight=935
-ClientWidth=1664
-ClientHeight=897
+MaxLeft=-8
+MaxTop=106
+MaxWidth=1932
+MaxHeight=942
+ClientWidth=1916
+ClientHeight=904
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400000000008006000000000000025500000000000000010000000000000000000000000100000000800600000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D657373616765566965777C070000000000000255000000000000000100000000000000000000000001000000007C0700000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.pas
-CursorX=1
-CursorY=1088
-TopLine=1067
+CursorX=117
+CursorY=1062
+TopLine=995
 LeftCol=1
 
 [View1]
@@ -86,7 +86,7 @@ Visible=1
 State=2
 Left=0
 Top=75
-Width=1680
+Width=1920
 Height=122
 MaxLeft=-1
 MaxTop=-1
@@ -141,7 +141,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=DataSet
+SelectedItem=
 ExpandedItems=
 HiddenCategories=
 
@@ -184,18 +184,18 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=797
+Height=892
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=797
+ClientHeight=892
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0
