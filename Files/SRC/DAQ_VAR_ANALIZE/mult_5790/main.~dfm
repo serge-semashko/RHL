@@ -1147,11 +1147,10 @@ object MainForm: TMainForm
               Style = csDropDownList
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
-              ItemIndex = 15
               TabOrder = 5
-              Text = '16'
               OnChange = cmbInst1271Change
               Items.Strings = (
+                '0'
                 '1'
                 '2'
                 '3'
@@ -1216,11 +1215,10 @@ object MainForm: TMainForm
               Style = csDropDownList
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
               ItemHeight = 13
-              ItemIndex = 15
               TabOrder = 8
-              Text = '16'
               OnChange = cmbGPIB_agilentChange
               Items.Strings = (
+                '0'
                 '1'
                 '2'
                 '3'

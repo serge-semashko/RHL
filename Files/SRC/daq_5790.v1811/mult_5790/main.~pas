@@ -274,10 +274,10 @@ var
     tarcontrol: int64;
     startsetTime: double;
 begin
-   if curvoltage <0 then begin
-          result := false;
-          exit;
-    end;
+//   if curvoltage <0 then begin
+//          result := false;
+//          exit;
+//    end;
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;

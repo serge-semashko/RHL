@@ -17,7 +17,7 @@ EditWindowCount=1
 
 [F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas]
 ModuleType=SourceModule
-FormState=1
+FormState=0
 FormOnTop=0
 
 [F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\Adgpib.pas]
@@ -61,9 +61,9 @@ BottomPanelData=0000040000000000000000000000000000000000000000000001000000000000
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas
-CursorX=38
-CursorY=1608
-TopLine=1600
+CursorX=81
+CursorY=685
+TopLine=661
 LeftCol=1
 
 [View1]
@@ -88,13 +88,13 @@ Visible=1
 State=2
 Left=0
 Top=74
-Width=1680
+Width=1920
 Height=122
 MaxLeft=-1
 MaxTop=-1
-MaxWidth=1932
+MaxWidth=1936
 MaxHeight=122
-ClientWidth=1916
+ClientWidth=1920
 ClientHeight=84
 
 [ProjectManager]
@@ -143,7 +143,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=OnChange
+SelectedItem=Items
 ExpandedItems=
 HiddenCategories=
 

@@ -673,13 +673,14 @@ begin
             DaqGetcounter;
             if gpib_1271_ready then DaqGetData1271;
             if gpib_agilent_ready then DaqGetData58;
+            CurVoltage := dacval1271;
             inc(Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
-                    LastVoltage[i] := CurVoltage
+                    LastVoltage[i] := dacval1271
                 else
                     LastVoltage[i] := LastVoltage[i + 1];
-            LastVoltage[5] := curVoltage;
+            LastVoltage[5] := dacval1271;
             meant := LastVoltage[0];
             mean3t := LastVoltage[3];
             for i := 1 to 5 do begin

@@ -61,9 +61,9 @@ BottomPanelData=0000040000000000000000000000000000000000000000000001000000000000
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas
-CursorX=81
-CursorY=685
-TopLine=661
+CursorX=22
+CursorY=268
+TopLine=233
 LeftCol=1
 
 [View1]
@@ -77,7 +77,9 @@ LeftCol=1
 Count=0
 
 [Breakpoints]
-Count=0
+Count=2
+Breakpoint0='F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas',675,'',0,1,'',1,0,0,'',1,'','',''
+Breakpoint1='F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas',481,'',0,1,'',1,0,0,'',1,'','',''
 
 [AddressBreakpoints]
 Count=0
@@ -90,11 +92,11 @@ Left=0
 Top=74
 Width=1920
 Height=122
-MaxLeft=-1
-MaxTop=-1
-MaxWidth=1936
+MaxLeft=-8
+MaxTop=-8
+MaxWidth=1932
 MaxHeight=122
-ClientWidth=1920
+ClientWidth=1916
 ClientHeight=84
 
 [ProjectManager]
@@ -143,7 +145,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=Items
+SelectedItem=
 ExpandedItems=
 HiddenCategories=
 
