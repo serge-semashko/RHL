@@ -13,7 +13,8 @@ uses
 
 const
     sweepmodes: array[0..4] of string = ('UpDown', 'Up', 'Down', 'err', 'Up');
-
+    url_rasp_agilent58a = 'http://192.168.0.12:8282/setabs=';
+    url_rasp_wavetek271 = 'http://192.168.0.10:8282/setabs=';
 type
     TDAQThread = class(TThread)
         procedure execute; override;
@@ -79,7 +80,6 @@ type
         DataDir: TLabeledEdit;
         SpeedButton1: TSpeedButton;
         OpenDialog1: TOpenDialog;
-        memoRead: TMemo;
     btn2: TSpeedButton;
     CurU: TLabeledEdit;
     ConstVolt: TLabeledEdit;
@@ -103,6 +103,8 @@ type
     Label8: TLabel;
     cmbInst58: TComboBox;
     SpeedButton2: TSpeedButton;
+    ControlGRP: TRadioGroup;
+    memoread: TMemo;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -129,6 +131,7 @@ type
       ValueIndex, X, Y: Integer);
     procedure psFullspClickPointer(Sender: TCustomSeries; ValueIndex, X,
       Y: Integer);
+    procedure ControlGRPClick(Sender: TObject);
     private
     { Private declarations }
     public
@@ -147,6 +150,8 @@ type
     Vrecord = record
         time: double;
         data: double;
+        data58: double;
+        data1271: double;
         counter: int64;
     end;
 
@@ -157,6 +162,8 @@ type
 function exec488(dev488:integer;cmd:string):boolean;
 
 var
+    rasp_url :string = '';
+    selected_control : integer = -1;
     Counter_per_sec : double = 0;
     newTarget, curTarget: double;
     SweepStartTime: double;
@@ -278,6 +285,10 @@ function setdPotential(U: int64): string;
 var
     s1, url: string;
 begin
+    if rasp_url = '' then begin
+      showmessage('не установлен управляющий аольтметр');
+      halt;
+    end;
     curControl := U;
     if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
         curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (U - oldcontrol) / abs(oldControl - U));
@@ -292,8 +303,7 @@ begin
     HTTP := THTTPSend.Create;
     s1 := format('%d', [curControl]);
     s1 := ansiReplaceStr(s1, ',', '.');
-    url := 'http://192.168.0.10:8282/setabs=' + s1;
-
+    url := rasp_url + s1;
     HTTP.HTTPMethod('GET', url);
     http.Free;
     http := nil;
@@ -462,6 +472,7 @@ var
     rdstr: string;
     dtc :double;
     resstr : string;
+    i1,i2,i3 : integer;
 begin
     curmtime := timegettime();
     writeProtocol('1 #################### DAQ58 start ##################### ' + IntToStr(vindex));
@@ -485,7 +496,8 @@ begin
             resstr := rdbuf;
             resstr := system.copy(resstr,1,length(resstr)-1);
             decimalseparator := '.';
-            if not TextToFloat(PChar(resstr), dacval58, fvExtended) then dacval58 := -1;
+            val(resstr,dacval58,i1);
+            if i1<>0  then dacval58 := -1;
           end;
 
         curmtime := timegettime();
@@ -502,16 +514,15 @@ begin
 //        writeprotocol('14');
         prevread := now();
 //        writeprotocol('rdstr: ' + rdstr);
-        CurVoltage := dacval58;
+//      CurVoltage := dacval58;
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', resstr);
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval58
             else
-            vdata[vIndex + 1].data := -1;
             vdata[vindex + 1].counter := cntval;
             vdata[vindex + 1].time := now();
-            vdata[vindex + 1].data := dacval58;
+            vdata[vindex + 1].data58 := dacval58;
             inc(vIndex);
         end
         else if counter_ready then begin
@@ -630,16 +641,14 @@ begin
 //        writeprotocol('14');
         prevread := now();
 //        writeprotocol('rdstr: ' + rdstr);
-        CurVoltage := dacval1271;
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
             if resc = 0 then
                 vdata[vIndex + 1].data := dacval1271
             else
-            vdata[vIndex + 1].data := -1;
             vdata[vindex + 1].counter := cntval;
             vdata[vindex + 1].time := now();
-            vdata[vindex + 1].data := dacval1271;
+            vdata[vindex + 1].data1271 := dacval1271;
             inc(vIndex);
         end
 
@@ -673,7 +682,11 @@ begin
             DaqGetcounter;
             if gpib_1271_ready then DaqGetData1271;
             if gpib_agilent_ready then DaqGetData58;
-            CurVoltage := dacval1271;
+            case selected_control of
+                1 : CurVoltage := dacval1271;
+                0 : CurVoltage := dacval58;
+            else CurVoltage :=  -131313;
+            end;
             inc(Daq_counter);
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
@@ -706,6 +719,8 @@ var
 begin
     deadspn.Value := 5;
     address.Value := cf.readInteger('hardware', 'counter_addr', 0);
+    ControlGRP.ItemIndex := cf.readInteger('hardware', 'selected-control', 0);
+    ControlGRP.OnClick(self);
     ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
     edch.Value := cf.readInteger('hardware', 'counter_channel', 0);
     cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib_1271', 0);
@@ -939,6 +954,7 @@ begin
     Screen.Cursor := crHourGlass;
 
     Startcycle.Enabled := false;
+    controlGrp.Enabled := false;
     Startcycle.Caption :='Prepare measurement';
 
     Sweep := 1;
@@ -972,6 +988,8 @@ begin
     if not SetRegionBorder(border_low) then begin
         showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
         Startcycle.Enabled := true;
+        controlGrp.Enabled := Startcycle.Enabled;
+
         Screen.Cursor := crDefault;
         exit;
     end;
@@ -986,6 +1004,7 @@ begin
         if I1 = 10 then begin
             showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
             Startcycle.Enabled := true;
+            controlGrp.Enabled := Startcycle.Enabled;
             Screen.Cursor := crDefault;
             exit;
         end;
@@ -1032,6 +1051,7 @@ begin
 //######################################################################################
     Startcycle.Font.Color := clRed;
     Startcycle.Enabled := true;
+    controlGrp.Enabled := Startcycle.Enabled;
     Screen.Cursor := crDefault;
     dstep := 1;
     GettingData := true;
@@ -1149,6 +1169,7 @@ begin
     end;
     GettingData := false;
     StartCycle.Enabled := true;
+    controlGrp.Enabled := Startcycle.Enabled;
     Startcycle.Caption := 'Start measurement';
     Startcycle.Font.Color := clBlue;
 
@@ -1306,6 +1327,7 @@ begin
 //    bottomspn.Value := trunc(meanVoltage * 10000);
 //    topspn.Value := trunc(meanVoltage * 10000);
     StartCycle.Enabled := true;
+    controlGrp.Enabled := Startcycle.Enabled;
 
 //***********finished configure ******************
 
@@ -1403,10 +1425,10 @@ begin
         end;
         statusbar1.Panels[1].Text := '';
         if GPIB_1271_Ready
-            then statusbar1.Panels[4].Text := format('Wavetek= %.5f ', [ dacval1271, dacval58])
+            then statusbar1.Panels[4].Text := format('Wavetek= %.7f ', [ dacval1271, dacval58])
             else statusbar1.Panels[4].Text := format('Wavetek=NaN', [ dacval1271]);
         if GPIB_agilent_Ready
-            then statusbar1.Panels[5].Text := format('Agilent=%.5f', [ dacval58])
+            then statusbar1.Panels[5].Text := format('Agilent=%.7f', [ dacval58])
             else statusbar1.Panels[5].Text := format('Agilent=NaN', [  dacval58]);
 
         curU.Text := format('%.5f %.5f', [ dacval1271, dacval58]);
@@ -1604,6 +1626,7 @@ var
 begin
     gpib_agilent_ready := false;
     StartCycle.Enabled := false;
+    controlGrp.Enabled := Startcycle.Enabled;
     memoread.lines.Add('');
     dev58a := ibdev(cmbGPIB58.ItemIndex, cmbInst58.ItemIndex , 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
@@ -1645,6 +1668,7 @@ begin
 //    bottomspn.Value := trunc(meanVoltage * 10000);
 //    topspn.Value := trunc(meanVoltage * 10000);
     StartCycle.Enabled := true;
+    controlGrp.Enabled := Startcycle.Enabled;
 
 //***********finished configure ******************
 end;
@@ -1656,6 +1680,18 @@ end;
 
 function get_WAVETEK_data: boolean;
 begin
+
+end;
+
+procedure TMainForm.ControlGRPClick(Sender: TObject);
+begin
+  cf.writeInteger('hardware', 'selected-control', ControlGRP.ItemIndex);
+ selected_control := ControlGRP.ItemIndex;
+ case ControlGRP.ItemIndex of
+    0:rasp_url := url_rasp_agilent58a;
+    1:rasp_url := url_rasp_wavetek271;
+    else rasp_url:='';
+ end;
 
 end;
 
