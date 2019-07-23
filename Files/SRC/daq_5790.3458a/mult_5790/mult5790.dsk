@@ -17,7 +17,7 @@ EditWindowCount=1
 
 [F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.pas]
 ModuleType=SourceModule
-FormState=3
+FormState=1
 FormOnTop=0
 
 [F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\mult5790.dpr]
@@ -26,6 +26,10 @@ FormState=0
 FormOnTop=0
 
 [C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+FormState=0
+FormOnTop=0
+
+[F:\home\rhlsrc\Files\SRC\daq_5790.3458a\mult_5790\mult5790.dpr]
 FormState=0
 FormOnTop=0
 
@@ -43,12 +47,12 @@ Left=0
 Top=109
 Width=1920
 Height=904
-MaxLeft=-8
-MaxTop=106
-MaxWidth=1936
-MaxHeight=942
-ClientWidth=1920
-ClientHeight=904
+MaxLeft=-9
+MaxTop=134
+MaxWidth=1932
+MaxHeight=907
+ClientWidth=1914
+ClientHeight=862
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
@@ -59,9 +63,9 @@ BottomPanelData=00000400010000000B0000004D657373616765566965777C0700000000000002
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.pas
-CursorX=117
-CursorY=1062
-TopLine=995
+CursorX=72
+CursorY=249
+TopLine=235
 LeftCol=1
 
 [View1]
@@ -90,10 +94,10 @@ Width=1920
 Height=122
 MaxLeft=-1
 MaxTop=-1
-MaxWidth=1936
-MaxHeight=122
-ClientWidth=1920
-ClientHeight=84
+MaxWidth=1932
+MaxHeight=144
+ClientWidth=1914
+ClientHeight=99
 
 [ProjectManager]
 Create=1
@@ -105,8 +109,8 @@ Width=446
 Height=313
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=430
-ClientHeight=279
+ClientWidth=428
+ClientHeight=273
 TBDockHeight=313
 LRDockWidth=446
 Dockable=1
@@ -118,7 +122,7 @@ State=0
 Left=200
 Top=124
 Width=156
-Height=84
+Height=88
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=150
@@ -134,14 +138,14 @@ Width=190
 Height=551
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=174
-ClientHeight=517
+ClientWidth=172
+ClientHeight=511
 TBDockHeight=551
 LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=
+SelectedItem=Name
 ExpandedItems=
 HiddenCategories=
 
@@ -155,8 +159,8 @@ Width=294
 Height=161
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=278
-ClientHeight=127
+ClientWidth=276
+ClientHeight=121
 TBDockHeight=161
 LRDockWidth=294
 Dockable=1
@@ -171,8 +175,8 @@ Width=190
 Height=366
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=174
-ClientHeight=332
+ClientWidth=172
+ClientHeight=326
 TBDockHeight=366
 LRDockWidth=190
 Dockable=1

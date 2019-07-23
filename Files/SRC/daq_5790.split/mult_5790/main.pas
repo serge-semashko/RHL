@@ -152,7 +152,7 @@ type
     Varray = array of vrecord;
 
 var
-    lowurl : string = 'http://192.168.0.10:8282/';
+    lowurl : string = 'http://192.168.0.12:8282/';
     volt_cost : double = 1043960/1000.0;
     Volt_scale : integer = 1000;
     Counter_per_sec : double = 0;

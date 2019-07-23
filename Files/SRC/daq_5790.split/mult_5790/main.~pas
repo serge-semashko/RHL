@@ -993,6 +993,7 @@ begin
             writetimelog(DataFileName + '.dat', Stepstr+#10);
             memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Read ok = ' + rdstr);
     //   writetimelog(rdstr+#10);
+
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;

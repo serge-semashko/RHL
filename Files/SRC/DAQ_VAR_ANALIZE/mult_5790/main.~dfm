@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 29
-  Top = 37
+  Left = 33
+  Top = 31
   Width = 1791
   Height = 1001
   Caption = 'Read/Write'
@@ -116,7 +116,7 @@ object MainForm: TMainForm
         Left = 1001
         Top = 30
         Width = 168
-        Height = 28
+        Height = 32
         EditLabel.Width = 127
         EditLabel.Height = 24
         EditLabel.BiDiMode = bdLeftToRight
@@ -164,7 +164,7 @@ object MainForm: TMainForm
         Left = 1004
         Top = 100
         Width = 169
-        Height = 28
+        Height = 32
         EditLabel.Width = 154
         EditLabel.Height = 24
         EditLabel.BiDiMode = bdLeftToRight
@@ -226,7 +226,7 @@ object MainForm: TMainForm
           object Chart1: TChart
             Left = 1
             Top = 1
-            Width = 1091
+            Width = 787
             Height = 404
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
@@ -352,8 +352,8 @@ object MainForm: TMainForm
           object Chart2: TChart
             Left = 1
             Top = 405
-            Width = 1091
-            Height = 463
+            Width = 787
+            Height = 244
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             MarginBottom = 0
@@ -754,7 +754,7 @@ object MainForm: TMainForm
               Left = 101
               Top = 37
               Width = 129
-              Height = 31
+              Height = 35
               MaxValue = 49000
               MinValue = 0
               TabOrder = 0
@@ -764,7 +764,7 @@ object MainForm: TMainForm
               Left = 230
               Top = 37
               Width = 132
-              Height = 31
+              Height = 35
               MaxValue = 49000
               MinValue = 0
               TabOrder = 1
@@ -774,7 +774,7 @@ object MainForm: TMainForm
               Left = 369
               Top = 37
               Width = 122
-              Height = 31
+              Height = 35
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -784,17 +784,17 @@ object MainForm: TMainForm
               Left = 494
               Top = 39
               Width = 118
-              Height = 31
+              Height = 35
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 0
+              Value = 5
             end
             object stepspn: TSpinEdit
               Left = 620
               Top = 38
               Width = 112
-              Height = 31
+              Height = 35
               MaxValue = 100000
               MinValue = 100
               TabOrder = 4
@@ -937,7 +937,7 @@ object MainForm: TMainForm
             object btn2: TSpeedButton
               Left = 321
               Top = 28
-              Width = 215
+              Width = 208
               Height = 30
               Caption = 'Down high voltage'
               Font.Charset = DEFAULT_CHARSET
@@ -946,7 +946,7 @@ object MainForm: TMainForm
               Font.Name = 'MS Sans Serif'
               Font.Style = [fsBold]
               ParentFont = False
-              OnClick = btn2Click
+              OnClick = down58a
             end
             object Label7: TLabel
               Left = 2
@@ -967,7 +967,7 @@ object MainForm: TMainForm
             object SpeedButton2: TSpeedButton
               Left = 322
               Top = 63
-              Width = 215
+              Width = 207
               Height = 28
               Caption = 'Down high voltage'
               Font.Charset = DEFAULT_CHARSET
@@ -976,7 +976,21 @@ object MainForm: TMainForm
               Font.Name = 'MS Sans Serif'
               Font.Style = [fsBold]
               ParentFont = False
-              OnClick = btn2Click
+              OnClick = down1271
+            end
+            object set1271btn: TSpeedButton
+              Left = 656
+              Top = 32
+              Width = 35
+              Height = 22
+              OnClick = set1271btnClick
+            end
+            object set58abtn: TSpeedButton
+              Left = 656
+              Top = 62
+              Width = 35
+              Height = 22
+              OnClick = set58abtnClick
             end
             object ComComboBox: TComboBox
               Left = 66
@@ -1008,7 +1022,7 @@ object MainForm: TMainForm
               Left = 226
               Top = 5
               Width = 49
-              Height = 22
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 1
@@ -1019,7 +1033,7 @@ object MainForm: TMainForm
               Left = 342
               Top = 5
               Width = 49
-              Height = 22
+              Height = 26
               MaxValue = 0
               MinValue = 0
               TabOrder = 2
@@ -1082,7 +1096,7 @@ object MainForm: TMainForm
                 Left = 469
                 Top = 14
                 Width = 95
-                Height = 26
+                Height = 35
                 MaxValue = 0
                 MinValue = 0
                 TabOrder = 1
@@ -1104,7 +1118,7 @@ object MainForm: TMainForm
                 Left = 11
                 Top = 113
                 Width = 651
-                Height = 24
+                Height = 32
                 EditLabel.Width = 114
                 EditLabel.Height = 24
                 EditLabel.Caption = 'Data directory'
@@ -1114,7 +1128,7 @@ object MainForm: TMainForm
                 Left = 386
                 Top = 49
                 Width = 172
-                Height = 24
+                Height = 32
                 EditLabel.Width = 154
                 EditLabel.Height = 24
                 EditLabel.Caption = 'Contant voltage(V)'
@@ -1262,6 +1276,20 @@ object MainForm: TMainForm
               Height = 193
               ScrollBars = ssBoth
               TabOrder = 9
+            end
+            object set1271edit: TEdit
+              Left = 544
+              Top = 32
+              Width = 102
+              Height = 24
+              TabOrder = 10
+            end
+            object set58aedit: TEdit
+              Left = 544
+              Top = 62
+              Width = 102
+              Height = 24
+              TabOrder = 11
             end
           end
         end

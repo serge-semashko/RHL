@@ -1,26 +1,39 @@
 [Closed Files]
-File_0=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.pas',0,1,1,105,1050,3,0
-File_1=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.dfm',0,1,1,1,1,0,0
-File_2=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas',0,1,1182,1,1198,0,0
-File_3=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\Adgpib.pas',0,1,4,21,12,0,0
-File_4=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\gpib_user.pas',0,1,28,1,8,0,0
-File_5=SourceModule,'F:\home\rhlsrc\Files\SRC\agilent 3458a\Async Read Write\Unit1.pas',0,1,93,1,118,0,0
-File_6=SourceModule,'F:\home\rhlsrc\Files\SRC\agilent 3458a\Async Read Write\gpib_user.pas',0,1,73,1,89,0,0
-File_7=SourceModule,'C:\ADLINK\ADL-GPIB\samples\Delphi\Async Read Write\Unit1.pas',0,1,62,71,73,1,0
-File_8=SourceModule,'C:\ADLINK\ADL-GPIB\Include\Delphi\gpib_user.pas',0,1,73,11,86,0,0
+File_0=SourceModule,'F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.dfm',0,1,1,1,1,0,0
+File_1=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.pas',0,1,1,105,1050,3,0
+File_2=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.split\mult_5790\main.dfm',0,1,1,1,1,0,0
+File_3=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas',0,1,1182,1,1198,0,0
+File_4=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\Adgpib.pas',0,1,4,21,12,0,0
+File_5=SourceModule,'F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\gpib_user.pas',0,1,28,1,8,0,0
+File_6=SourceModule,'F:\home\rhlsrc\Files\SRC\agilent 3458a\Async Read Write\Unit1.pas',0,1,93,1,118,0,0
+File_7=SourceModule,'F:\home\rhlsrc\Files\SRC\agilent 3458a\Async Read Write\gpib_user.pas',0,1,73,1,89,0,0
+File_8=SourceModule,'C:\ADLINK\ADL-GPIB\samples\Delphi\Async Read Write\Unit1.pas',0,1,62,71,73,1,0
+File_9=SourceModule,'C:\ADLINK\ADL-GPIB\Include\Delphi\gpib_user.pas',0,1,73,11,86,0,0
 
 [Modules]
 Module0=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas
 Module1=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\Adgpib.pas
-Count=2
+Module2=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\VAR_analize.dpr
+Module3=c:\program files (x86)\borland\delphi7\source\rtl\Sys\sysutils.pas
+Count=4
 EditWindowCount=1
 
 [F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas]
 ModuleType=SourceModule
-FormState=0
+FormState=1
 FormOnTop=0
 
 [F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\Adgpib.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\VAR_analize.dpr]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[c:\program files (x86)\borland\delphi7\source\rtl\Sys\sysutils.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -29,44 +42,58 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\VAR_analize.dpr]
-FormState=0
-FormOnTop=0
-
 [EditWindow0]
-ViewCount=2
+ViewCount=4
 CurrentView=0
 View0=0
 View1=1
+View2=2
+View3=3
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
-State=0
-Left=288
-Top=195
-Width=1302
+State=2
+Left=1
+Top=149
+Width=1919
 Height=682
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=1286
-ClientHeight=644
+MaxLeft=-9
+MaxTop=126
+MaxWidth=1932
+MaxHeight=915
+ClientWidth=1914
+ClientHeight=870
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
 BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400000000007A070000000000000255000000000000000100000000000000000000000001000000007A0700000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas
-CursorX=22
-CursorY=268
-TopLine=233
+CursorX=43
+CursorY=1400
+TopLine=1379
 LeftCol=1
 
 [View1]
+Module=c:\program files (x86)\borland\delphi7\source\rtl\Sys\sysutils.pas
+CursorX=39
+CursorY=2699
+TopLine=2682
+LeftCol=1
+
+[View2]
+Module=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\VAR_analize.dpr
+CursorX=1
+CursorY=1
+TopLine=1
+LeftCol=1
+
+[View3]
 Module=F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\Adgpib.pas
 CursorX=1
 CursorY=165
@@ -77,9 +104,7 @@ LeftCol=1
 Count=0
 
 [Breakpoints]
-Count=2
-Breakpoint0='F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas',675,'',0,1,'',1,0,0,'',1,'','',''
-Breakpoint1='F:\home\rhlsrc\Files\SRC\DAQ_VAR_ANALIZE\mult_5790\main.pas',481,'',0,1,'',1,0,0,'',1,'','',''
+Count=0
 
 [AddressBreakpoints]
 Count=0
@@ -89,15 +114,15 @@ Create=1
 Visible=1
 State=2
 Left=0
-Top=74
+Top=75
 Width=1920
-Height=122
-MaxLeft=-8
-MaxTop=-8
+Height=144
+MaxLeft=-1
+MaxTop=-1
 MaxWidth=1932
-MaxHeight=122
-ClientWidth=1916
-ClientHeight=84
+MaxHeight=144
+ClientWidth=1914
+ClientHeight=99
 
 [ProjectManager]
 Create=1
@@ -109,8 +134,8 @@ Width=446
 Height=313
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=430
-ClientHeight=279
+ClientWidth=428
+ClientHeight=273
 TBDockHeight=313
 LRDockWidth=446
 Dockable=1
@@ -122,7 +147,7 @@ State=0
 Left=200
 Top=124
 Width=156
-Height=84
+Height=88
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=150
@@ -134,18 +159,18 @@ Visible=1
 State=0
 Left=0
 Top=490
-Width=190
+Width=298
 Height=551
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=174
-ClientHeight=517
+ClientWidth=280
+ClientHeight=511
 TBDockHeight=551
 LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=
 
@@ -159,8 +184,8 @@ Width=294
 Height=161
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=278
-ClientHeight=127
+ClientWidth=276
+ClientHeight=121
 TBDockHeight=161
 LRDockWidth=294
 Dockable=1
@@ -175,8 +200,8 @@ Width=190
 Height=366
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=174
-ClientHeight=332
+ClientWidth=172
+ClientHeight=326
 TBDockHeight=366
 LRDockWidth=190
 Dockable=1
@@ -188,11 +213,11 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=544
+Height=770
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=544
+ClientHeight=770
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
@@ -203,11 +228,11 @@ Visible=1
 State=0
 Left=12
 Top=0
-Width=1274
+Width=1902
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1274
+ClientWidth=1902
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443

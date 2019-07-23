@@ -105,6 +105,10 @@ type
     SpeedButton2: TSpeedButton;
     ControlGRP: TRadioGroup;
     memoread: TMemo;
+    set1271edit: TEdit;
+    set58aedit: TEdit;
+    set1271btn: TSpeedButton;
+    set58abtn: TSpeedButton;
         procedure FormCreate(Sender: TObject);
         procedure StartCycleClick(Sender: TObject);
         procedure FormShow(Sender: TObject);
@@ -122,7 +126,7 @@ type
         procedure cmbGPIB_agilentChange(Sender: TObject);
         procedure cmbInst1271Change(Sender: TObject);
         procedure SpeedButton1Click(Sender: TObject);
-    procedure btn2Click(Sender: TObject);
+    procedure down58a(Sender: TObject);
     procedure dbgrd1CellClick(Column: TColumn);
     procedure SpectrumChartClickSeries(Sender: TCustomChart;
       Series: TChartSeries; ValueIndex: Integer; Button: TMouseButton;
@@ -132,13 +136,17 @@ type
     procedure psFullspClickPointer(Sender: TCustomSeries; ValueIndex, X,
       Y: Integer);
     procedure ControlGRPClick(Sender: TObject);
+    procedure down1271(Sender: TObject);
+    procedure set1271btnClick(Sender: TObject);
+    procedure set58abtnClick(Sender: TObject);
     private
     { Private declarations }
     public
         function SetRegionBorder(target: double): boolean;
         function SetVoltage(target: double): boolean;
         function CorrectVoltage(target: double): boolean;
-        function SetRVoltage(target: double): boolean;
+        function CorrectVoltage58a(target: double): boolean;
+        function CorrectVoltage1271(target: double): boolean;
         function delay(ms: integer): integer;
         function InitCounter: integer;
         function InitGPIB1271: integer;
@@ -162,6 +170,8 @@ type
 function exec488(dev488:integer;cmd:string):boolean;
 
 var
+    setup1271, setup58a : double;
+    mult_cntl :double = 0;
     rasp_url :string = '';
     selected_control : integer = -1;
     Counter_per_sec : double = 0;
@@ -192,6 +202,8 @@ var
     DaqThread: Tdaqthread;
     CurVoltage: double;
     CurControl: int64 = 0;
+    CurControl58a: int64 = 0;
+    CurControl1271: int64 = 0;
     oldControl: int64 = 0;
     MainForm: TMainForm;
     VoltageChangeTime: double;
@@ -223,7 +235,7 @@ var
     cntVal: DWord;
     DeltaCounterValue: int64;
     PrevVoltageChange: double;
-    dev1271, resc: integer;
+    dev1271 : integer;
     dev58a: integer;
     Interval_low: double = 0.1000;
     interval_high: double = 0.1090;
@@ -255,7 +267,9 @@ end;
 function V_Convert(v_cur: double): dword;
 begin
 //     result:=trunc(0.7090*10000*20.98843441466855);
-    result:=round(v_cur*10000*20.98843441466855);
+    if selected_control = 0
+       then   result:=round(v_cur*10000*20.98843441466855)
+       else      result:=abs(round(v_cur*1043));
 //    result := trunc(1048576.0 * (v_cur) / 5);
 end;
 
@@ -281,7 +295,7 @@ var
         then result := false
 end;
 
-function setdPotential(U: int64): string;
+function setdPotential(var curControl:int64): string;
 var
     s1, url: string;
 begin
@@ -289,9 +303,14 @@ begin
       showmessage('не установлен управляющий аольтметр');
       halt;
     end;
-    curControl := U;
-    if abs(oldControl - U) > (0.01 * $FFFFF / 5) then
-        curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (U - oldcontrol) / abs(oldControl - U));
+    if selected_control = 0 then begin
+        if abs(oldControl - curControl) > (0.01 * $FFFFF / 5) then
+            curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (curControl - oldcontrol) / abs(oldControl - curControl));
+    end;
+    if selected_control = 1 then begin
+        if abs(oldControl - curControl) > (0.01 * $FFFFF ) then
+            curcontrol := oldcontrol + trunc((0.01 * $FFFFF) * (curControl - oldcontrol) / abs(oldControl - curControl));
+    end;
     if curControl < 0 then
         curcontrol := 0;
     oldControl := CurControl;
@@ -313,26 +332,38 @@ function tmainform.CorrectVoltage(target: double): boolean;
 var
     tarcontrol: int64;
     startsetTime: double;
+    r1: double ;
 begin
    if (now - PrevMTime)*24*2600 >1 then begin
      exit;
    end;
+   case selected_control of
+     0: CorrectVoltage58a(target);
+     1: CorrectVoltage1271(target);
+   end;
+   exit;
 
-//    curControl := curControl + trunc((target * 1.0 - mean3Voltage * 10000) * 20.98843441466855);
-    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
-    setDPotential(curControl);
+//    if selected_control = 0 then begin
+//        r1 :=CurVoltage * 10000;
+//        curControl := curControl + round((target * 1.0 - r1) * 26.98843441466855);
+//    end else begin
+//        r1 :=CurVoltage ;
+//        curControl := curControl + round((target * 1.0 - r1) * 1050);
+//    end;
+//    setDPotential(curControl);
+
 end;
-function CorrectVoltageM(target: double): boolean;
-var
-    tarcontrol: int64;
-    startsetTime: double;
-begin
-   if (now - PrevMTime)*24*2600 >1 then begin
-     exit;
-   end;
-    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
-    setDPotential(curControl);
-end;
+//function CorrectVoltageM(target: double): boolean;
+//var
+//    tarcontrol: int64;
+//    startsetTime: double;
+//begin
+//   if (now - PrevMTime)*24*2600 >1 then begin
+//     exit;
+//   end;
+//    curControl := curControl + round((target * 1.0 - CurVoltage * 10000) * 20.98843441466855);
+//    setDPotential(curControl);
+//end;
 
 function tmainform.SetVoltage(target: double): boolean;
 var
@@ -345,8 +376,8 @@ begin
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     correctVoltage(target);
     delay(1200);
-    diff := mean3Voltage * 10000;
-    diff := target * 1.0 - mean3Voltage * 10000;
+    diff := mean3Voltage * mult_cntl;
+    diff := target * 1.0 - mean3Voltage * mult_cntl;
 //    tmpstr := format('setvoltage 2 target=%.2f  Cur=%.2f M3=%.2f M5=%.2f  diff=%.2f', [target * 1.0, curVoltage, mean3Voltage * 10000, meanVoltage * 10000, diff]);
 //    writetimelog(DataDirName + 'range.txt', tmpstr);
     if abs(diff) > 0.1 then
@@ -362,22 +393,24 @@ var
     Vdiff: double;
 begin
     startsetTime := now;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
+    if selected_control = 0 then mult_cntl := 10000 else mult_cntl := 1;
+
+    while (abs((target * 1.0 - curVoltage * mult_cntl)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
         delay(1000);
-        Vdiff := abs((target * 1.0 - curVoltage * 10000));
+        Vdiff := abs((target * 1.0 - curVoltage * mult_cntl));
     end;
-    if (target <200) and (meanVoltage*10000<200) then begin
+    if (selected_control = 0) and (target <200) and (meanVoltage*mult_cntl<200) then begin
       Result := True;
       Exit;
     end;
-    while (abs((target * 1.0 - curVoltage * 10000)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
+    while (abs((target * 1.0 - curVoltage * mult_cntl)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
         correctVoltage(target);
         delay(1000);
-        Vdiff := abs((target * 1.0 - curVoltage * 10000));
+        Vdiff := abs((target * 1.0 - curVoltage * mult_cntl));
     end;
 
-    if (target * 1.0 - curVoltage * 10000) > 1 then begin
+    if (target * 1.0 - curVoltage * mult_cntl) > 1 then begin
         result := false;
     end
     else
@@ -447,6 +480,12 @@ begin
             end
             else begin
                 deltaCounterValue := cntval - lastCounterValue;
+                if GettingData
+                    then vdata[vindex + 1].counter := cntval
+                    else if counter_ready then begin
+                        wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
+                        LastCounterValue := 0;
+                    end;
                 dtc := now;
 
                 dtc := (dtc - LastCounterTime )*24*3600*1000;
@@ -472,7 +511,7 @@ var
     rdstr: string;
     dtc :double;
     resstr : string;
-    i1,i2,i3 : integer;
+    i1,i2,i3, resc : integer;
 begin
     curmtime := timegettime();
     writeProtocol('1 #################### DAQ58 start ##################### ' + IntToStr(vindex));
@@ -518,17 +557,10 @@ begin
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', resstr);
             if resc = 0 then
-                vdata[vIndex + 1].data := dacval58
+                vdata[vIndex + 1].data58 := dacval58
             else
-            vdata[vindex + 1].counter := cntval;
-            vdata[vindex + 1].time := now();
             vdata[vindex + 1].data58 := dacval58;
-            inc(vIndex);
         end
-        else if counter_ready then begin
-            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
-            LastCounterValue := 0;
-        end;
 
     except
         on E: Exception do begin
@@ -551,6 +583,7 @@ var
     wrtbuf, rdbuf: packed array[0..299] of char;
     rdstr: string;
     dtc :double;
+    resc : integer;
 begin
     curmtime := timegettime();
     writeProtocol('1 #################### DAQ start ##################### ' + IntToStr(vindex));
@@ -644,18 +677,12 @@ begin
         if GettingData then begin
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', rdstr);
             if resc = 0 then
-                vdata[vIndex + 1].data := dacval1271
+                vdata[vIndex + 1].data1271 := dacval1271
             else
             vdata[vindex + 1].counter := cntval;
-            vdata[vindex + 1].time := now();
             vdata[vindex + 1].data1271 := dacval1271;
-            inc(vIndex);
         end
 
-        else if counter_ready then begin
-            wRet := DCON_Clear_Counter(gcPort, StrToInt('$' + mainform.Address.Text), -1, StrToInt('$' + mainform.edCh.Text), 0, 200);
-            LastCounterValue := 0;
-        end;
 
     except
         on E: Exception do begin
@@ -683,17 +710,17 @@ begin
             if gpib_1271_ready then DaqGetData1271;
             if gpib_agilent_ready then DaqGetData58;
             case selected_control of
-                1 : CurVoltage := dacval1271;
-                0 : CurVoltage := dacval58;
-            else CurVoltage :=  -131313;
+                1 : CurVoltage := abs(dacval1271);
+                0 : CurVoltage := abs(dacval58);
+                else CurVoltage :=  -131313;
             end;
-            inc(Daq_counter);
+
             for i := 0 to 4 do
                 if (LastVoltage[i] < 0) then
-                    LastVoltage[i] := dacval1271
+                    LastVoltage[i] := curVoltage
                 else
                     LastVoltage[i] := LastVoltage[i + 1];
-            LastVoltage[5] := dacval1271;
+            LastVoltage[5] := curVoltage;
             meant := LastVoltage[0];
             mean3t := LastVoltage[3];
             for i := 1 to 5 do begin
@@ -703,6 +730,12 @@ begin
             end;
             meanVoltage := meant / 6.0;
             mean3Voltage := mean3t / 3.0;
+            if gettingData then begin
+                vdata[vIndex + 1].data := CurVoltage;
+                vdata[vindex + 1].time := now();
+                inc(vIndex);
+            end;
+            inc(Daq_counter);
        except
             writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ GET DATA');
             writetimelog( 'Exception on DAQ GET DATA');
@@ -720,7 +753,7 @@ begin
     deadspn.Value := 5;
     address.Value := cf.readInteger('hardware', 'counter_addr', 0);
     ControlGRP.ItemIndex := cf.readInteger('hardware', 'selected-control', 0);
-    ControlGRP.OnClick(self);
+    ControlGRPClick(self);
     ComComboBox.ItemIndex := cf.readInteger('hardware', 'counter_port', 0);
     edch.Value := cf.readInteger('hardware', 'counter_channel', 0);
     cmbGPIB1271.ItemIndex := cf.readInteger('instrument', 'gpib_1271', 0);
@@ -1009,6 +1042,36 @@ begin
             exit;
         end;
     end;
+    case selected_control of
+        0:  begin
+                for I1 := 0 to 10 do begin
+                    if CorrectVoltage1271(setup1271) then
+                        break;
+                    if I1 = 10 then begin
+                        showmessage('Не удается установить уровень wavetek1271 = '+set1271edit.text);
+                        Startcycle.Enabled := true;
+                        controlGrp.Enabled := Startcycle.Enabled;
+                        Screen.Cursor := crDefault;
+                        exit;
+                    end;
+                end;
+
+            end;
+        1:  begin
+                for I1 := 0 to 10 do begin
+                    if CorrectVoltage58a(setup58a) then
+                        break;
+                    if I1 = 10 then begin
+                        showmessage('Не удается установить уровень wAgilent 3458a = '+set58aedit.text);
+                        Startcycle.Enabled := true;
+                        controlGrp.Enabled := Startcycle.Enabled;
+                        Screen.Cursor := crDefault;
+                        exit;
+                    end;
+                end;
+
+            end;
+    end;
 //    setreg
     memoread.Lines.Add('Set ok. wait 4 sec');
 
@@ -1073,7 +1136,9 @@ begin
         if prevGrIndex = vindex + 1 then
             continue;
         for il1 := prevGrIndex to vindex do begin
-            ch1VoltSeries.AddXY(vdata[il1].time, vdata[il1].data);
+            if selected_control = 0
+                then             ch1VoltSeries.AddXY(vdata[il1].time, vdata[il1].data*mult_cntl)
+                else             ch1VoltSeries.AddXY(vdata[il1].time, vdata[il1].data)
         end;
 
         prevGrIndex := vindex + 1;
@@ -1087,8 +1152,14 @@ begin
             CounterStep := vdata[vindex].counter;
             dt := (now() - lastCounterTime) * 24 * 3600;
             CalcStdAndMean(Vindex, vindex - StepStartIndex); // vIndex-PrevVindex);
-            ch1MeanSeries.AddXY(now, mean);
-            ch1stdSeries.AddXY(now, std);
+            if selected_control = 0 then begin
+                ch1MeanSeries.AddXY(now, mean*mult_cntl);
+                ch1stdSeries.AddXY(now, std*mult_cntl);
+            end else begin
+                ch1MeanSeries.AddXY(now, mean);
+                ch1stdSeries.AddXY(now, std);
+            end;
+
             MeanVoltageSeries.AddXY(now(), mean);
             stdVoltageSeries.AddXY(now(), std);
             countPerVSeries.AddXy(curtarget, CounterStep);
@@ -1111,10 +1182,10 @@ begin
             LastCounterTime := now;
 
             StepStartIndex := vindex + 1;
-            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
+            tmpstr := format('finish %.2f  %.2f  %.2f   %.2f %.2f', [curTarget * 1.0, meanVoltage * mult_cntl, mean3Voltage * mult_cntl, dstep * step_Value / 1000.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
 
-            newTarget := curTarget + dstep * step_Value / 1000.0;
+            newTarget := curTarget + dstep * mult_cntl*(step_Value / 1000.0);
             curTarget := newTarget;
             if (curTarget > Border_High) or (curTarget < Border_low) then begin
                 OldSweepNumber := Sweep;
@@ -1139,18 +1210,21 @@ begin
                 end;
             end
             else begin
-                writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                writetimelog(format('beg Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*mult_cntl, mean3Voltage*mult_cntl, curTarget])+#10);
+                setVoltage(curTarget);
+                delay(2000);
                 while (now - start_dead) * 24 * 3600 < dead_Value-2 do begin
-                    writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                    writetimelog(IntToStr( trunc((now - start_dead) * 24 * 3600 ) )+format(' Set Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*mult_cntl, mean3Voltage*mult_cntl, curTarget])+#10);
                     setVoltage(curTarget);
+
                 end;
                 while (now - start_dead) * 24 * 3600 < dead_Value -0.3 do begin
-                    writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*10000, mean3Voltage*10000, curTarget])+#10);
+                    writetimelog(format('wait Step Mean3= %.2f cur= %.2f Target= %.2f',[curVoltage*mult_cntl, mean3Voltage*mult_cntl, curTarget])+#10);
 
                     delay(300);
                 end;
             end;
-            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * 10000, meanVoltage * 10000, mean3Voltage * 10000, dstep * step_Value / 1000.0, border_low * 1.0]);
+            tmpstr := format('start target = %.2f  mean =(%.2f  %.2f  %.2f)   %.2f %.2f', [curTarget * 1.0, CurVoltage * mult_cntl, meanVoltage * mult_cntl, mean3Voltage * mult_cntl, dstep * step_Value / 1000.0, border_low * 1.0]);
             writetimelog(DataDirName + 'range.txt', tmpstr);
             GettingData := true;
             correctionTime := now;
@@ -1322,7 +1396,8 @@ begin
     daqthread.Resume;
     delay(2000);
 
-    curControl := v_convert(meanVoltage);
+    curControl58a := v_convert(dacval58);
+    curControl1271 := v_convert(dacval1271);
     oldControl := CurControl;
 //    bottomspn.Value := trunc(meanVoltage * 10000);
 //    topspn.Value := trunc(meanVoltage * 10000);
@@ -1373,6 +1448,7 @@ procedure TMainForm.Timer1Timer(Sender: TObject);
 var
  dt, dv,wv: double;
 begin
+     statusbar1.Panels[0].Text := inttostr(curcontrol);
      statusbar1.Panels[2].Text := formatDateTime('HH:NN:SS', now);
 
  if (now - PrevMTime)*24*3600 >1 then begin
@@ -1431,7 +1507,7 @@ begin
             then statusbar1.Panels[5].Text := format('Agilent=%.7f', [ dacval58])
             else statusbar1.Panels[5].Text := format('Agilent=NaN', [  dacval58]);
 
-        curU.Text := format('%.5f %.5f', [ dacval1271, dacval58]);
+        curU.Text := format('%.5f ', [ curvoltage]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
@@ -1461,24 +1537,6 @@ begin
     LogFileName := s2 + ' full.txt';
 end;
 
-function TMainForm.SetRVoltage(target: double): boolean;
-var
-    tarcontrol: int64;
-    startsetTime: double;
-begin
-    tarcontrol := V_Convert(target);
-    startsetTime := now;
-    while ((Bottomspn.Value * 1.0 - meanVoltage * 10000) > 0.2) and ((now - startsetTime) * 24 * 3600 < 5) do begin
-        curControl := curControl + trunc((Bottomspn.Value * 1.0 - meanVoltage * 10000) / (50000 / $FFFFF));
-        setDPotential(curControl);
-        delay(1000);
-    end;
-    if (Bottomspn.Value * 1.0 - meanVoltage * 10000) > 0.2 then
-        result := false
-    else
-        result := true;
-
-end;
 
 procedure TMainForm.pnl3Click(Sender: TObject);
 begin
@@ -1571,13 +1629,25 @@ begin
     DataDirName := dir;
 end;
 
-procedure TMainForm.btn2Click(Sender: TObject);
+procedure TMainForm.down58a(Sender: TObject);
+var
+old_selected_control: integer;
 begin
+  old_selected_control := selected_control;
+  ControlGRP.Enabled := false;
   Screen.Cursor := crHourGlass;
+  selected_control := 0;
+  ControlGRP.ItemIndex := selected_control;
+  ControlGRPClick(self);
+  delay(700);
     if not SetRegionBorder(0) then begin
         showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
     end;
   Screen.Cursor := crDefault;
+ selected_control := old_selected_control;
+ ControlGRP.ItemIndex := selected_control;
+ ControlGRPClick(self);
+  ControlGRP.Enabled := true;
 
 end;
 
@@ -1665,8 +1735,8 @@ begin
 
     curControl := v_convert(meanVoltage);
     oldControl := CurControl;
-//    bottomspn.Value := trunc(meanVoltage * 10000);
-//    topspn.Value := trunc(meanVoltage * 10000);
+//    bottomspn.Value := trunc(meanVoltage * mult_cntl);
+//    topspn.Value := trunc(meanVoltage * mult_cntl);
     StartCycle.Enabled := true;
     controlGrp.Enabled := Startcycle.Enabled;
 
@@ -1692,6 +1762,140 @@ begin
     1:rasp_url := url_rasp_wavetek271;
     else rasp_url:='';
  end;
+    if selected_control = 0 then mult_cntl := 10000 else mult_cntl := 10000;
+end;
+
+procedure TMainForm.down1271(Sender: TObject);
+var
+old_selected_control: integer;
+begin
+  old_selected_control := selected_control;
+  ControlGRP.Enabled := false;
+  Screen.Cursor := crHourGlass;
+  selected_control := 1;
+  ControlGRP.ItemIndex := selected_control;
+  ControlGRPClick(self);
+  delay(700);
+    if not SetRegionBorder(0) then begin
+        showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
+    end;
+  Screen.Cursor := crDefault;
+ selected_control := old_selected_control;
+ ControlGRP.ItemIndex := selected_control;
+ ControlGRPClick(self);
+  ControlGRP.Enabled := true;
+
+end;
+
+procedure TMainForm.set1271btnClick(Sender: TObject);
+var
+old_selected_control: integer;
+r1 :double;
+i1,i2 : integer;
+begin
+  val(set1271edit.text,r1,i1);
+  DecimalSeparator := '.';
+  set1271edit.text := StringReplace(set1271edit.text,',','.',[rfReplaceAll]);
+  if i1>0 then begin
+    showmessage('Некорректное плавающее значение :'+set1271edit.text);
+    exit;
+  end;
+  setup1271 := r1;
+  old_selected_control := selected_control;
+  ControlGRP.Enabled := false;
+  Screen.Cursor := crHourGlass;
+  selected_control := 1;
+  ControlGRP.ItemIndex := selected_control;
+  ControlGRPClick(self);
+  delay(700);
+    if not SetRegionBorder(setup1271) then begin
+        showmessage('1.Не удается установить начальный уровень = ' + set1271edit.text);
+    end;
+    for I1 := 0 to 10 do begin
+        if SetVoltage(setup1271) then
+            break;
+        if I1 = 10 then begin
+            showmessage('2.Не удается установить начальный уровень = ' + set1271edit.text);
+            Screen.Cursor := crDefault;
+        end;
+    end;
+
+ Screen.Cursor := crDefault;
+ selected_control := old_selected_control;
+ ControlGRP.ItemIndex := selected_control;
+ ControlGRPClick(self);
+ ControlGRP.Enabled := true;
+
+end;
+
+procedure TMainForm.set58abtnClick(Sender: TObject);
+var
+old_selected_control: integer;
+r1 :double;
+i1,i2 : integer;
+begin
+  val(set58aedit.text,r1,i1);
+  DecimalSeparator := '.';
+  set58aedit.text := StringReplace(set58aedit.text,',','.',[rfReplaceAll]);
+  if i1>0 then begin
+    showmessage('Некорректное плавающее значение :'+set58aedit.text);
+    exit;
+  end;
+  setup58a := r1;
+  old_selected_control := selected_control;
+  ControlGRP.Enabled := false;
+  Screen.Cursor := crHourGlass;
+  selected_control := 0;
+  ControlGRP.ItemIndex := selected_control;
+  ControlGRPClick(self);
+  delay(700);
+    if not SetRegionBorder(setup58a) then begin
+        showmessage('1.Не удается установить начальный уровень = ' + set58aedit.text);
+    end;
+    for I1 := 0 to 10 do begin
+        if SetVoltage(setup58a) then
+            break;
+        if I1 = 10 then begin
+            showmessage('2.Не удается установить начальный уровень = ' + set58aedit.text);
+            Screen.Cursor := crDefault;
+        end;
+    end;
+
+ Screen.Cursor := crDefault;
+ selected_control := old_selected_control;
+ ControlGRP.ItemIndex := selected_control;
+ ControlGRPClick(self);
+ ControlGRP.Enabled := true;
+
+end;
+
+function TMainForm.CorrectVoltage1271(target: double): boolean;
+var
+    tarcontrol: int64;
+    startsetTime: double;
+    r1: double ;
+begin
+   if (now - PrevMTime)*24*2600 >1 then begin
+     exit;
+   end;
+   r1 :=abs(dacval1271);
+   curControl1271 := curControl1271 + round((target * 1.0 - r1) * 1050);
+   setDPotential(curControl1271);
+
+end;
+
+function TMainForm.CorrectVoltage58a(target: double): boolean;
+var
+    tarcontrol: int64;
+    startsetTime: double;
+    r1: double ;
+begin
+   if (now - PrevMTime)*24*2600 >1 then begin
+     exit;
+   end;
+   r1 :=dacval58 * 10000;
+   curControl58a := curControl58a + round((target * 1.0 - r1) * 26.98843441466855);
+   setDPotential(curControl58a);
 
 end;
 
