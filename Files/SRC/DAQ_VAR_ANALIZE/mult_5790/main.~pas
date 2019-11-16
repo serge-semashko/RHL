@@ -13,8 +13,8 @@ uses
 
 const
     sweepmodes: array[0..4] of string = ('UpDown', 'Up', 'Down', 'err', 'Up');
-    url_rasp_agilent58a = 'http://192.168.0.12:8282/setabs=';
-    url_rasp_wavetek271 = 'http://192.168.0.10:8282/setabs=';
+    url_rasp_agilent58a = 'http://192.168.0.10:8282/setabs=';
+    url_rasp_wavetek271 = 'http://192.168.0.12:8282/setabs=';
 type
     TDAQThread = class(TThread)
         procedure execute; override;
@@ -660,7 +660,7 @@ begin
         PrevVoltage := rdstr;
         rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
         val(rdstr, dacval1271, resc);
-
+        dacval1271 := abs(dacval1271);
         if  pos('.', rdstr) = 0  then begin
             dacval1271 := -131313;
             PrevMTime := TimeGetTime();
@@ -1396,7 +1396,8 @@ begin
     daqthread.Resume;
     delay(2000);
 
-    curControl := v_convert(meanVoltage);
+    curControl58a := v_convert(dacval58);
+    curControl1271 := v_convert(dacval1271);
     oldControl := CurControl;
 //    bottomspn.Value := trunc(meanVoltage * 10000);
 //    topspn.Value := trunc(meanVoltage * 10000);
@@ -1447,7 +1448,10 @@ procedure TMainForm.Timer1Timer(Sender: TObject);
 var
  dt, dv,wv: double;
 begin
-     statusbar1.Panels[0].Text := inttostr(curcontrol);
+//     statusbar1.Panels[0].Text := inttostr(curcontrol);
+     statusbar1.Panels[0].Text := format('”правление:Wavetek=%d Agilent=%d',[curControl1271,curControl58a]);
+
+
      statusbar1.Panels[2].Text := formatDateTime('HH:NN:SS', now);
 
  if (now - PrevMTime)*24*3600 >1 then begin

@@ -1,7 +1,7 @@
 object MainForm: TMainForm
   Left = 87
   Top = 39
-  Width = 1705
+  Width = 1799
   Height = 1001
   Caption = 'Read/Write'
   Color = clBtnFace
@@ -19,14 +19,14 @@ object MainForm: TMainForm
   object Panel1: TPanel
     Left = 0
     Top = 893
-    Width = 1687
+    Width = 1781
     Height = 33
     Align = alBottom
     TabOrder = 0
     object TimeInfolbl: TStaticText
       Left = 1
       Top = 1
-      Width = 1685
+      Width = 1779
       Height = 31
       Align = alClient
       AutoSize = False
@@ -44,7 +44,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1687
+    Width = 1781
     Height = 202
     ActivePage = TabSheet1
     Align = alTop
@@ -60,7 +60,7 @@ object MainForm: TMainForm
       object StartCycle: TSpeedButton
         Left = 1505
         Top = 12
-        Width = 239
+        Width = 200
         Height = 117
         Caption = 'Start measurement'
         Font.Charset = DEFAULT_CHARSET
@@ -180,7 +180,7 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 202
-    Width = 1687
+    Width = 1781
     Height = 691
     Align = alClient
     Caption = 'Panel5'
@@ -188,7 +188,7 @@ object MainForm: TMainForm
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1685
+      Width = 1779
       Height = 4
       Cursor = crVSplit
       Align = alTop
@@ -196,7 +196,7 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 5
-      Width = 1685
+      Width = 1779
       Height = 685
       ActivePage = ts1
       Align = alClient
@@ -218,7 +218,7 @@ object MainForm: TMainForm
         object Panel2: TPanel
           Left = 974
           Top = 0
-          Width = 703
+          Width = 797
           Height = 650
           Align = alClient
           Caption = 'Panel2'
@@ -226,7 +226,7 @@ object MainForm: TMainForm
           object Chart1: TChart
             Left = 1
             Top = 1
-            Width = 1091
+            Width = 795
             Height = 404
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
@@ -352,8 +352,8 @@ object MainForm: TMainForm
           object Chart2: TChart
             Left = 1
             Top = 405
-            Width = 1091
-            Height = 463
+            Width = 795
+            Height = 244
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             MarginBottom = 0
@@ -876,7 +876,7 @@ object MainForm: TMainForm
         object pnl2: TPanel
           Left = 927
           Top = 0
-          Width = 750
+          Width = 844
           Height = 650
           Align = alClient
           Caption = 'pnl2'
@@ -884,7 +884,7 @@ object MainForm: TMainForm
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 748
+            Width = 842
             Height = 648
             Align = alClient
             BorderStyle = bsSingle
@@ -999,7 +999,7 @@ object MainForm: TMainForm
             object leconstVolt: TPanel
               Left = 1
               Top = 321
-              Width = 742
+              Width = 836
               Height = 322
               Align = alBottom
               BorderStyle = bsSingle
@@ -1020,7 +1020,7 @@ object MainForm: TMainForm
               object Label4: TLabel
                 Left = 1
                 Top = 141
-                Width = 736
+                Width = 830
                 Height = 24
                 Align = alBottom
                 Alignment = taCenter
@@ -1043,7 +1043,7 @@ object MainForm: TMainForm
               object DescMemo: TMemo
                 Left = 1
                 Top = 165
-                Width = 736
+                Width = 830
                 Height = 152
                 Align = alBottom
                 TabOrder = 0
@@ -1061,7 +1061,7 @@ object MainForm: TMainForm
               object rgSweepMode: TRadioGroup
                 Left = 10
                 Top = 5
-                Width = 228
+                Width = 183
                 Height = 84
                 Caption = 'Sweep mode'
                 ItemIndex = 0
@@ -1153,15 +1153,6 @@ object MainForm: TMainForm
                 '29'
                 '30')
             end
-            object memoRead: TMemo
-              Left = 10
-              Top = 127
-              Width = 1025
-              Height = 376
-              ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
-              ScrollBars = ssBoth
-              TabOrder = 6
-            end
           end
         end
       end
@@ -1170,7 +1161,7 @@ object MainForm: TMainForm
   object StatusBar1: TStatusBar
     Left = 0
     Top = 926
-    Width = 1687
+    Width = 1781
     Height = 30
     Panels = <
       item

@@ -16,14 +16,14 @@ EditWindowCount=1
 
 [F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas]
 ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
+[F:\home\rhlsrc\Files\SRC\daq_5790.1271\mult_5790\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
-FormState=0
-FormOnTop=0
-
-[F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\mult5790.dpr]
+[F:\home\rhlsrc\Files\SRC\daq_5790.agilent\mult_5790\mult5790.dpr]
 FormState=0
 FormOnTop=0
 
@@ -35,28 +35,30 @@ CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
-State=0
+State=2
 Left=229
 Top=142
-Width=1302
+Width=1691
 Height=682
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=1284
-ClientHeight=637
+MaxLeft=-9
+MaxTop=134
+MaxWidth=1932
+MaxHeight=907
+ClientWidth=1914
+ClientHeight=862
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=85
+BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400010000000B0000004D65737361676556696577000000000000000000000000000000000001000000000000000000000000FFFFFFFF
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas
-CursorX=32
-CursorY=265
-TopLine=249
+CursorX=103
+CursorY=970
+TopLine=962
 LeftCol=1
 
 [Watches]
@@ -99,6 +101,23 @@ TBDockHeight=313
 LRDockWidth=446
 Dockable=1
 
+[CPUWindow]
+Create=1
+Visible=0
+State=0
+Left=160
+Top=143
+Width=1599
+Height=794
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=1581
+ClientHeight=749
+DumpPane=101
+DisassemblyPane=240
+RegisterPane=297
+FlagPane=82
+
 [AlignmentPalette]
 Create=1
 Visible=0
@@ -129,7 +148,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=
 
@@ -172,26 +191,26 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=537
+Height=858
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=537
+ClientHeight=858
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=12
 Top=0
-Width=1272
+Width=1902
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1272
+ClientWidth=1902
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443

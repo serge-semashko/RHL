@@ -788,7 +788,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 5
+              Value = 0
             end
             object stepspn: TSpinEdit
               Left = 620
@@ -920,7 +920,7 @@ object MainForm: TMainForm
             end
             object Label1: TLabel
               Left = 3
-              Top = 41
+              Top = 70
               Width = 105
               Height = 16
               Alignment = taRightJustify
@@ -929,14 +929,14 @@ object MainForm: TMainForm
             end
             object Label2: TLabel
               Left = 195
-              Top = 36
+              Top = 70
               Width = 63
               Height = 16
               Caption = 'Instrument:'
             end
             object btn2: TSpeedButton
               Left = 321
-              Top = 28
+              Top = 70
               Width = 208
               Height = 30
               Caption = 'Down high voltage'
@@ -950,7 +950,7 @@ object MainForm: TMainForm
             end
             object Label7: TLabel
               Left = 2
-              Top = 68
+              Top = 34
               Width = 105
               Height = 16
               Alignment = taRightJustify
@@ -959,14 +959,14 @@ object MainForm: TMainForm
             end
             object Label8: TLabel
               Left = 195
-              Top = 68
+              Top = 34
               Width = 63
               Height = 16
               Caption = 'Instrument:'
             end
             object SpeedButton2: TSpeedButton
               Left = 322
-              Top = 63
+              Top = 34
               Width = 207
               Height = 28
               Caption = 'Down high voltage'
@@ -980,14 +980,14 @@ object MainForm: TMainForm
             end
             object set1271btn: TSpeedButton
               Left = 656
-              Top = 32
+              Top = 70
               Width = 35
               Height = 22
               OnClick = set1271btnClick
             end
             object set58abtn: TSpeedButton
               Left = 656
-              Top = 62
+              Top = 34
               Width = 35
               Height = 22
               OnClick = set58abtnClick
@@ -1138,7 +1138,7 @@ object MainForm: TMainForm
             end
             object cmbGPIB1271: TComboBox
               Left = 114
-              Top = 37
+              Top = 70
               Width = 80
               Height = 24
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
@@ -1155,7 +1155,7 @@ object MainForm: TMainForm
             end
             object cmbInst1271: TComboBox
               Left = 264
-              Top = 32
+              Top = 70
               Width = 49
               Height = 24
               Style = csDropDownList
@@ -1198,7 +1198,7 @@ object MainForm: TMainForm
             end
             object cmbGPIB58: TComboBox
               Left = 113
-              Top = 65
+              Top = 34
               Width = 80
               Height = 24
               ImeName = #164#164#164#1077' ('#1041'c'#1045#1081') - '#183's'#1028'`'#173#181
@@ -1215,7 +1215,7 @@ object MainForm: TMainForm
             end
             object cmbInst58: TComboBox
               Left = 265
-              Top = 65
+              Top = 34
               Width = 49
               Height = 24
               Style = csDropDownList
@@ -1279,14 +1279,14 @@ object MainForm: TMainForm
             end
             object set1271edit: TEdit
               Left = 544
-              Top = 32
+              Top = 70
               Width = 102
               Height = 24
               TabOrder = 10
             end
             object set58aedit: TEdit
               Left = 544
-              Top = 62
+              Top = 34
               Width = 102
               Height = 24
               TabOrder = 11
@@ -1303,7 +1303,7 @@ object MainForm: TMainForm
     Height = 30
     Panels = <
       item
-        Width = 200
+        Width = 400
       end
       item
         Width = 200

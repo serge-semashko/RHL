@@ -85,7 +85,7 @@ ClientHeight=99
 
 [ProjectManager]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=369
 Top=372

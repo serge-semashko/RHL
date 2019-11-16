@@ -79,7 +79,6 @@ type
         DataDir: TLabeledEdit;
         SpeedButton1: TSpeedButton;
         OpenDialog1: TOpenDialog;
-        memoRead: TMemo;
     btn2: TSpeedButton;
     CurU: TLabeledEdit;
     ConstVolt: TLabeledEdit;
@@ -572,7 +571,7 @@ begin
     end;
     ds1.DataSet := zqry1;
 //    dbgrd1.DataSource := ds
-    memoRead.Text := '';
+//    memoRead.Text := '';
     gcDataBit := Char(8);      // 8 data bit
     gcParity := Char(0);      // Non Parity
     gcStopBit := Char(0);      // One Stop Bit
@@ -831,7 +830,7 @@ begin
         end;
     end;
 //    setreg
-    memoread.Lines.Add('Set ok. wait 4 sec');
+//    memoread.Lines.Add('Set ok. wait 4 sec');
 
     prevGrIndex := 2;
     LastCounterTime := now;
@@ -926,7 +925,7 @@ begin
             Stepstr := Stepstr + ' ' + format(' %.5d %.2d %.8d %.6d %.6d', [CounterStep, curControl, dstep, vindex + 1, stepStartIndex]) + ' ' + StringReplace(floattostr(now), ',', '.', [rfReplaceAll, rfIgnoreCase]);
             Stepstr := StringReplace(Stepstr, ',', '.', [rfReplaceAll, rfIgnoreCase]);
             writetimelog(DataFileName + '.dat', Stepstr);
-            memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Read ok = ' + rdstr);
+//            memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Read ok = ' + rdstr);
     //   writetimelog(rdstr+#10);
             LastCounterTime := now;
 
@@ -979,7 +978,7 @@ begin
             start_step := now;
         end
         else if (now - CorrectionTime) * 24 * 3600 > 2 then begin
-            CorrectVoltage(curTarget);
+//            CorrectVoltage(curTarget);
             correctionTime := now;
         end;
         T1 := now;
@@ -1061,12 +1060,12 @@ var
 begin
     gpib_ready := false;
     StartCycle.Enabled := false;
-    memoread.lines.Add('');
+//    memoread.lines.Add('');
     dev := ibdev(cmbGPIB.ItemIndex, cmbInst.ItemIndex + 1, 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
         errmess := GpibError(iberr);
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+//        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
         showmessage('Err: Error in init the GPIB device.');
         exit;
     end;
@@ -1076,7 +1075,7 @@ begin
 
     if not exec488(dev,'PRESET NORM') then begin
         errmess := GpibError(iberr);
-        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
+//        memoread.lines[0] := (DateToStr(now) + ' ' + TimeToStr(now) + '  ' + 'Err: Error in init the GPIB device.' + errmess + #10);
         showmessage('Err: Error in init the GPIB device.');
         exit;
     end;;

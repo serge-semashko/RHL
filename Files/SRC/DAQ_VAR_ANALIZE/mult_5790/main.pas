@@ -13,8 +13,8 @@ uses
 
 const
     sweepmodes: array[0..4] of string = ('UpDown', 'Up', 'Down', 'err', 'Up');
-    url_rasp_agilent58a = 'http://192.168.0.12:8282/setabs=';
-    url_rasp_wavetek271 = 'http://192.168.0.10:8282/setabs=';
+    url_rasp_agilent58a = 'http://192.168.0.10:8282/setabs=';
+    url_rasp_wavetek271 = 'http://192.168.0.12:8282/setabs=';
 type
     TDAQThread = class(TThread)
         procedure execute; override;
@@ -660,7 +660,7 @@ begin
         PrevVoltage := rdstr;
         rdstr := system.copy(rdstr, 1, pos(' ', rdstr) - 1);
         val(rdstr, dacval1271, resc);
-
+        dacval1271 := abs(dacval1271);
         if  pos('.', rdstr) = 0  then begin
             dacval1271 := -131313;
             PrevMTime := TimeGetTime();
@@ -750,7 +750,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 var
     i: int64;
 begin
-    deadspn.Value := 5;
+    deadspn.Value := 5;                                        33
     address.Value := cf.readInteger('hardware', 'counter_addr', 0);
     ControlGRP.ItemIndex := cf.readInteger('hardware', 'selected-control', 0);
     ControlGRPClick(self);
@@ -891,7 +891,7 @@ var
           x:=StrToInt(spectreList.Names[il1]) /1000.0;
           s1 := spectreList.values[spectreList.Names[il1]];
           y:=StrToInt(s1)  * 1.0;
-          if spectrumChart.LeftAxis.Maximum < y*1.1 then spectrumChart.LeftAxis.Maximum := y*1.1; 
+          if spectrumChart.LeftAxis.Maximum < y*1.1 then spectrumChart.LeftAxis.Maximum := y*1.1;
           psFullsp.AddXY(x,y);
 
         end;
@@ -1448,7 +1448,10 @@ procedure TMainForm.Timer1Timer(Sender: TObject);
 var
  dt, dv,wv: double;
 begin
-     statusbar1.Panels[0].Text := inttostr(curcontrol);
+//     statusbar1.Panels[0].Text := inttostr(curcontrol);
+     statusbar1.Panels[0].Text := format('”правление:Wavetek=%d Agilent=%d',[curControl1271,curControl58a]);
+
+
      statusbar1.Panels[2].Text := formatDateTime('HH:NN:SS', now);
 
  if (now - PrevMTime)*24*3600 >1 then begin

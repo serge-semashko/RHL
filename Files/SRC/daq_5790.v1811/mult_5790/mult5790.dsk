@@ -16,10 +16,10 @@ EditWindowCount=1
 
 [F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas]
 ModuleType=SourceModule
-FormState=0
+FormState=1
 FormOnTop=0
 
-[C:\Program Files (x86)\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+[F:\home\rhlsrc\Files\SRC\daq_5790.1271\mult_5790\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
@@ -36,14 +36,14 @@ MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
 State=0
-Left=229
-Top=142
-Width=1302
-Height=682
+Left=91
+Top=124
+Width=1705
+Height=886
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1284
-ClientHeight=637
+ClientWidth=1687
+ClientHeight=841
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
@@ -54,9 +54,9 @@ BottomPanelData=0000040000000000000000000000000000000000000000000001000000000000
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\daq_5790.v1811\mult_5790\main.pas
-CursorX=32
-CursorY=265
-TopLine=249
+CursorX=37
+CursorY=514
+TopLine=501
 LeftCol=1
 
 [Watches]
@@ -76,8 +76,8 @@ Left=0
 Top=75
 Width=1920
 Height=144
-MaxLeft=-1
-MaxTop=-1
+MaxLeft=-9
+MaxTop=-9
 MaxWidth=1932
 MaxHeight=144
 ClientWidth=1914
@@ -85,7 +85,7 @@ ClientHeight=99
 
 [ProjectManager]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=369
 Top=372
@@ -98,6 +98,23 @@ ClientHeight=273
 TBDockHeight=313
 LRDockWidth=446
 Dockable=1
+
+[CPUWindow]
+Create=1
+Visible=0
+State=0
+Left=160
+Top=143
+Width=1599
+Height=794
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=1581
+ClientHeight=749
+DumpPane=101
+DisassemblyPane=240
+RegisterPane=297
+FlagPane=82
 
 [AlignmentPalette]
 Create=1
@@ -129,7 +146,7 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 ArrangeBy=Name
-SelectedItem=
+SelectedItem=Caption
 ExpandedItems=
 HiddenCategories=
 
@@ -172,11 +189,11 @@ State=0
 Left=0
 Top=12
 Width=140
-Height=537
+Height=741
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=537
+ClientHeight=741
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
@@ -187,11 +204,11 @@ Visible=1
 State=0
 Left=12
 Top=0
-Width=1272
+Width=1675
 Height=85
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1272
+ClientWidth=1675
 ClientHeight=85
 TBDockHeight=85
 LRDockWidth=443
