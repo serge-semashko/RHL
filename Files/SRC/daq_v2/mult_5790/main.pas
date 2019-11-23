@@ -22,6 +22,10 @@ type
     TDAQ_58a = class(TThread)
         procedure execute; override;
     end;
+    TDAQ_all = class(TThread)
+        procedure execute; override;
+    end;
+
 
     TMainForm = class(TForm  )
         Panel1: TPanel;
@@ -202,6 +206,7 @@ var
     Border_High, Border_low: dword;
     step_value, dead_value: int64;
     dstep: integer;
+    Daq_all: Tdaq_all;
     Daq_58a: Tdaq_58a;
     Daq_1271: Tdaq_1271;
     CurVoltage: double;
@@ -209,6 +214,9 @@ var
     CurControl58a: int64 = 0;
     CurControl1271: int64 = 0;
     oldControl: int64 = 0;
+    oldControl1271: int64 = 0;
+    oldControl58a: int64 = 0;
+
     MainForm: TMainForm;
     VoltageChangeTime: double;
     TimerID: dword;
@@ -307,13 +315,19 @@ begin
       showmessage('не установлен управляющий аольтметр');
       halt;
     end;
+    if (curControl > $FFFFF) then curControl := $FFFFF;
     if selected_control = 0 then begin
-        if abs(oldControl - curControl) > (0.01 * $FFFFF / 5) then
-            curcontrol := oldcontrol + trunc((0.01 * $FFFFF / 5) * (curControl - oldcontrol) / abs(oldControl - curControl));
+        curControl58a := curControl;
+        if abs(oldControl58a - curControl58a) > (0.01 * $FFFFF / 5) then
+            curcontrol58a := oldcontrol58a + trunc((0.01 * $FFFFF / 5) * (curControl58a - oldcontrol58a) / abs(oldControl58a - curControl58a));
     end;
     if selected_control = 1 then begin
-        if abs(oldControl - curControl) > (0.01 * $FFFFF ) then
-            curcontrol := oldcontrol + trunc((0.01 * $FFFFF) * (curControl - oldcontrol) / abs(oldControl - curControl));
+        curControl1271 := curControl;
+        if abs(oldControl1271 - curControl1271) > (0.1 * $FFFFF ) then
+            curcontrol1271 := oldcontrol1271 + trunc((0.1 * $FFFFF) * (curControl1271 - oldcontrol1271) / abs(oldControl1271 - curControl1271));
+        if curControl1271 < 0 then
+            curcontrol1271 := 0;
+        oldControl1271 := CurControl1271;
     end;
     if curControl < 0 then
         curcontrol := 0;
@@ -401,7 +415,7 @@ begin
 
     while (abs((target * 1.0 - curVoltage * mult_cntl)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
         correctVoltage(target);
-        delay(1000);
+        delay(3000);
         Vdiff := abs((target * 1.0 - curVoltage * mult_cntl));
     end;
     if (selected_control = 0) and (target <200) and (meanVoltage*mult_cntl<200) then begin
@@ -410,7 +424,7 @@ begin
     end;
     while (abs((target * 1.0 - curVoltage * mult_cntl)) > 1) and ((now - startsetTime) * 24 * 3600 < 120) do begin
         correctVoltage(target);
-        delay(1000);
+        delay(3000);
         Vdiff := abs((target * 1.0 - curVoltage * mult_cntl));
     end;
 
@@ -747,11 +761,45 @@ begin
     bCfgChg := False;
     gszSend := StrAlloc(100);
     gszReceive := StrAlloc(100);
+    LastCounterTime := now;
     InitCounter;
     InitGPIB1271;
     InitGPIB_agilent;
+
     con2.Connect;
     zqry1.Open;
+
+    GettingData := false;
+    prevread := now();
+{
+    Daq_1271 := Tdaq_1271.Create(true);
+    daq_1271.Priority := tphighest;
+    gpib_1271_ready := true;
+    daq_1271.Resume;
+
+    Daq_58a := Tdaq_58a.Create(true);
+    daq_58a.Priority := tphigher;
+    daq_58a.Priority := tphighest;
+    gpib_agilent_ready := true;
+    daq_58a.Resume;
+}
+    Daq_all := Tdaq_all.Create(true);
+    daq_all.Priority := tphigher;
+    daq_all.Priority := tphighest;
+    daq_all.Resume;
+
+
+
+    delay(2000);
+
+    curControl58a := v_convert(dacval58);
+    curControl1271 := v_convert(dacval1271);
+    oldControl58a := CurControl;
+    oldControl1271 := CurControl;
+    StartCycle.Enabled := true;
+    controlGrp.Enabled := Startcycle.Enabled;
+
+
 end;
 
 
@@ -976,10 +1024,11 @@ begin
     setrangeparams;
 
     if not SetRegionBorder(border_low) then begin
-        showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
+        showmessage('(1) Не удается установить начальный уровень = ' + IntToStr(border_low));
+
         Startcycle.Enabled := true;
         controlGrp.Enabled := Startcycle.Enabled;
-
+        Startcycle.Caption := 'Start measurement';
         Screen.Cursor := crDefault;
         exit;
     end;
@@ -992,13 +1041,15 @@ begin
         if SetVoltage(border_low) then
             break;
         if I1 = 10 then begin
-            showmessage('Не удается установить начальный уровень = ' + IntToStr(border_low));
+            showmessage('(2) Не удается установить начальный уровень = ' + IntToStr(border_low));
             Startcycle.Enabled := true;
             controlGrp.Enabled := Startcycle.Enabled;
             Screen.Cursor := crDefault;
+            Startcycle.Caption := 'Start measurement';
             exit;
         end;
     end;
+{
     case selected_control of
         0:  begin
                 for I1 := 0 to 10 do begin
@@ -1006,6 +1057,7 @@ begin
                         break;
                     if I1 = 10 then begin
                         showmessage('Не удается установить уровень wavetek1271 = '+set1271edit.text);
+                        Startcycle.Caption := 'Start measurement';
                         Startcycle.Enabled := true;
                         controlGrp.Enabled := Startcycle.Enabled;
                         Screen.Cursor := crDefault;
@@ -1020,6 +1072,7 @@ begin
                         break;
                     if I1 = 10 then begin
                         showmessage('Не удается установить уровень wAgilent 3458a = '+set58aedit.text);
+                        Startcycle.Caption := 'Start measurement';
                         Startcycle.Enabled := true;
                         controlGrp.Enabled := Startcycle.Enabled;
                         Screen.Cursor := crDefault;
@@ -1029,6 +1082,7 @@ begin
 
             end;
     end;
+}    
 //    setreg
     memoread.Lines.Add('Set ok. wait 4 sec');
 
@@ -1257,10 +1311,7 @@ var
     t1: double;
     wrtbuf: array[0..2000] of char;
 begin
-
-    if (gpib_1271_ready) then
-        exit;
-
+    gpib_1271_ready := false;
     dev1271 := ibdev(cmbGPIB1271.ItemIndex, cmbInst1271.ItemIndex , 0, T1s, 1, 0);
     gpib_get_globals(@ibsta, @iberr, @ibcnt, @ibcntl);
     if (ibsta and ERR) <> 0 then begin
@@ -1341,26 +1392,8 @@ begin
         opError := true;
         exit;
     end;
-    prevread := now();
-    GettingData := false;
-    Daq_1271 := Tdaq_1271.Create(true);
-    daq_1271.Priority := tphighest;
-    LastCounterTime := now;
-//    daqthread.Priority := tpTimeCritical;
-    GettingData := false;
-    gpib_1271_ready := true;
-    daq_1271.Resume;
-    delay(2000);
-
-    curControl58a := v_convert(dacval58);
-    curControl1271 := v_convert(dacval1271);
-    oldControl := CurControl;
-//    bottomspn.Value := trunc(meanVoltage * 10000);
-//    topspn.Value := trunc(meanVoltage * 10000);
-    StartCycle.Enabled := true;
-    controlGrp.Enabled := Startcycle.Enabled;
-
 //***********finished configure ******************
+    gpib_1271_ready := true;
 
 end;
 function TMainForm.InitCounter: integer;
@@ -1466,7 +1499,7 @@ begin
             then statusbar1.Panels[5].Text := format('Agilent=%.7f', [ dacval58])
             else statusbar1.Panels[5].Text := format('Agilent=NaN', [  dacval58]);
 
-        curU.Text := format('%.5f ', [ curvoltage]);
+        curU.Text := format('%.5f ', [ curvoltage*mult_cntl]);
         CurCount.Text := format('%d', [ trunc(Counter_per_sec)]);
   end;
 end;
@@ -1566,7 +1599,7 @@ procedure TMainForm.cmbGPIB_agilentChange(Sender: TObject);
 begin
     cf.WriteInteger('instrument', 'mult_58', cmbInst58.ItemIndex);
     cf.WriteInteger('instrument', 'gpib_58', cmbgpib58.ItemIndex);
-    InitGPIB1271;
+    InitGPIB_agilent;
 end;
 
 procedure TMainForm.cmbInst1271Change(Sender: TObject);
@@ -1679,25 +1712,7 @@ begin
     exec488(dev58a,'MEM LIFO');
     exec488(dev58a,'DCV 10, 1E-10');
     exec488(dev58a,'aper.1');
-
-    prevread := now();
-    GettingData := false;
-    Daq_58a := Tdaq_58a.Create(true);
-    daq_58a.Priority := tphigher;
-    daq_58a.Priority := tphighest;
-    LastCounterTime := now;
-//    daqthread.Priority := tpTimeCritical;
-    GettingData := false;
-    gpib_agilent_ready := true;
-    daq_58a.Resume;
-    delay(2000);
-
-    curControl := v_convert(meanVoltage);
-    oldControl := CurControl;
-//    bottomspn.Value := trunc(meanVoltage * mult_cntl);
-//    topspn.Value := trunc(meanVoltage * mult_cntl);
-    StartCycle.Enabled := true;
-    controlGrp.Enabled := Startcycle.Enabled;
+   gpib_agilent_ready := true;
 
 //***********finished configure ******************
 end;
@@ -1717,11 +1732,17 @@ begin
   cf.writeInteger('hardware', 'selected-control', ControlGRP.ItemIndex);
  selected_control := ControlGRP.ItemIndex;
  case ControlGRP.ItemIndex of
-    0:rasp_url := url_rasp_agilent58a;
-    1:rasp_url := url_rasp_wavetek271;
+    0:begin
+        rasp_url := url_rasp_agilent58a;
+        mult_cntl := 10000
+      end;
+    1:begin
+        rasp_url := url_rasp_wavetek271;
+        mult_cntl := 1;
+      end;
     else rasp_url:='';
  end;
-    if selected_control = 0 then mult_cntl := 10000 else mult_cntl := 10000;
+
 end;
 
 procedure TMainForm.down1271(Sender: TObject);
@@ -1839,7 +1860,9 @@ begin
    end;
    r1 :=abs(dacval1271);
    curControl1271 := curControl1271 + round((target * 1.0 - r1) * 1050);
+   memoread.Lines.add (format('T=%f Cur=%f OldCTR = %d CTR = %d',[target,r1, oldcontrol,curControl1271]));
    setDPotential(curControl1271);
+   memoread.Lines.add (format('After set POTD T=%f Cur=%f OldCTR = %d CTR = %d',[target,r1, oldcontrol,curControl1271]));
 
 end;
 
@@ -1857,6 +1880,65 @@ begin
    setDPotential(curControl58a);
 
 end;
+
+
+procedure TDAQ_all.execute;
+var
+    i: integer;
+    meant, mean3t,  Curtimel, PrevTimel: double;
+    CurMtimel, PrevMTimel: dword;
+begin
+    while not terminated do begin
+            DaqGetcounter;
+           try
+            if gpib_1271_ready then DaqGetData1271;
+           except
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ 1271 GET DATA');
+            writetimelog( 'Exception on DAQ GET DATA 1271');
+
+           end;
+
+           try
+            if gpib_agilent_ready then DaqGetData58;
+           except
+            writetimelog(DataDirName + IntToStr(Sweep) + '.dat', 'Exception on DAQ 58a GET DATA');
+            writetimelog( 'Exception on DAQ GET DATA 58a');
+
+           end;
+
+            case selected_control of
+                1 : CurVoltage := abs(dacval1271);
+                0 : CurVoltage := abs(dacval58);
+                else CurVoltage :=  -131313;
+            end;
+
+            for i := 0 to 4 do
+                if (LastVoltage[i] < 0) then
+                    LastVoltage[i] := curVoltage
+                else
+                    LastVoltage[i] := LastVoltage[i + 1];
+            LastVoltage[5] := curVoltage;
+            meant := LastVoltage[0];
+            mean3t := LastVoltage[3];
+            for i := 1 to 5 do begin
+                meant := meant + LastVoltage[i];
+                if i > 3 then
+                    mean3t := mean3t + LastVoltage[i];
+            end;
+            meanVoltage := meant / 6.0;
+            mean3Voltage := mean3t / 3.0;
+            if gettingData then begin
+                vdata[vIndex + 1].data := CurVoltage;
+                vdata[vindex + 1].time := now();
+                inc(vIndex);
+            end;
+            inc(Daq_counter);
+        sleep(300)
+    end;
+    mainform.Caption := 'terminated';
+end;
+
+
 procedure TDAQ_1271.execute;
 var
     i: integer;
