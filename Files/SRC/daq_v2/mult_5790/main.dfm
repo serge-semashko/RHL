@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 33
-  Top = 31
-  Width = 1791
-  Height = 1001
+  Left = 2
+  Top = 1
+  Width = 1022
+  Height = 718
   Caption = 'Read/Write'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,15 +18,15 @@ object MainForm: TMainForm
   TextHeight = 16
   object Panel1: TPanel
     Left = 0
-    Top = 893
-    Width = 1773
+    Top = 610
+    Width = 1004
     Height = 33
     Align = alBottom
     TabOrder = 0
     object TimeInfolbl: TStaticText
       Left = 1
       Top = 1
-      Width = 1771
+      Width = 1002
       Height = 31
       Align = alClient
       AutoSize = False
@@ -44,7 +44,7 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1773
+    Width = 1004
     Height = 202
     ActivePage = TabSheet1
     Align = alTop
@@ -180,15 +180,15 @@ object MainForm: TMainForm
   object Panel5: TPanel
     Left = 0
     Top = 202
-    Width = 1773
-    Height = 691
+    Width = 1004
+    Height = 408
     Align = alClient
     Caption = 'Panel5'
     TabOrder = 2
     object Splitter1: TSplitter
       Left = 1
       Top = 1
-      Width = 1771
+      Width = 1002
       Height = 4
       Cursor = crVSplit
       Align = alTop
@@ -196,8 +196,8 @@ object MainForm: TMainForm
     object PageControl2: TPageControl
       Left = 1
       Top = 5
-      Width = 1771
-      Height = 685
+      Width = 1002
+      Height = 402
       ActivePage = ts1
       Align = alClient
       Font.Charset = DEFAULT_CHARSET
@@ -213,13 +213,13 @@ object MainForm: TMainForm
           Left = 966
           Top = 0
           Width = 8
-          Height = 650
+          Height = 367
         end
         object Panel2: TPanel
           Left = 974
           Top = 0
-          Width = 789
-          Height = 650
+          Width = 20
+          Height = 367
           Align = alClient
           Caption = 'Panel2'
           TabOrder = 0
@@ -472,7 +472,7 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 966
-          Height = 650
+          Height = 367
           Align = alLeft
           Caption = 'Panel4'
           TabOrder = 1
@@ -480,7 +480,7 @@ object MainForm: TMainForm
             Left = 1
             Top = 1
             Width = 964
-            Height = 648
+            Height = 365
             BackWall.Brush.Color = clWhite
             BackWall.Brush.Style = bsClear
             Title.Font.Charset = DEFAULT_CHARSET
@@ -506,7 +506,7 @@ object MainForm: TMainForm
             TabOrder = 0
             DesignSize = (
               964
-              648)
+              365)
             object SelPointCur: TStaticText
               Left = 6
               Top = 7
@@ -526,7 +526,7 @@ object MainForm: TMainForm
             end
             object SelPointSum: TStaticText
               Left = 526
-              Top = 5
+              Top = -4
               Width = 430
               Height = 32
               Anchors = [akLeft, akRight]
@@ -591,13 +591,13 @@ object MainForm: TMainForm
           Left = 0
           Top = 0
           Width = 927
-          Height = 650
+          Height = 367
           Align = alLeft
           Caption = 'pnl1'
           TabOrder = 0
           object pnl3: TPanel
             Left = 1
-            Top = 570
+            Top = 287
             Width = 925
             Height = 79
             Align = alBottom
@@ -859,7 +859,7 @@ object MainForm: TMainForm
             Left = 1
             Top = 1
             Width = 925
-            Height = 569
+            Height = 286
             Align = alClient
             DataSource = ds1
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgCancelOnExit]
@@ -876,16 +876,16 @@ object MainForm: TMainForm
         object pnl2: TPanel
           Left = 927
           Top = 0
-          Width = 836
-          Height = 650
+          Width = 67
+          Height = 367
           Align = alClient
           Caption = 'pnl2'
           TabOrder = 1
           object Panel3: TPanel
             Left = 1
             Top = 1
-            Width = 834
-            Height = 648
+            Width = 65
+            Height = 365
             Align = alClient
             BorderStyle = bsSingle
             Font.Charset = DEFAULT_CHARSET
@@ -1042,8 +1042,8 @@ object MainForm: TMainForm
             end
             object leconstVolt: TPanel
               Left = 1
-              Top = 321
-              Width = 828
+              Top = 38
+              Width = 59
               Height = 322
               Align = alBottom
               BorderStyle = bsSingle
@@ -1064,7 +1064,7 @@ object MainForm: TMainForm
               object Label4: TLabel
                 Left = 1
                 Top = 141
-                Width = 822
+                Width = 53
                 Height = 24
                 Align = alBottom
                 Alignment = taCenter
@@ -1087,7 +1087,7 @@ object MainForm: TMainForm
               object DescMemo: TMemo
                 Left = 1
                 Top = 165
-                Width = 822
+                Width = 53
                 Height = 152
                 Align = alBottom
                 TabOrder = 0
@@ -1298,8 +1298,8 @@ object MainForm: TMainForm
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 926
-    Width = 1773
+    Top = 643
+    Width = 1004
     Height = 30
     Panels = <
       item

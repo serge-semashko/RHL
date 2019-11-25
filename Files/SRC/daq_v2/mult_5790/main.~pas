@@ -324,7 +324,7 @@ begin
     if selected_control = 1 then begin
         curControl1271 := curControl;
         if abs(oldControl1271 - curControl1271) > (0.1 * $FFFFF ) then
-            curcontrol1271 := oldcontrol1271 + trunc((0.1 * $FFFFF) * (curCon1271trol - oldcontrol1271) / abs(oldControl1271 - curControl1271));
+            curcontrol1271 := oldcontrol1271 + trunc((0.1 * $FFFFF) * (curControl1271 - oldcontrol1271) / abs(oldControl1271 - curControl1271));
         if curControl1271 < 0 then
             curcontrol1271 := 0;
         oldControl1271 := CurControl1271;
@@ -794,8 +794,8 @@ begin
 
     curControl58a := v_convert(dacval58);
     curControl1271 := v_convert(dacval1271);
-    oldControl58a := CurControl;
-    oldControl1271 := CurControl;
+    oldControl58a := curControl58a;
+    oldControl1271 := curControl1271;
     StartCycle.Enabled := true;
     controlGrp.Enabled := Startcycle.Enabled;
 

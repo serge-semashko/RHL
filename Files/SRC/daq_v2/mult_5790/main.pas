@@ -794,8 +794,8 @@ begin
 
     curControl58a := v_convert(dacval58);
     curControl1271 := v_convert(dacval1271);
-    oldControl58a := CurControl;
-    oldControl1271 := CurControl;
+    oldControl58a := curControl58a;
+    oldControl1271 := curControl1271;
     StartCycle.Enabled := true;
     controlGrp.Enabled := Startcycle.Enabled;
 
