@@ -411,7 +411,6 @@ var
     Vdiff: double;
 begin
     startsetTime := now;
-
     if selected_control = 0 then mult_cntl := 10000 else mult_cntl := 1;
 
     while (abs((target * 1.0 - curVoltage * mult_cntl)) > 100) and ((now - startsetTime) * 24 * 3600 < 500) do begin
@@ -829,16 +828,12 @@ var
     end;
 
     procedure setrangeparams;
-    var
-    str1:string;
     begin
         border_low := zqry1.FieldValues['Ubeg'];
         border_high := zqry1.FieldValues['Uend'];
         dead_value := zqry1.FieldValues['dead_time'];
         step_value := zqry1.FieldValues['Ustep'];
         step_len := zqry1.FieldValues['exposition'];
-    str1:=format('Set border %d %d ', [border_low,border_high]);
-    WriteLog(str1);
 
     end;
 
@@ -1175,12 +1170,8 @@ begin
                     BeginSweep;
                     SweepStartTime := now;
                 end;
-
                 SetRegionBorder(curTarget);
-                for I1 := 0 to 10 do
-                    if dstep<0
-                        then  SetVoltage(border_high)
-                        else  SetVoltage(border_low);
+                for I1 := 0 to 10 do SetVoltage(border_low);
                 Start_dead := now;
                 while (now - start_dead) * 24 * 3600 < dead_Value * 2 do begin
                     setVoltage(curTarget);
