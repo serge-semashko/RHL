@@ -809,7 +809,7 @@ object MainForm: TMainForm
               MaxValue = 0
               MinValue = 5
               TabOrder = 3
-              Value = 0
+              Value = 5
             end
             object stepspn: TSpinEdit
               Left = 620
@@ -918,7 +918,7 @@ object MainForm: TMainForm
             TabOrder = 0
             object Label5: TLabel
               Left = 6
-              Top = 10
+              Top = 6
               Width = 55
               Height = 22
               Alignment = taRightJustify
@@ -927,21 +927,21 @@ object MainForm: TMainForm
             end
             object Label6: TLabel
               Left = 152
-              Top = 10
+              Top = 7
               Width = 67
-              Height = 22
+              Height = 16
               Caption = '7088d addr'
             end
             object Label9: TLabel
-              Left = 281
-              Top = 10
+              Left = 287
+              Top = 6
               Width = 49
-              Height = 22
+              Height = 16
               Caption = 'Channel'
             end
             object ComComboBox: TComboBox
               Left = 66
-              Top = 7
+              Top = 3
               Width = 86
               Height = 24
               Style = csDropDownList
@@ -967,7 +967,7 @@ object MainForm: TMainForm
             end
             object address: TSpinEdit
               Left = 226
-              Top = 10
+              Top = 3
               Width = 49
               Height = 26
               MaxValue = 0
@@ -978,7 +978,7 @@ object MainForm: TMainForm
             end
             object edCh: TSpinEdit
               Left = 342
-              Top = 10
+              Top = 2
               Width = 49
               Height = 26
               MaxValue = 0
@@ -1116,11 +1116,15 @@ object MainForm: TMainForm
               Width = 763
               Height = 61
               Caption = 'AGILENT 3458A'
+              Color = clSilver
+              Ctl3D = True
               Font.Charset = RUSSIAN_CHARSET
               Font.Color = clWindowText
               Font.Height = -18
               Font.Name = 'Times New Roman'
               Font.Style = [fsBold]
+              ParentColor = False
+              ParentCtl3D = False
               ParentFont = False
               TabOrder = 6
               object Label7: TLabel
@@ -1219,7 +1223,7 @@ object MainForm: TMainForm
                 Left = 464
                 Top = 24
                 Width = 76
-                Height = 25
+                Height = 28
                 TabOrder = 2
               end
             end
@@ -1229,11 +1233,13 @@ object MainForm: TMainForm
               Width = 763
               Height = 61
               Caption = 'WAVETEK 1271'
+              Color = clSilver
               Font.Charset = RUSSIAN_CHARSET
               Font.Color = clWindowText
               Font.Height = -18
               Font.Name = 'Times New Roman'
               Font.Style = [fsBold]
+              ParentColor = False
               ParentFont = False
               TabOrder = 7
               object Label1: TLabel

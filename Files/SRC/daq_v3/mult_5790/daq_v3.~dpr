@@ -1,6 +1,6 @@
 program daq_v3;
 
-uses
+uses       
   Forms,
   windows,
   dialogs,

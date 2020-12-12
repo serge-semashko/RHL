@@ -1741,6 +1741,7 @@ old_selected_control: integer;
 r1 :double;
 i1,i2 : integer;
 begin
+  Screen.Cursor := crHourGlass;
   val(set1271edit.text,r1,i1);
   DecimalSeparator := '.';
   set1271edit.text := StringReplace(set1271edit.text,',','.',[rfReplaceAll]);

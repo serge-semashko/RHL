@@ -1072,6 +1072,7 @@ begin
     Screen.Cursor := crDefault;
     dstep := 1;
     GettingData := true;
+    FormTrends.w1271ser.clear;
     while (Startcycle.Caption = 'Stop measurement') do begin
         mainform.Caption := IntToStr(cntval);
 
@@ -1397,8 +1398,17 @@ var
  dt, dv,wv: double;
 begin
         if FormTrends <> nil then begin
-            FormTrends.w1271ser.AddXY(now,dacval1271);
-            while (FormTrends.w1271ser.Count>800) do FormTrends.w1271ser.Delete(0);
+          if ControlGRP.ItemIndex=0 then begin
+                FormTrends.w1271ser.Title:='Wavetek 1271';
+                FormTrends.w1271ser.AddXY(now,dacval1271);
+                while (FormTrends.w1271ser.Count>600) do FormTrends.w1271ser.Delete(0);
+            end else begin
+                FormTrends.w1271ser.Title:='Agilent 3458A ';
+
+                FormTrends.w1271ser.AddXY(now,dacval1271);
+                while (FormTrends.w1271ser.Count>600) do FormTrends.w1271ser.Delete(0);
+            end;
+
 
         end;
 

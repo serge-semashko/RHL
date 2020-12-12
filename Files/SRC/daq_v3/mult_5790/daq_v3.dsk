@@ -25,7 +25,7 @@ ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[F:\home\rhlsrc\Files\SRC\daq_v3\mult_5790\ProjectGroup1.bpg]
+[C:\Windows\system32\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
@@ -41,7 +41,7 @@ Visible=1
 State=2
 Left=200
 Top=173
-Width=1302
+Width=1720
 Height=682
 MaxLeft=-9
 MaxTop=139
@@ -55,7 +55,7 @@ LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000
 RightPanelSize=0
 BottomPanelSize=85
 BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+BottomPanelData=00000400000000007A070000000000000255000000000000000100000000000000000000000001000000007A0700000B0000004D65737361676556696577FFFFFFFF
 
 [View0]
 Module=F:\home\rhlsrc\Files\SRC\daq_v3\mult_5790\daq_v3.dpr
@@ -66,9 +66,9 @@ LeftCol=1
 
 [View1]
 Module=F:\home\rhlsrc\Files\SRC\daq_v3\mult_5790\main.pas
-CursorX=100
-CursorY=335
-TopLine=331
+CursorX=51
+CursorY=1409
+TopLine=1385
 LeftCol=1
 
 [Watches]
